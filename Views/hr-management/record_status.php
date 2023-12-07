@@ -56,29 +56,7 @@
                    <!--tab 1  ------ -->
                     <div class="tab-pane fade show active" id="travel_request_status_tab" role="tabpanel" aria-labelledby="home-tab">
                         <!-- --- discription ---- -->
-                            <div id="company_structure_table_top" class="reviewBlock">
-                            <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-            
-                                <div class="ant-card-head">
                             
-                                    <div class="name">
-                                    Travel Request 
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can manage the job titles in your organisation . Each employee needs to assigned a job title.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
                             <!-- --- ./discription ---- -->
             
                         <!--for loading CompanyStructure DataTable -->

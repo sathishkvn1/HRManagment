@@ -8,31 +8,7 @@
 </head>
 
 <body>
-       <!-- --- discription ---- -->
-             <div id="company_structure_table_top" class="reviewBlock">
-                <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-            
-                   <div class="ant-card-head">
-                            
-                       <div class="name">
-                                Approved
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can manage the job titles in your organisation . Each employee needs to assigned a job title.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                            <!-- --- ./discription ---- -->
+
             
                         <!--for loading CompanyStructure DataTable -->
                             <table id="loan_approval_data_table" class="table table-striped">
@@ -216,8 +192,10 @@ function viewloanApproveRequest(row_id)
               $("#loan_type_id_for_approval").val(response.data.loan_type_id);
               $("#requested_amount_for_approval").val(response.data.requested_amount);
               $("#status_id_fr_approval").val(response.data.loan_request_status_id);
-               var disable_new_request = $("#new_request_employee_id, #new_request_date_of_request, #requested_amount_for_new_request,#loan_type_id_for_new_request");
-               disable_new_request.prop("disabled", true).prop("readonly", true).css("cursor", "not-allowed");
+              var disableElements = $("input, select").prop("disabled", true).prop("readonly", true).css("cursor", "not-allowed");
+                disableElements.prop("disabled", true).prop("readonly", true).css("cursor", "not-allowed");
+              //  var disable_new_request = $("#new_request_employee_id, #new_request_date_of_request, #requested_amount_for_new_request,#loan_type_id_for_new_request");
+              //  disable_new_request.prop("disabled", true).prop("readonly", true).css("cursor", "not-allowed");
                 // Show the .modal-footer when the modal is hidden
                 $("#loan_approval_data_table_modal").on("hidden.bs.modal", function () 
                 {

@@ -47,26 +47,10 @@
                    <div class="tab-pane fade show active" id="company_structure_tab" role="tabpanel" aria-labelledby="home-tab">
                       <!-- --- discription ---- -->
                         <div id="company_structure_table_top" class="reviewBlock">
-                          <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-        
-                            <div class="ant-card-head">
-                         
-                                <div class="name">
-                                  Company 
-                                </div>
-                                <div class="moreinfo">
-                                    <a href="#">More Info</a>
-                                </div>
-                            </div>
-                            <div class="ant-card-body">
-                              <div class="ant-card-meta">
-                                <div class="ant-card-meta-detail">
-                                  <div class="ant-card-meta-description">
-                                      Here you can define the structure of the company by adding branches, departments, company units,etc. Each employee needs to be connected to a company structure.
-                                </div>
-                                </div>
-                              </div>
-                            </div>
+                          <div class="combined_buttons">
+                              <div class="add_new_btn_div">
+                                <button id="company_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              </div>           
                           </div>
                         </div>
                         <!-- --- ./discription ---- -->
@@ -110,27 +94,11 @@
               <div class="tab-pane fade" id="company_department_tab" role="tabpanel" aria-labelledby="profile-tab">
                  <!-- --- discription ---- -->
                  <div id="company_structure_table_top" class="reviewBlock">
-                  <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-
-                    <div class="ant-card-head">
-           
-                        <div class="name">
-                          Company Department
+                  <div class="combined_buttons">
+                              <div class="add_new_btn_div">
+                                <button id="company_department_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              </div>           
                         </div>
-                        <div class="moreinfo">
-                            <a href="#">More Info</a>
-                        </div>
-                    </div>
-                    <div class="ant-card-body">
-                      <div class="ant-card-meta">
-                        <div class="ant-card-meta-detail">
-                          <div class="ant-card-meta-description">
-                              Here you can define the branch of the company by adding branches, departments, company units,etc. Each employee needs to be connected to a company structure.
-                        </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
                 <!-- --- ./discription ---- -->
 
@@ -167,26 +135,10 @@
               <div class="tab-pane fade" id="company_address_tab" role="tabpanel" aria-labelledby="profile-tab">
                  <!-- --- discription ---- -->
                  <div id="company_structure_table_top" class="reviewBlock">
-                  <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-
-                    <div class="ant-card-head">
-           
-                        <div class="name">
-                          Company Branches
-                        </div>
-                        <div class="moreinfo">
-                            <a href="#">More Info</a>
-                        </div>
-                    </div>
-                    <div class="ant-card-body">
-                      <div class="ant-card-meta">
-                        <div class="ant-card-meta-detail">
-                          <div class="ant-card-meta-description">
-                              Here you can define the branch of the company by adding branches, departments, company units,etc. Each employee needs to be connected to a company structure.
-                        </div>
-                        </div>
-                      </div>
-                    </div>
+                  <div class="combined_buttons">
+                      <div class="add_new_btn_div">
+                        <button id="company_address_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                      </div>           
                   </div>
                 </div>
                 <!-- --- ./discription ---- -->
@@ -475,7 +427,7 @@
                   <div class="form-group row">
                     
                     <div class="col-8">
-                      <input type="" class="form-control" id="branch_id_hidden_field" name="branch_id_hidden_field">
+                      <input type="hidden" class="form-control" id="branch_id_hidden_field" name="branch_id_hidden_field">
                     </div>
                   </div>
                 <!-- ./ one field ---- -->
@@ -831,6 +783,22 @@ function loadDataTableForCompany(){
 });
  }
 
+ $("#company_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#company_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
+
  function fetchEmployeeNamesForCompany() {
   
 
@@ -1171,6 +1139,23 @@ function loadDataTableForDepartment(){
   });
 }
 
+$("#company_department_add_new").on("click", function() {
+  
+    $("#flag_id").val("0");
+
+    var modalId = "#company_department_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
+
 function viewDepartment(id) {
   
     $.ajax({
@@ -1183,7 +1168,7 @@ function viewDepartment(id) {
                 console.log(response);
                 $('#company_department_modal').modal('show');
                 $("#department_name").val(response.department_name);
-                var disable_data = $("#department_name");
+                var disable_data = $("#department_name,#branch_id_company");
                 disable_data.prop("disabled", true).prop("readonly", true).css("cursor", "not-allowed");
                 $(".modal-footer .savebtn").hide();
                 $("#company_department_modal").on("hidden.bs.modal", function () 
@@ -1293,6 +1278,23 @@ function editDepartment(id) {
   });
 }
 
+$("#company_address_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#company_address_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
+
+
 function viewAddress(row_id) {
     $("#company_address_data_table_modal").modal("show");
     $.ajax({
@@ -1342,6 +1344,7 @@ function deleteAddress(row_id){
                 $('#company_address_data_table_modal').modal('hide');
                 showToast('success', response.message); 
                  $('#company_address_data_table').DataTable().ajax.reload();
+                 fetchBranches();
                   
                   // alert(response.message);
             },

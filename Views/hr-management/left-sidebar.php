@@ -1,7 +1,8 @@
  <!-- Main Sidebar Container -->
       <aside class="main-sidebar sidebar-light-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="<?php echo base_url("HrMaster");?>" class="brand-link navbar-dark white" >
+
+        <a href="<?php echo base_url(CONTROLLER_HR);?>" class="brand-link navbar-dark white" >
           <img src="<?php  echo base_url("hrmanagement/dist/img/logo.png");?>" alt="AdminLTE Logo" class="brand-image"
               style="opacity: .8">
           <span class="brand-text font-weight-light">Home</span>
@@ -153,6 +154,29 @@
                       <a href="<?php echo base_url(CONTROLLER_HR."/travel");?>" class="nav-link">
                         <i class="fa fa-check-square"></i>
                         <p>Travel</p>
+                      </a>
+                    </li>
+                  
+                   
+                  </ul>
+                </li>
+              <!-- ./ one section --- -->
+
+              
+                <!--  one section --- -->
+                <li class="nav-item has-treeview menu-close sidebar-shadow-top-bottom">
+                  <a href="#" class="nav-link active bg-purewhite text-dark no-shadow">
+                    <i class="fa fa-grip-horizontal"></i>
+                    <p>Calender
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                  
+                    <li class="nav-item">
+                      <a href="<?php echo base_url(CONTROLLER_HR."/calender");?>" class="nav-link">
+                        <i class="fa fa-check-square"></i>
+                        <p>Calender</p>
                       </a>
                     </li>
                   

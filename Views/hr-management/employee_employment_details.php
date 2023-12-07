@@ -1,26 +1,15 @@
 
 <div id="work_history_tab" class="reviewBlock">
-                    <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-                        <div class="ant-card-head">
-                               <div class="name" id="click">
-                                    Work History
-                                </div>
-                              
-                                <div class="moreinfo" >
-                                    <a href="#">More Info</a>
-                                </div>
-                        </div>
-                            <div class="ant-card-body">
-                            <div class="ant-card-meta">
-                                <div class="ant-card-meta-detail">
-                                <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                    </div>
-            </div>
+        <div id="" class="reviewBlock">
+             <div class="combined_buttons">
+                 <div class="add_new_btn_div">
+                   <button id="employee_employment_details_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                  </div>
+                
+              
+             </div>
+          </div>
+</div>
                        
 <!-- table  -->
     <table id="employee_employment_details_data_table" class="table table-striped">
@@ -210,48 +199,7 @@
      
 
    <!-- ./modal employement -->
-   <div class="modal fade data-table-modal" id="employee_employment_details_data_table_filter_modal" data-bs-backdrop="static">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Employee Details</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <form id="employment_status_filter_modal_form" class="modal_form">
-                        <!--one field  text field---- -->
-                    <div class="form-group row">
-                        <div class="col-3">
-                          <label for="recipient-name" class="col-form-label required">Employee</label>
-                        </div>
-                        <div class="col-8">
-                          <select name="work_history_filter_employee_id"  id="work_history_filter_employee_id"class="form-control select2">
-                                <?php
-                                 if(isset($all_employee_in_company)):
-                                    foreach($all_employee_in_company as $row):
-                                ?>
-                                    <option value="<?php echo $row->employee_id;?>"><?php echo $row->employee_name;?></option>
-                                <?php
-                                    endforeach;
-                                    endif;
-                                ?>
-                         </select>
-                        </div>
-                    </div>
-                    <!-- ./ one field ---- -->              
-                 </form>
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default cancelbtn" id="#" data-dismiss="modal">Cancel</button>
-              <button type="button" class="btn savebtn" id="btn_employee_employment_details_filter"><i class="fas fa-calendar-check"></i>Save</button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        <!-- /.modal-dialog -->
-      </div>
-  </div>
+
   
     
      
@@ -534,7 +482,7 @@ $(document).ready(function () {
         var table = $('#employee_employment_details_data_table').DataTable();
         table.column(0).search(selectedemployee_name);
         table.draw();
-        $("#employee_employment_details_data_table_filter_modal").modal("hide");
+        // $("#employee_employment_details_data_table_filter_modal").modal("hide");
 
     });
 
@@ -592,40 +540,31 @@ $('#employment_status_modal_form').validate({
 
 //  filter box
 
-$("#btn_employee_employment_details_filter").on("click", function () {
-    var employee_name_val = $("#work_history_filter_employee_id").val();
-    var employee_name_val_text = $("#work_history_filter_employee_id option:selected").text();
 
-    var table_employee_employment_details = $('#employee_employment_details_data_table').DataTable();
 
-    // Clear all filters
-    table_employee_employment_details.columns().search('');
 
-    if (employee_name_val != "0") {
-      
-        table_employee_employment_details.column(0).search(employee_name_val_text);
-    }
+$("#employee_employment_details_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
 
-    table_employee_employment_details.draw();
+    var modalId = "#employee_employment_details_data_table_modal";
+    $(modalId).modal("show");
 
-    var filter_employee_name_val_text = ''; // Default text
-
-    if (employee_name_val_text != "0") {
-        filter_employee_name_val_text = 'Employee Name:' + employee_name_val_text;
-    }
-    var resetFilterEmployeeNameText = filter_employee_name_val_text+'<span class="icon"><i class="fa fa-times"></i></span>';
-    $('#employee_employment_details_data_table_reset_filter').html(resetFilterEmployeeNameText);
-    
-    // Use a single conditional statement to show or hide the button
-    if (employee_name_val == "0" ) {
-        $("#employee_employment_details_data_table_reset_filter").hide();
-    } else {
-        $("#employee_employment_details_data_table_reset_filter").show();
-    }
-
-    $("#employee_employment_details_data_table_reset_filter_modal").modal("hide");
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
 });
-//  ./ filter box
+
+
+
+
+
+
+
 
 </script>
 

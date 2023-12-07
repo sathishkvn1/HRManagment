@@ -1,26 +1,18 @@
    <div id="skills_tab" class="reviewBlock">
-                    <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-                        <div class="ant-card-head">
-                               <div class="name" id="click">
-                               Contacts
-                                </div>
-                              
-                                <div class="moreinfo" >
-                                    <a href="#">More Info</a>
-                                </div>
-                        </div>
-                            <div class="ant-card-body">
-                              <div class="ant-card-meta">
-                                  <div class="ant-card-meta-detail">
-                                  <div class="ant-card-meta-description">
-                                          Here you can define the different pay Scales in your organization.
-                                  </div>
-                                  </div>
-                              </div>
-                            </div>
-                    </div>
+                                      <div class="combined_buttons">
+                                                <div class="add_new_btn_div">
+                                                    <button id="employee_skill_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                                                 </div>
+                                                <div class="filter_btn_div">
+                                                <button id="employee_skill_data_table_filter_btn" class="customise_filter_button" data-value="employee_data_table"><i class="fas fa-filter"></i>Filter</button>
+                                                </div>
+                                                <div class="reset_filter_btn_div">
+                                                    <button id="employee_skill_data_table_reset_filter"  style="display:none" class="cancel_filter_button"><i class="fas fa-times"></i> Cancel</button>
+                                                </div>
+                                               
+                                            </div>
                </div>
-                       
+             
                         <!-- table  -->
                         <table id="employee_skill_data_table" class="table table-striped">
                             <thead>
@@ -63,7 +55,7 @@
                       </div>
                       <div class="col-8">
 
-                        <select name="employee_id_employee_skill"  id="employee_id_employee_skill" class="form-control select2">
+                        <select name="employee_id_employee_skills"  id="employee_id_employee_skills" class="form-control select2">
                                   
 
                          </select>
@@ -191,9 +183,10 @@
 
               </form>
             </div>
+          
             <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default cancelbtn" id="#" data-dismiss="modal">Cancel</button>
-              <button type="button" class="btn savebtn" id="btn_employee_skill_data_table_filter"><i class="fas fa-calendar-check"></i>Save</button>
+            
+             <button type="button" class="btn savebtn" id="btn_employee_skill_data_table_filter"><i class="fas fa-calendar-check"></i>Apply Filter</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -206,13 +199,16 @@
 
 <script>
      var BASE_URL = "<?php echo base_url(); ?>";
+    
+    
  var hrController = "<?php echo CONTROLLER_HR; ?>";
  var token = "<?php echo $_SESSION['li_token']; ?>";
 
 // load job item data table
 
 $(document).ready( function () {
-  $('#employee_skill_data_table').DataTable({
+
+  var table = $('#employee_skill_data_table').DataTable({
         "ajax": {
             "url": BASE_URL + "index.php/" +  hrController + "/get_employee_skills",
             "dataSrc": "data"
@@ -235,15 +231,61 @@ $(document).ready( function () {
                 }
             }
         ],
-
+       
 
         "initComplete": function(settings, json) {
+         
             customizeDataTable('employee_skill_data_table');
+            fetchEmployeeNames();
+        }
+    });
+    
+   
+});
+
+
+
+$(document).on("click", "#employee_skill_data_table_export_to_pdf", function() {
+    $.ajax({
+        url: BASE_URL + 'index.php/' + hrController + '/generate_pdf_for_employee_skills',
+        type: "GET",
+        xhrFields: {
+            responseType: 'blob' 
+        },
+        success: function(response) {
+          
+            var blob = new Blob([response], { type: 'application/pdf' });
+
+          
+            var url = URL.createObjectURL(blob);
+
+           
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'employee_skills.pdf'; 
+            document.body.appendChild(a);
+            a.click();
+
+           
+            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        },
+        error: function(xhr, status, error) {
+          
         }
     });
 });
 
-// ./load
+
+
+
+
+  
+
+
+
+
+
 //save
 $("#btn_employment_skill_save").on("click",function() {  
    if ($('#employee_skill_data_table_modal_form').valid()) {
@@ -266,6 +308,7 @@ $("#btn_employment_skill_save").on("click",function() {
                                console.log(response.message);
                                $('#employee_skill_data_table_modal').modal('hide');
                                 $('#employee_skill_data_table').DataTable().ajax.reload();
+                                
                                showToast('success', response.message);       
                             },
                             error: function(xhr, status, error) {
@@ -361,6 +404,8 @@ function employeeSkillDeleteRow(row_id) {
             success: function (response) {
                 $('#employee_skill_data_table_modal').modal('hide');
                  $('#employee_skill_data_table').DataTable().ajax.reload();
+                 fetchEmployeeNames(); 
+                
                   showToast('success', response.message); 
             },
             error: function (xhr, status, error) {
@@ -503,4 +548,42 @@ $("#btn_employee_skill_data_table_filter").on("click", function () {
 
     $("#employee_skill_data_table_filter_modal").modal("hide");
 });
+
+
+$("#employee_skill_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#employee_skill_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
+
+$("#employee_skill_data_table_filter_btn").on("click", function() {
+  // Show the associated modal
+  $("#flag_id").val('0');
+   $("#employee_skill_data_table_filter_modal").modal("show");
+});
+
+$("#employee_skill_data_table_reset_filter").on("click", function() {
+  // Show the associated modal
+  
+     var table = $('#employee_skill_data_table').DataTable();
+    var modal = $('#employee_skill_data_table_filter_modal');
+    modal.find("select").val("0");
+    table.columns().search('');
+    table.search('').draw();
+  
+    // Hide the "Cancel" button again
+    $(this).hide();
+    // Update the filter status text
+});
+
 </script>

@@ -45,29 +45,13 @@
                    <!--tab 1  ------ -->
                     <div class="tab-pane fade show active" id="job_title_tab" role="tabpanel" aria-labelledby="home-tab">
                         <!-- --- discription ---- -->
-                            <div id="company_structure_table_top" class="reviewBlock">
-                            <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-            
-                                <div class="ant-card-head">
-                            
-                                    <div class="name">
-                                    Job Titles
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can manage the job titles in your organisation . Each employee needs to assigned a job title.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
+                          <div id="company_structure_table_top" class="reviewBlock">
+                            <div class="combined_buttons">
+                              <div class="add_new_btn_div">
+                                <button id="job_title_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              </div>           
                             </div>
-                            </div>
+                          </div>
                             <!-- --- ./discription ---- -->
             
                         <!--for loading CompanyStructure DataTable -->
@@ -100,26 +84,10 @@
                     <div class="tab-pane fade" id="pay_scales_tab" role="tabpanel" aria-labelledby="profile-tab">
                         <!-- --- discription ---- -->
                         <div id="company_structure_table_top" class="reviewBlock">
-                            <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-
-                                <div class="ant-card-head">
-                    
-                                    <div class="name">
-                                    Pay Scales
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
+                            <div class="combined_buttons">
+                              <div class="add_new_btn_div">
+                                <button id="pay_scales_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              </div>           
                             </div>
                         </div>
                         <!-- --- ./discription ---- -->
@@ -148,26 +116,10 @@
                     <div class="tab-pane fade" id="employment_status_tab" role="tabpanel" aria-labelledby="profile-tab">
                         <!-- --- discription ---- -->
                         <div id="company_structure_table_top" class="reviewBlock">
-                            <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-
-                                <div class="ant-card-head">
-                    
-                                    <div class="name">
-                                    Pay Scales
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
+                            <div class="combined_buttons">
+                              <div class="add_new_btn_div">
+                                <button id="employment_status_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              </div>           
                             </div>
                         </div>
                         <!-- --- ./discription ---- -->
@@ -188,7 +140,7 @@
                         </table>
                         <!-- ./ table start -->
                     </div>
-                    <!--  ./ tab 2-->
+                    <!--  ./ tab 3-->
               </div>
 
              
@@ -453,7 +405,21 @@ function loadDataTableForJobTitle(){
 }
 // ./load job item data table
 
+$("#job_title_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
 
+    var modalId = "#job_title_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
 
 // load job item data table
 function loadDataTableForPayScales(){
@@ -488,6 +454,22 @@ function loadDataTableForPayScales(){
 }
 // ./load job item data table
 
+$("#pay_scales_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#pay_scales_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
+
 // load job item employement statys
 function loadDataTableForEmploymentStatus(){
     $('#employment_status_data_table').DataTable({
@@ -519,6 +501,23 @@ function loadDataTableForEmploymentStatus(){
     });
 }
 // ./load job item data table
+
+$("#employment_status_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#employment_status_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
+
 </script>
 
 

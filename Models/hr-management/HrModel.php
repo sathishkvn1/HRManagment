@@ -44,7 +44,9 @@ class HrModel extends CI_Model {
     public function get_branch_details($company_id_in_hr) {
        
         $this->db->where('company_id', $company_id_in_hr); 
+        $this->db->where('is_deleted', 'no'); 
         $query = $this->db->get('hr_branches'); 
+       
         // echo "Last Query: " . $this->db->last_query($query);
 
         if ($query->num_rows() > 0) {
@@ -462,7 +464,17 @@ public function delete_certification_by_id($row_id)
             return false; // Update failed
         }
     }    
-
+   
+    public function   update_certification_in_company($row_id, $data){
+        $this->db->where('id', $row_id);
+        $this->db->update('hr_certifications', $data);
+       
+        if ($this->db->affected_rows() > 0) {
+            return true; // Update successful
+        } else {
+            return false; // Update failed
+        }
+    } 
 
     public function get_language_details()
     {
@@ -1356,22 +1368,39 @@ public function delete_group_by_id($row_id)
     }
 
     
+// public function get_employee_details($company_id_in_hr)
+// {
+   
+//     $query = $this->db->select('*')
+//         ->from('hr_employee_master_view') 
+//         ->where('is_deleted', 'no') 
+//         ->where('is_active', 'yes')
+//         ->where('company_id', $company_id_in_hr)
+//         ->get();
+//         // echo "Last Query: " . $this->db->last_query();
+//     if ($query->num_rows() > 0) {
+//         return $query->result(); 
+//     }
+
+//     return []; 
+// }
+
 public function get_employee_details($company_id_in_hr)
 {
-   
-    $query = $this->db->select('*')
+    $query = $this->db->select('*, CONCAT(first_name, " ", last_name) AS full_name')
         ->from('hr_employee_master_view') 
         ->where('is_deleted', 'no') 
         ->where('is_active', 'yes')
         ->where('company_id', $company_id_in_hr)
         ->get();
-        // echo "Last Query: " . $this->db->last_query();
+
     if ($query->num_rows() > 0) {
         return $query->result(); 
     }
 
     return []; 
 }
+
 
 
 public function update_employee_details($row_id,$employee_master_data){
@@ -2413,10 +2442,12 @@ public function get_certifications()
                                 return $query->result();
                             }
                             
-                            public function  get_employee_skill_options() {
+                            public function get_employee_skill_options()
+                                {
                                 //  $company_id_in_hr = $this->session->userdata('company_id_in_hr');
                                 $this->db->select('id, skill_name');
                                 $this->db->from('hr_skills');
+                                $this->db->where('is_deleted', 'no'); 
                                 $query = $this->db->get();
                                 return $query->result();
                                 }
@@ -2616,6 +2647,7 @@ public function update_employee_team($data,$row_id)
             $this->db->select('id, branch_name');
             $this->db->from('hr_branches');
             $this->db->where('company_id',$this->session->userdata('company_id_in_hr'));
+            $this->db->where('is_deleted',"no");
             $query = $this->db->get();
             return $query->result();
             }
@@ -2917,16 +2949,17 @@ public function save_new_travel_request($data,$row_id){
             }
         }
 
-        public function get_employee_skills()
-{
-    $this->db->select('hr_employee_skills.id,details,skill_name,CONCAT(hr_employee_master.employee_number, " ", hr_employee_master.first_name, " ", hr_employee_master.last_name) as employee_name');
-    $this->db->from('hr_employee_skills');
-    $this->db->join('hr_employee_master', 'hr_employee_skills.employee_id = hr_employee_master.employee_id', 'left');
-    $this->db->join('hr_skills', 'hr_employee_skills.skill_id = hr_skills.id', 'left');
-    $this->db->where('hr_employee_skills.is_deleted', 'no');
-    $query = $this->db->get();
-    return $query->result();
-}
+    public function get_employee_skills()
+         {
+            $this->db->select('hr_employee_skills.id,details,skill_name,CONCAT(hr_employee_master.employee_number, " ", hr_employee_master.first_name, " ", hr_employee_master.last_name) as employee_name');
+            $this->db->from('hr_employee_skills');
+            $this->db->join('hr_employee_master', 'hr_employee_skills.employee_id = hr_employee_master.employee_id', 'left');
+            $this->db->join('hr_skills', 'hr_employee_skills.skill_id = hr_skills.id', 'left');
+            $this->db->where('hr_employee_skills.is_deleted', 'no');
+            $query = $this->db->get();
+
+            return $query->result();
+        }
 
 public function insert_employee_skills($data)
 {
@@ -2976,6 +3009,136 @@ public function get_employee_head_name($departmentId) {
         return null; 
     }
 }
+
+//test
+public function get_state_list(){
+    $query = $this->db->get('sys_state_list');
+  
+    if($query->num_rows()>0)
+    {
+        return($query->result());
+
+    }
+       
+    return array();
+}
+
+
+
+
+
+// public function get_employee_team_master_details_for_modal($id)
+// {
+//     $this->db->select('etm.id AS team_id, etm.team_name, etm.team_description,
+//      b.branch_name, d.department_name, 
+//     etm.team_leader_id, CONCAT(em.employee_number, " ", em.first_name, " ", 
+//     em.last_name) 
+//     AS team_leader_name, GROUP_CONCAT(CONCAT(mem.employee_number, " ",
+//      mem.first_name, " ", mem.last_name) SEPARATOR ", ") AS team_members, em.present_address_line_1, em.present_address_line_2, em.present_address_line_3, em.present_address_line_4,em.mobile_phone');
+//     $this->db->from('hr_employee_team_master AS etm');
+//     $this->db->join('hr_branches AS b', 'etm.branch_id = b.id', 'left');
+//     $this->db->join('hr_departments AS d', 'etm.department_id = d.id', 'left');
+//     $this->db->join('hr_employee_master AS em', 'etm.team_leader_id = em.employee_id', 'left');
+//     $this->db->join('hr_employee_team_details AS etd', 'etm.id = etd.team_id', 'left');
+//     $this->db->join('hr_employee_master AS mem', 'etd.team_member_id = mem.employee_id', 'left');
+//     $this->db->where('etm.id', $id);
+//     $this->db->where('etm.is_deleted', 'no');
+//     $this->db->group_by('etm.id');
+//     $query = $this->db->get();
+//     return $query->result();
+// }
+
+public function get_employee_team_master_details_for_modal($id)
+{
+    $this->db->select('etm.id AS team_id, etm.team_name, etm.team_description,
+        b.branch_name, d.department_name, 
+        etm.team_leader_id, CONCAT(em.employee_number, " ", em.first_name, " ", em.last_name) AS team_leader_name, 
+        mem.employee_number AS team_member_number,
+        CONCAT(mem.first_name, " ", mem.last_name) AS team_member_name,
+        mem.present_address_line_1 AS team_member_address_1,
+        mem.present_address_line_2 AS team_member_address_2,
+        mem.present_address_line_3 AS team_member_address_3,
+        mem.present_address_line_4 AS team_member_address_4,
+        mem.mobile_phone AS team_member_phone');
+    
+    $this->db->from('hr_employee_team_master AS etm');
+    $this->db->join('hr_branches AS b', 'etm.branch_id = b.id', 'left');
+    $this->db->join('hr_departments AS d', 'etm.department_id = d.id', 'left');
+    $this->db->join('hr_employee_master AS em', 'etm.team_leader_id = em.employee_id', 'left');
+    $this->db->join('hr_employee_team_details AS etd', 'etm.id = etd.team_id', 'left');
+    $this->db->join('hr_employee_master AS mem', 'etd.team_member_id = mem.employee_id', 'left');
+    $this->db->where('etm.id', $id);
+    $this->db->where('etm.is_deleted', 'no');
+    $this->db->order_by('mem.employee_number'); 
+    $query = $this->db->get();
+    
+    return $query->result();
+}
+
+
+
+
+public function get_calandar_details()
+{
+   
+    $query = $this->db->select('*')
+        ->from('hr_calendar_master') 
+        ->where('is_deleted', 'no') 
+        ->get();
+
+    if ($query->num_rows() > 0) {
+        return $query->result(); 
+    }
+
+    return []; 
+}
+
+public function get_week_days(){
+    $query = $this->db->select('*')
+        ->from('hr_week_days') 
+        ->get();
+
+    if ($query->num_rows() > 0) {
+        return $query->result(); 
+    }
+
+    return [];
+
+}
+
+
+
+    public function insert_calendar_details($data) {
+
+        $this->db->insert('hr_calendar_details', $data);
+        return $this->db->insert_id(); 
+    }
+
+    public function insert_calendar_master($data) {
+        $this->db->insert('hr_calendar_master', $data);
+        return $this->db->insert_id(); 
+    }
+
+
+
+  
+    public function get_calendar_details_by_id($row_id) {
+        $this->db->select('*');
+        $this->db->from('hr_calendar_details');
+        $this->db->where('calendar_master_id', $row_id);
+    
+        $query = $this->db->get();
+        // echo "Last Query: " . $this->db->last_query($query);
+    
+        if ($query->num_rows() > 0) {
+            return $query->result_array(); // Return an array of rows
+        } else {
+            return false;
+        }
+    }
+    
+    
+
 
 
 

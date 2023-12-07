@@ -45,29 +45,13 @@
                    <!--tab 1  ------ -->
                     <div class="tab-pane fade show active" id="transportation_means_tab" role="tabpanel" aria-labelledby="home-tab">
                         <!-- --- discription ---- -->
-                            <div id="company_structure_table_top" class="reviewBlock">
-                            <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-            
-                                <div class="ant-card-head">
-                            
-                                    <div class="name">
-                                    Transportation
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can manage the job titles in your organisation . Each employee needs to assigned a job title.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
+                          <div id="company_structure_table_top" class="reviewBlock">
+                            <div class="combined_buttons">
+                               <div class="add_new_btn_div">
+                                  <button id="transportation_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                               </div>           
                             </div>
-                            </div>
+                          </div>
                             <!-- --- ./discription ---- -->
             
                         <!--for loading CompanyStructure DataTable -->
@@ -98,27 +82,11 @@
                     <div class="tab-pane fade" id="leave_category_tab" role="tabpanel" aria-labelledby="profile-tab">
                         <!-- --- discription ---- -->
                         <div id="company_structure_table_top" class="reviewBlock">
-                            <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-
-                                <div class="ant-card-head">
-                    
-                                    <div class="name">
-                                     Leave Category
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
+                          <div class="combined_buttons">
+                            <div class="add_new_btn_div">
+                              <button id="leave_category_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                            </div>           
+                          </div>
                         </div>
                         <!-- --- ./discription ---- -->
                         <!-- table  -->
@@ -145,27 +113,11 @@
                     <div class="tab-pane fade" id="loan_type_tab_tab" role="tabpanel" aria-labelledby="profile-tab">
                         <!-- --- discription ---- -->
                         <div id="company_structure_table_top" class="reviewBlock">
-                            <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-
-                                <div class="ant-card-head">
-                    
-                                    <div class="name">
-                                    Loan Type
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
+                        <div class="combined_buttons">
+                            <div class="add_new_btn_div">
+                              <button id="loan_type_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                            </div>           
+                          </div>
                         </div>
                         <!-- --- ./discription ---- -->
                         <!-- table  -->
@@ -188,7 +140,7 @@
                         </table>
                         <!-- ./ table start -->
                     </div>
-                    <!--  ./ tab 2-->
+                    <!--  ./ tab 3-->
               </div>
 
              
@@ -299,7 +251,7 @@
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default cancelbtn" id="btn_pay_scales_cancel" data-dismiss="modal">Cancel</button>
-              <button type="button" class="btn savebtn" id="btn_category_save"><i class="fas fa-calendar-check"></i>Save</button>
+              <button type="button" class="btn savebtn" id="btn_leave_category_save"><i class="fas fa-calendar-check"></i>Save</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -428,6 +380,21 @@ function loadDataTableForTransportation() {
     });
 }
 
+$("#transportation_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#transportation_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
 
 // save transportation
 $('#transportation_modal_form').validate({
@@ -603,6 +570,22 @@ function loadDataTableForLeaveCategory() {
         }
     });
 }
+
+$("#leave_category_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#leave_category_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
 
 // save leave category
 $('#leave_category_modal_form').validate({
@@ -780,6 +763,21 @@ function loadDataTableForLoanType() {
     });
 }
 
+$("#loan_type_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#loan_type_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
 
 
 

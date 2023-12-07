@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 ob_start();// this is required to session start error in the server version only;
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+
 use PhpOffice\PhpWord\Autoloader;
 use PhpOffice\PhpWord\Settings;
 
@@ -620,7 +621,9 @@ public function save_certification_details()
      elseif ($flag_id === "1") {
 
         $row_id = $this->input->post('row_id'); 
-        $res = $this->HrModel->update_certification($row_id,  $data);
+        
+        $res = $this->HrModel->update_certification_in_company($row_id,  $data);
+       
        
     }  
 
@@ -1783,6 +1786,8 @@ public function save_projects()
                     }
 
                     public function employee(){
+                        // echo APPPATH;
+                        // die;
                         $company_id_in_hr = $this->session->userdata('company_id_in_hr');
                         $data = array();
                         $data["gender"]  = $this->HrModel->get_gender();
@@ -3045,6 +3050,7 @@ public function teams()
     //team master
     public function get_employee_team_master_details()
     {
+ 
     $data = $this->HrModel->get_employee_team_master_details();
     echo json_encode(['data' => $data]);
     }
@@ -3608,7 +3614,322 @@ public function get_employee_head_name() {
 
 
 
+public function generate_pdf_for_employee_skills() {
+   
+    ob_start();
 
+    require_once(APPPATH . 'third_party/tcpdf/tcpdf.php');
+
+    
+    $employee_skills = $this->HrModel->get_employee_skills();
+
+ 
+    $pdf = new TCPDF();
+    $pdf->SetCreator('Your Creator');
+    $pdf->SetAuthor('Your Author');
+    $pdf->SetTitle('Employee Skills PDF');
+    $pdf->SetSubject('Employee Skills Data');
+    $pdf->SetKeywords('Employee, Skills, PDF');
+    $pdf->AddPage();
+    $pdf->SetFont('helvetica', '', 12);
+
+    
+    $pdf_content = $this->load->view('hr-management/pdf_template', ['employee_skills' => $employee_skills], true);
+
+   
+    $pdf->writeHTML($pdf_content, true, false, true, false, '');
+
+    
+    $pdf->Output('employee_skills.pdf', 'D');
+
+   
+    exit();
+}
+
+
+
+
+
+
+
+
+
+public function generate_pdf_for_state_list() {
+    ob_start();
+
+    require_once(APPPATH . 'third_party/CustomTCPDF.php'); // Include your custom TCPDF class
+    $state_list = $this->HrModel->get_state_list();
+
+    $reportTitle ='State list from header';
+    $pdf = new CustomTCPDF($reportTitle);
+   
+    $pdf->SetMargins(PDF_MARGIN_LEFT, 20, PDF_MARGIN_RIGHT);
+    
+
+    $pdf->SetCreator('Your Creator');
+    $pdf->SetAuthor('Your Author');
+    $pdf->SetTitle('State List PDF');
+    $pdf->SetSubject('State List Data');
+    $pdf->SetKeywords('State, List, PDF');
+    $pdf->SetFont('helvetica', '', 12);
+
+    $itemsPerPage = 40;
+
+    $startIndex = 0;
+    $totalItems = count($state_list);
+    $pageCount = 1;
+
+    while ($startIndex < $totalItems) {
+        $pdf->AddPage();
+
+        $currentItems = array_slice($state_list, $startIndex, $itemsPerPage);
+
+        // Check if it's the first page and add the main heading
+        // if ($pageCount === 1) {
+        //     $content = '<h1 style="text-align: center;">State List Report</h1>';
+        //     $content .= $this->load->view('hr-management/pdf_state_list', ['state_list' => $currentItems, 'pageCount' => $pageCount], true);
+        // } 
+        // else {
+            $content = $this->load->view('hr-management/pdf_state_list', ['state_list' => $currentItems, 'pageCount' => $pageCount], true);
+        // }
+
+        $pdf->writeHTML($content, true, false, true, false, '');
+
+        $startIndex += $itemsPerPage;
+        $pageCount++;
+    }
+
+    $pdf->Output('state_list.pdf', 'D');
+    exit();
+}
+
+
+
+public function generate_pdf_for_employee_list() {
+    $company_id_in_hr = $this->session->userdata('company_id_in_hr');
+    ob_start();
+
+    require_once(APPPATH . 'third_party/CustomTCPDF.php'); 
+    $employee_list = $this->HrModel->get_employee_details($company_id_in_hr);
+
+    $company_info = $this->HrModel->get_compamny_structure_details();
+
+    if (!empty($company_info)) {
+        // $company_name = $company_info[0]->company_name; 
+        // $address_line_1 = $company_info[0]->address_line1; 
+        // $address_line_2 = $company_info[0]->address_line2; 
+        $company_name = '<span style="font-size: 23px;"><b>' . $company_info[0]->company_name . '</b></span>'; 
+        $address_line_1 = '<span style="font-size: 10px;"><i>' . $company_info[0]->address_line1 . '</i></span>'; 
+        $address_line_2 = '<span style="font-size: 10px;"><i>' . $company_info[0]->address_line2 . '</i></span>'; 
+
+       
+        $reportTitle = $company_name . '<br>' . $address_line_1 . '<br>' . $address_line_2;
+
+        $pdf = new CustomTCPDF($reportTitle);
+      
+    } else {
+        // Handle the case when company information is not available
+        echo "Company information not found.";
+    }
+    // $reportTitle = "BRQ Associates<br>Subtitle Line 1<br>Subtitle Line 2";
+   
+    
+
+    $pdf = new CustomTCPDF($reportTitle);
+    $pdf->SetMargins(PDF_MARGIN_LEFT, 25, PDF_MARGIN_RIGHT);
+
+
+    $pdf->SetCreator('Your Creator');
+    $pdf->SetAuthor('Your Author');
+    $pdf->SetTitle('Employee List');
+    $pdf->SetSubject('State List Data');
+    $pdf->SetKeywords('State, List, PDF');
+    $pdf->SetFont('helvetica', '', 12);
+
+    $itemsPerPage = 40;
+
+    $startIndex = 0;
+    $totalItems = count($employee_list);
+    $pageCount = 1;
+
+    while ($startIndex < $totalItems) {
+        $pdf->AddPage();
+
+        $currentItems = array_slice($employee_list, $startIndex, $itemsPerPage);
+
+            $content = $this->load->view('hr-management/PdfTemplates/pdf_employee_list', ['employee_list' => $currentItems, 'pageCount' => $pageCount], true);
+        
+        $pdf->writeHTML($content, true, false, true, false, '');
+        
+
+        $startIndex += $itemsPerPage;
+        $pageCount++;
+    }
+
+    $pdf->Output('employee_list.pdf', 'D');
+    exit();
+}
+
+public function get_employee_team_master_details_for_modal()
+{
+    $id = $this->input->post('id');
+$data = $this->HrModel->get_employee_team_master_details_for_modal($id);
+echo json_encode(['data' => $data]);
+}
+
+
+public function generate_pdf_for_teams() {
+    ob_start();
+    require_once(APPPATH . 'third_party/CustomTCPDF.php'); 
+
+    // Retrieve necessary data
+    $id = $this->input->post('id');
+    $company_info = $this->HrModel->get_compamny_structure_details();
+    $employee_team_details = $this->HrModel->get_employee_team_master_details_for_modal($id);
+
+    if (!empty($company_info)) {
+        // Retrieve company information for the header
+        $company_name = '<span style="font-size: 23px;"><b>' . $company_info[0]->company_name . '</b></span>'; 
+        $address_line_1 = '<span style="font-size: 10px;"><i>' . $company_info[0]->address_line1 . '</i></span>'; 
+        $address_line_2 = '<span style="font-size: 10px;"><i>' . $company_info[0]->address_line2 . '</i></span>'; 
+        $reportTitle = $company_name . '<br>' . $address_line_1 . '<br>' . $address_line_2;
+        
+        // Initialize TCPDF
+        $pdf = new CustomTCPDF($reportTitle);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, 25, PDF_MARGIN_RIGHT);
+        $pdf->AddPage();
+
+        // Generate PDF content from view and pass necessary data
+        $content = $this->load->view('hr-management/PdfTemplates/pdf_employee_team_details', ['employee_team_details' => $employee_team_details, 'pageCount' => $pageCount], true);
+        
+        // Write HTML content to PDF
+        $pdf->writeHTML($content, true, false, true, false, '');
+
+        // Output the PDF
+        $pdf->Output('generated_pdf_from_modal.pdf', 'D');
+        exit();
+    } else {
+        echo "Company information not found.";
+    }
+}
+
+public function calender(){
+
+    $data["week_days"]  = $this->HrModel->get_week_days();
+    $this->load->view('hr-management/calender',$data);
 
 }
+
+
+public function get_calandar_details()
+{
+    $data = $this->HrModel->get_calandar_details();
+    echo json_encode(['data' => $data]);
+}
+
+
+
+
+
+
+
+function save_calender_details()
+{
+    $company_id_in_hr = $this->session->userdata('company_id_in_hr');
+    $flag_id = $_POST['flag_id'];
+    $row_id = $_POST['row_id'];
+
+    if ($flag_id === "0") 
+    {
+        $calender_master_data = array(
+            'company_id' => $company_id_in_hr,
+            'calendar_start_date' => $_POST['calendar_start_date'],
+            'calendar_end_date' => $_POST['calendar_end_date'],
+            'year_name' => $_POST['year_name'],
+            'effective_from' => $_POST['effective_from'],
+            'effective_to' => $_POST['effective_to'],
+            'created_by' => $_SESSION['user_id'],
+            'created_on' => date("Y-m-d H:i:s"),
+        );
+
+        $calendar_master_id = $this->HrModel->insert_calendar_master($calender_master_data);
+
+        if ($calendar_master_id) {
+
+            $week_day_id = $_POST['working_day_id'];
+            $start_times = $_POST['start_time']; 
+            $end_times = $_POST['end_time']; 
+            $start_time_formatted = [];
+            $end_time_formatted = [];
+            $selected_working_days = $_POST['working_day_id']; 
+
+            foreach ($start_times as $start_hour) {
+                $start_time_formatted[] = date('H:i:s', strtotime("$start_hour:00"));
+            }
+
+            foreach ($end_times as $end_hour) {
+                $end_time_formatted[] = date('H:i:s', strtotime("$end_hour:00"));
+            }
+
+            foreach ($week_day_id as $key => $value) {
+                $is_working_day = (in_array($value, $selected_working_days)) ? 'yes' : 'no'; 
+
+                $calender_details_data = array(
+                    'calendar_master_id' => $calendar_master_id,
+                    'week_day_id' => $value,
+                    'start_time' => $start_time_formatted[$key],
+                    'end_time' => $end_time_formatted[$key],
+                    'is_working_day' => $is_working_day, 
+                );
+
+                $insertedRowId = $this->HrModel->insert_calendar_details($calender_details_data);
+            }
+
+            $response = array(
+                'success' => true,
+                'message' => 'Saved successfully.',
+            );
+        } 
+        else {
+            $response = array(
+                'success' => false,
+                'message' => 'Error in saving master calendar data.',
+            );
+        }
+    } else {
+        // Handle other flag_id scenarios if needed
+        $response = array(
+            'success' => false,
+            'message' => 'Flag_id is not 0.',
+        );
+    }
+
+    echo json_encode($response);
+}
+
+
+
+public function get_calendar_details_by_id()
+{
+    $row_id = $this->input->get('row_id');
+   
+    $result = $this->HrModel->get_calendar_details_by_id($row_id);
+
+    if ($result) {
+        $response = [
+            'success' => true,
+            'data' => $result
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => 'Not found'
+        ];
+    }
+
+    echo json_encode($response);
+}
+
+}
+
 

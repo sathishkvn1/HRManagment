@@ -1,25 +1,18 @@
 <div id="employment_tab" class="reviewBlock">
-                    <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-                        <div class="ant-card-head">
-                               <div class="name" id="click">
-                                 Employee Team Details
-                                </div>
-                              
-                                <div class="moreinfo" >
-                                    <a href="#">More Info</a>
-                                </div>
-                        </div>
-                            <div class="ant-card-body">
-                            <div class="ant-card-meta">
-                                <div class="ant-card-meta-detail">
-                                <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                    </div>
-                </div>
+           
+                            <div class="combined_buttons">
+                                                <div class="add_new_btn_div">
+                                                    <button id="employee_team_details_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                                                 </div>
+                                                <div class="filter_btn_div">
+                                                <button id="employee_team_details_data_table_filter_btn" class="customise_filter_button" data-value="employee_data_table"><i class="fas fa-filter"></i>Filter</button>
+                                                </div>
+                                                <div class="reset_filter_btn_div">
+                                                    <button id="employee_team_details_data_table_reset_filter"  style="display:none" class="cancel_filter_button"><i class="fas fa-times"></i> Cancel</button>
+                                                </div>
+                                                
+                                            </div>  
+                             </div>
                        
                         <!-- table  -->
                         <table id="employee_team_details_data_table" class="table table-striped">
@@ -473,6 +466,44 @@ $("#appy_filter_team_details").on("click", function () {
     }
 
     $("#employee_team_details_data_table_filter_modal").modal("hide");
+});
+
+
+$("#employee_team_details_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#employee_team_details_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
+
+$("#employee_team_details_data_table_filter_btn").on("click", function() {
+
+  $("#flag_id").val('0');
+   $("#employee_team_details_data_table_filter_modal").modal("show");
+});
+
+
+$("#employee_team_details_data_table_reset_filter").on("click", function() {
+
+  
+     var table = $('#employee_team_details_data_table').DataTable();
+    var modal = $('#employee_team_details_data_table_filter_modal');
+    modal.find("select").val("0");
+    table.columns().search('');
+    table.search('').draw();
+  
+   
+    $(this).hide();
+
 });
 
 

@@ -1,30 +1,5 @@
 
 
-                                       <!-- --- discription ---- -->
-                                       <div id="company_structure_table_top" class="reviewBlock">
-                            <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-            
-                                <div class="ant-card-head">
-                            
-                                    <div class="name">
-                                         New Travel Request
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can manage the job titles in your organisation . Each employee needs to assigned a job title.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                            <!-- --- ./discription ---- -->
             
                         <!--for loading CompanyStructure DataTable -->
                             <table id="new_travel_request_data_table" class="table table-striped">
@@ -365,11 +340,12 @@ function travelNewRequestViewRow(row_id) {
        data: { row_id: row_id, li_token: token,flag_id: $("#flag_id").val()},
        dataType: "json",
        success: function (response) {
-           // console.log(response is ,response);
+           
            if (response.success) {
                $("#employee_newtravel_request_employee_id").val(response.data.employee_id);
                $("#employee_newtravel_request_date_of_request").val(response.data.date_of_request);
-               $("#employee_newtravel_request_means_of_transportation_id").val(response.data.means_of_transportation_id);
+               $("#employee_newtravel_request_means_of_transportation_id").val(response.data.means_of_transportation_id).trigger('change');
+               
                $("#employee_newtravel_request_purpose_of_travel").val(response.data.purpose_of_travel);
                $("#employee_newtravel_request_travel_from_place").val(response.data.travel_from_place);
                $("#employee_newtravel_request_travel_to_place").val(response.data.travel_to_place);

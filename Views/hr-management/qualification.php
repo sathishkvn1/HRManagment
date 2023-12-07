@@ -6,21 +6,17 @@
   <title>Hr Management System</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
- 
      <?php include("top-css.php"); ?> 
-
-
 </head>
+
 <body class="hold-transition sidebar-mini layout-fixed brq-payroll company-structure">
    <div class="wrapper">
       <!-- Navbar -->
       <?php include("top-nav.php"); ?> 
       <!-- /.navbar -->
-      
       <?php include("left-sidebar.php"); ?> 
       <!-- Content Wrapper. Contains page content -->
-
-    <!-- MAIN  CODE  -->
+      <!-- MAIN  CODE  -->
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->
           <div class="content-header py-2 px-4">
@@ -47,37 +43,22 @@
               <div class="tab-content">
                    <!--tab 1 (COMPANY STRUCTURE)  ------ -->
                    <div class="tab-pane fade show active" id="qualification_skills_tab" role="tabpanel" aria-labelledby="home-tab">
-                        <!-- --- discription ---- -->
+                        <!----- discription ------>
                         <div id="company_structure_table_top" class="reviewBlock">
-                            <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-                               <div class="ant-card-head">
-                                 <div class="name">
-                                    Skills
-                                  </div>
-                                  <div class="moreinfo">
-                                      <a href="#">More Info</a>
-                                  </div>
-                               </div>
-                                <div class="ant-card-body">
-                                  <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                      <div class="ant-card-meta-description">
-                                          Here you can define the structure of the company by adding branches, departments, company units,etc. Each employee needs to be connected to a company structure.
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                            <div class="combined_buttons">
+                              <div class="add_new_btn_div">
+                                <button id="skills_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              </div>           
                             </div>
                         </div>
                         <!-- --- ./discription ---- -->
                          <!--for loading Skills DataTable -->
+                         
                          <table id="skills_data_table" class="table table-striped" style="width: -webkit-fill-available !important; ">
-                            <thead>
+                          <thead>
                                 <tr>
                                     <th>Skill Name</th>
                                     <th>Description</th>
-                                    
-                                    
                                     <th style="width:200px;text-align: center;">Action</th>
                                 </tr>
                             </thead>
@@ -85,15 +66,11 @@
                                 <tr>
                                     <td>Your Company</td>
                                     <td>PO Box 001002 Sample Road, Sample Town</td>
-                                    
-                                    
                                     <td class="operations">
                                         <div class="edit"><i class="fas fa-edit"></i>Edit</div>
                                         <div class="view"><i class="fas fa-eye"></i>View</div>
                                         <div class="delete"><i class="fas fa-trash"></i>Delete</div>
-                                    
                                     </td>
-                                    
                                 </tr>
                             </tbody>
                          </table>
@@ -104,27 +81,11 @@
                    <div class="tab-pane " id="qualification_education_tab" role="tabpanel" aria-labelledby="home-tab">
                       <!-- --- discription ---- -->
                         <div id="company_structure_table_top" class="reviewBlock">
-                          <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-        
-                            <div class="ant-card-head">
-                         
-                                <div class="name">
-                                 Education
-                                </div>
-                                <div class="moreinfo">
-                                    <a href="#">More Info</a>
-                                </div>
+                            <div class="combined_buttons">
+                              <div class="add_new_btn_div">
+                                <button id="education_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              </div>           
                             </div>
-                            <div class="ant-card-body">
-                              <div class="ant-card-meta">
-                                <div class="ant-card-meta-detail">
-                                  <div class="ant-card-meta-description">
-                                      Here you can define the structure of the company by adding branches, departments, company units,etc. Each employee needs to be connected to a company structure.
-                                </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
                         </div>
                         <!-- --- ./discription ---- -->
                          <!--for loading Skills DataTable -->
@@ -140,18 +101,12 @@
                               <tr>
                                   <td>Your Company</td>
                                   <td>PO Box 001002 Sample Road, Sample Town</td>
-                                 
-                                 
                                   <td class="operations">
                                     <div class="edit"><i class="fas fa-edit"></i>Edit</div>
                                     <div class="view"><i class="fas fa-eye"></i>View</div>
                                     <div class="delete"><i class="fas fa-trash"></i>Delete</div>
-                                   
                                   </td>
-                                  
                               </tr>
-                             
-                           
                           </tbody>
                         </table>
                          <!-- ./ for loading CompanyStructure DataTable -->
@@ -161,40 +116,19 @@
               <div class="tab-pane fade" id="qualification_certification_tab" role="tabpanel" aria-labelledby="profile-tab">
                  <!-- --- discription ---- -->
                  <div id="company_structure_table_top" class="reviewBlock">
-                  <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-
-                    <div class="ant-card-head">
-           
-                        <div class="name">
-                          Company Address
-                        </div>
-                        <div class="moreinfo">
-                            <a href="#">More Info</a>
-                        </div>
-                    </div>
-                    <div class="ant-card-body">
-                      <div class="ant-card-meta">
-                        <div class="ant-card-meta-detail">
-                          <div class="ant-card-meta-description">
-                              Here you can define the branch of the company by adding branches, departments, company units,etc. Each employee needs to be connected to a company structure.
-                        </div>
-                        </div>
+                      <div class="combined_buttons">
+                            <div class="add_new_btn_div">
+                              <button id="certification_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                            </div>           
                       </div>
-                    </div>
-                  </div>
                 </div>
                 <!-- --- ./discription ---- -->
-
-
               <!-- table  -->
                 <table id="certification_data_table" class="table table-striped">
                   <thead>
                       <tr>
-                      
                        <th>Branch Name</th>
                         <th>Address</th>
-    
-                        
                           <th style="width:200px;text-align: center;">Action</th>
                       </tr>
                   </thead>
@@ -202,7 +136,6 @@
                       <tr>
                       <td>Your Company</td>
                         <td>PO Box 001002 Sample Road, Sample Town</td>
-                       
                           <td>
                             <div class="operations">
                               <div class="edit"><i class="fas fa-edit"></i>Edit</div>
@@ -211,7 +144,6 @@
                               <div class="copy"><i class="fas fa-copy"></i>Copy</div>
                            </div>
                           </td>
-                          
                       </tr>
                   </tbody>
                 </table>
@@ -222,27 +154,11 @@
               <div class="tab-pane fade" id="qualification_languages_tab" role="tabpanel" aria-labelledby="profile-tab">
                  <!-- --- discription ---- -->
                  <div id="company_structure_table_top" class="reviewBlock">
-                  <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-
-                    <div class="ant-card-head">
-           
-                        <div class="name">
-                          Languages
-                        </div>
-                        <div class="moreinfo">
-                            <a href="#">More Info</a>
-                        </div>
-                    </div>
-                    <div class="ant-card-body">
-                      <div class="ant-card-meta">
-                        <div class="ant-card-meta-detail">
-                          <div class="ant-card-meta-description">
-                              Here you can define the branch of the company by adding branches, departments, company units,etc. Each employee needs to be connected to a company structure.
-                        </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                 <div class="combined_buttons">
+                              <div class="add_new_btn_div">
+                                <button id="languages_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              </div>           
+                            </div>
                 </div>
                 <!-- --- ./discription ---- -->
 
@@ -254,8 +170,6 @@
                       
                        <th>Language Name</th>
                         <th>Language Code</th>
-    
-                        
                           <th style="width:200px;text-align: center;">Action</th>
                       </tr>
                   </thead>
@@ -282,40 +196,18 @@
               <div class="tab-pane fade" id="languages_proficiency_tab" role="tabpanel" aria-labelledby="profile-tab">
                  <!-- --- discription ---- -->
                  <div id="company_structure_table_top" class="reviewBlock">
-                  <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-
-                    <div class="ant-card-head">
-           
-                        <div class="name">
-                          Languages Proficiency
-                        </div>
-                        <div class="moreinfo">
-                            <a href="#">More Info</a>
-                        </div>
+                    <div class="combined_buttons">
+                      <div class="add_new_btn_div">
+                        <button id="languages_proficiency_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                      </div>           
                     </div>
-                    <div class="ant-card-body">
-                      <div class="ant-card-meta">
-                        <div class="ant-card-meta-detail">
-                          <div class="ant-card-meta-description">
-                              Here you can define the branch of the company by adding branches, departments, company units,etc. Each employee needs to be connected to a company structure.
-                        </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
                 <!-- --- ./discription ---- -->
-
-
               <!-- table  -->
                 <table id="languages_proficiency_data_table" class="table table-striped">
                   <thead>
                       <tr>
-                      
                        <th>Language Proficiency</th>
-                       
-    
-                        
                           <th style="width:200px;text-align: center;">Action</th>
                       </tr>
                   </thead>
@@ -612,6 +504,10 @@ $(document).ready( function () {
  });
 
 
+ $("#education_data_table_add_new").on("click", function() {  
+  alert("hai");
+   $('#education_data_table_modal').modal('show');
+});
 
 
 
@@ -826,7 +722,7 @@ $("#btn_certification_save").click (function(){
               processData: false,
               contentType: false,
               success: function(response) {
-                console.log("response",response);
+                console.log("response in qualifi",response);
                 showToast('success', response.message);
                 $('#certification_data_table_modal').modal('hide');
                 $('#certification_data_table').DataTable().ajax.reload();
@@ -985,12 +881,27 @@ function loadDataTableForSkills(){
    ],
    
      "initComplete": function(settings, json) {
-       customizeDataTable('skills_data_table');
+      customizeDataTable('skills_data_table');
    }
 
 });
  }
 
+ $("#skills_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#skills_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
 
 function  loadDataTableForEducation(){
    
@@ -1025,6 +936,24 @@ function  loadDataTableForEducation(){
 });
  }
 
+ $("#education_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#education_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
+
+
+
 
 function loadDataTableForCertification(){
    
@@ -1058,6 +987,22 @@ function loadDataTableForCertification(){
 });
  }
 
+ $("#certification_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#certification_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
+
  function loadDataTableForLanguages(){
    
    $('#languages_data_table').DataTable({
@@ -1089,6 +1034,22 @@ function loadDataTableForCertification(){
 
 });
  }
+
+ $("#languages_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#languages_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
 
 
  function loadDataTableForProficiency(){
@@ -1123,7 +1084,21 @@ function loadDataTableForCertification(){
 });
  }
 
+ $("#languages_proficiency_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
 
+    var modalId = "#languages_proficiency_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
 
  function viewSkill(row_id) 
  {
@@ -1608,6 +1583,8 @@ function editLanguagesProficiency(row_id) {
    }
        
   });
+ 
+  
 </script>
 <script>
 $(document).ready(function() {

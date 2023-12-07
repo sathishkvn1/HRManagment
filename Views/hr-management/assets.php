@@ -49,26 +49,10 @@
                     <div class="tab-pane fade show active" id="group_tab_tab" role="tabpanel" aria-labelledby="home-tab">
                         <!-- --- discription ---- -->
                             <div id="company_structure_table_top" class="reviewBlock">
-                            <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-            
-                                <div class="ant-card-head">
-                            
-                                    <div class="name">
-                                    Group
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can manage the job titles in your organisation . Each employee needs to assigned a job title.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
+                            <div class="combined_buttons">
+                              <div class="add_new_btn_div">
+                                <button id="asset_group_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              </div>           
                             </div>
                             </div>
                             <!-- --- ./discription ---- -->
@@ -101,27 +85,11 @@
                     <div class="tab-pane fade" id="category_tab" role="tabpanel" aria-labelledby="profile-tab">
                         <!-- --- discription ---- -->
                         <div id="company_structure_table_top" class="reviewBlock">
-                            <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-
-                                <div class="ant-card-head">
-                    
-                                    <div class="name">
-                                     Category
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
+                          <div class="combined_buttons">
+                            <div class="add_new_btn_div">
+                                <button id="category_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                            </div>           
+                          </div>
                         </div>
                         <!-- --- ./discription ---- -->
                         <!-- table  -->
@@ -191,33 +159,17 @@
                         </table>
                         <!-- ./ table start -->
                     </div>
-                    <!--  ./ tab 2-->
+                    <!--  ./ tab 3-->
 
-                       <!--tab 3  ------ -->
+                       <!--tab 4  ------ -->
                        <div class="tab-pane fade" id="return_reason_tab" role="tabpanel" aria-labelledby="profile-tab">
                         <!-- --- discription ---- -->
                         <div id="company_structure_table_top" class="reviewBlock">
-                            <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-
-                                <div class="ant-card-head">
-                    
-                                    <div class="name">
-                                        Return Reason
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
+                          <div class="combined_buttons">
+                            <div class="add_new_btn_div">
+                                <button id="return_reason_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                            </div>           
+                          </div>
                         </div>
                         <!-- --- ./discription ---- -->
                         <!-- table  -->
@@ -240,7 +192,7 @@
                         </table>
                         <!-- ./ table start -->
                     </div>
-                    <!--  ./ tab 2-->
+                    <!--  ./ tab 4-->
               </div>
 
              
@@ -494,7 +446,21 @@ function loadDataTableForGroup() {
     });
 }
 
+$("#asset_group_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
 
+    var modalId = "#asset_group_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
 
 
 
@@ -670,6 +636,22 @@ function loadDataTableForCategory() {
     });
 }
 
+$("#category_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#category_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
+
 $('#category_modal_form').validate({
   rules: {
                 asset_category_name: {
@@ -843,6 +825,22 @@ $('#return_reason_data_table').DataTable({
     }
 });
 }
+
+$("#return_reason_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#return_reason_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
 
 $('#return_reason_form').validate({
   rules: {

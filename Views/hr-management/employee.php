@@ -73,6 +73,25 @@
                         <div class="tab-content">
                             <!--tab 1  ------ -->
                                 <div class="tab-pane fade show active" id="employee_tab" role="tabpanel" aria-labelledby="employee_tab">
+
+                                <div id="" class="reviewBlock">
+
+                                            <div class="combined_buttons">
+                                                <div class="add_new_btn_div">
+                                                    <button id="employee_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                                                 </div>
+                                                <div class="filter_btn_div">
+                                                <button id="employee_data_table_filter_btn" class="customise_filter_button" data-value="employee_data_table"><i class="fas fa-filter"></i>Filter</button>
+                                                </div>
+                                                <div class="reset_filter_btn_div">
+                                                    <button id="employee_data_table_reset_filter"  style="display:none" class="cancel_filter_button"><i class="fas fa-times"></i> Cancel</button>
+                                                </div>
+                                                <div class="export_pdf">
+                                                <button id="employee_data_table_export_to_pdf" class="export_pdf_button"><i class="far fa-file-pdf export-pdf-icon"></i>Export to PDF</button>
+                                                </div>
+                                            </div>
+                
+                                                </div>
                                     <!--for loading CompanyStructure DataTable -->
                                     <table id="employee_data_table" class="table table-striped">
                                         <thead>
@@ -115,24 +134,24 @@
 
                         <div class="tab-pane fade" id="education_tab" role="tabpanel" aria-labelledby="education_tab">
                             
-                                <?php include("education.php");?>
+                                <?php include("employee_education.php");?>
                         </div>
                         <div class="tab-pane fade" id="certifications_tab" role="tabpanel" aria-labelledby="certifications_tab">
                                 
-                                <?php include("certification.php");?>
+                                <?php include("employee_certification.php");?>
                         </div>
 
                         <div class="tab-pane fade" id="languages_tab" role="tabpanel" aria-labelledby="languages_tab">
                                 
-                                <?php include("languages.php");?>
+                                <?php include("employee_languages.php");?>
                         </div>
                         <div class="tab-pane fade" id="dependents_tab" role="tabpanel" aria-labelledby="dependents_tab">
                             
-                                <?php include("dependents.php");?>
+                                <?php include("employee_dependents.php");?>
                         </div>
                         <div class="tab-pane fade" id="contacts_tab" role="tabpanel" aria-labelledby="contacts_tab">
                         
-                        <?php include("contacts.php");?>
+                        <?php include("employee_contacts.php");?>
                     </div>
                             <!--./one tab  ------ -->
 
@@ -183,7 +202,7 @@
             </div>
             
 
-            <!-- ===== -->
+            <!-- ===== ------------------------------------------->
 
 
             <section class="design-process-section" id="process-tab">
@@ -1357,7 +1376,7 @@ function fetchEmployeeNames() {
             var dropdown8 = $('#dependent_employee_id');
             var dropdown9 = $('#contact_employee_id');
             var dropdown10 = $('#loan_request_employee_id');
-            var dropdown11 = $('#employee_id_employee_skill');
+            var dropdown11 = $('#employee_id_employee_skills');
             
             
             
@@ -1382,8 +1401,9 @@ function fetchEmployeeNames() {
             dropdown9.empty();
             dropdown9.append($('<option></option>').attr('value', '').text('Select Employee')); 
             dropdown10.empty();
-            dropdown11.empty();
+          
             dropdown11.append($('<option></option>').attr('value', '').text('Select Employee')); 
+            dropdown11.empty();
             
             $.each(data.employee_names, function(index, employee) {
                 dropdown1.append($('<option></option>').attr('value', employee.employee_id).text(employee.full_name));
@@ -1406,6 +1426,7 @@ function fetchEmployeeNames() {
         }
     });
 }
+
 
 
 function updateDepartmentDropdown() {
@@ -1582,7 +1603,7 @@ function editEmployee(row_id,employmentDetailsId) {
                 // $("#gender_id").val(response.data.gender_id);
                 $("#gender_id").val(response.data.gender_id).trigger('change');
                 $("#date_of_birth").val(response.data.date_of_birth);
-                $("#nationality_id").val(response.data.nationality_id);
+                $("#nationality_id").val(response.data.nationality_id).trigger('change');
                 $("#marital_status_id").val(response.data.marital_status_id).trigger('change');
                 $("#aadhar_number").val(response.data.aadhar_number);
                 $("#passport_number").val(response.data.passport_number);
@@ -1628,10 +1649,10 @@ function editEmployee(row_id,employmentDetailsId) {
                 $("#date_joined").val(response.data.date_joined);
                
 
-                $("#present_state_id").val(response.data.permenent_state_id);
-                $("#present_country_id").val(response.data.present_country_id);
-                $("#permenent_state_id").val(response.data.permenent_state_id);
-                $("#permenent_country_id").val(response.data.permenent_country_id);
+                $("#present_state_id").val(response.data.permenent_state_id).trigger('change');
+                $("#present_country_id").val(response.data.present_country_id).trigger('change');
+                $("#permenent_state_id").val(response.data.permenent_state_id).trigger('change');
+                $("#permenent_country_id").val(response.data.permenent_country_id).trigger('change');
                
             
                 $("#employee_data_table_modal").modal("show");
@@ -1671,6 +1692,7 @@ function deleteEmployee(row_id, employmentDetailsId){
                 $('#employee_data_table_modal').modal('hide');
                 showToast('success', response.message); 
                 $('#employee_data_table').DataTable().ajax.reload();
+                fetchEmployeeNames(); 
             },
             error: function (xhr, status, error) {
                 // Handle error
@@ -1825,7 +1847,81 @@ $('#employee_department_id').change(function() {
     });
 });
 
+
+  // pdf generation
+
+$(document).on("click", "#employee_data_table_export_to_pdf", function() {
+ 
+ $.ajax({
+     url: BASE_URL + 'index.php/' + hrController + '/generate_pdf_for_employee_list',
+     type: "GET",
+     xhrFields: {
+         responseType: 'blob' 
+     },
+     success: function(response) {
+       
+         var blob = new Blob([response], { type: 'application/pdf' });
+
+       
+         var url = URL.createObjectURL(blob);
+
+        
+         var a = document.createElement('a');
+         a.href = url;
+         a.download = 'employee_list.pdf'; 
+         document.body.appendChild(a);
+         a.click();
+
+        
+         URL.revokeObjectURL(url);
+         document.body.removeChild(a);
+     },
+     error: function(xhr, status, error) {
+       
+     }
+ });
+});
+
+
+$("#employee_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#employee_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
+
+$("#employee_data_table_filter_btn").on("click", function() {
+
+  $("#flag_id").val('0');
+   $("#employee_data_table_filter_modal").modal("show");
+});
+
+
+$("#employee_data_table_reset_filter").on("click", function() {
+
+  
+     var table = $('#employee_data_table').DataTable();
+    var modal = $('#employee_data_table_filter_modal');
+    modal.find("select").val("0");
+    table.columns().search('');
+    table.search('').draw();
+  
    
+    $(this).hide();
+
+});
+
+
+
 
 
 </script>

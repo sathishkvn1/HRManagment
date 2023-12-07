@@ -1,25 +1,17 @@
 
 <div id="employment_tab" class="reviewBlock">
-                    <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
-                        <div class="ant-card-head">
-                               <div class="name" id="click">
-                                 Team Master
-                                </div>
-                              
-                                <div class="moreinfo" >
-                                    <a href="#">More Info</a>
-                                </div>
-                        </div>
-                            <div class="ant-card-body">
-                            <div class="ant-card-meta">
-                                <div class="ant-card-meta-detail">
-                                <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                    </div>
+<div class="combined_buttons">
+                                                <div class="add_new_btn_div">
+                                                    <button id="employee_team_master_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                                                 </div>
+                                                <div class="filter_btn_div">
+                                                <button id="employee_team_master_data_table_filter_btn" class="customise_filter_button" data-value="employee_data_table"><i class="fas fa-filter"></i>Filter</button>
+                                                </div>
+                                                <div class="reset_filter_btn_div">
+                                                    <button id="employee_team_master_data_table_reset_filter"  style="display:none" class="cancel_filter_button"><i class="fas fa-times"></i> Cancel</button>
+                                                </div>
+                                                
+                                            </div>                  
                 </div>
                        
                         <!-- table  -->
@@ -202,10 +194,36 @@
 
 
       <!-- ======filtering ==== -->
+      <!-- Modal Structure -->
 
-      
 
-      <!-- ======== -->
+
+       <div class="modal fade data-table-modal" id="detailsModal" data-bs-backdrop="static">
+         <div class="modal-dialog modal-lg"> 
+          <div class="modal-content">
+          <div class="modal-header">
+                <h3 class="modal-title">Employee Team Details</h3>
+                
+             
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </div>
+            <div class="modal-body">
+                <h1>Title</h1>
+                <p>Description or details here...</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+            <input type="hidden" id="hiddenIdField" value="">
+            
+            <button class="btn savebtn" id="generatePDFButton">Generate PDF</button>
+            </div>
+          </div> 
+       
+     </div>
+</div>
+
+
+
 
 
 
@@ -230,16 +248,17 @@ function loadDataTableForTeamMaster(){
             { data: "team_name"},
             { data: "team_description"},
             { data: "employee_name"},
-     
             {
                 data: "id",
-                render: function (data, type, full, row) {
+                render: function (data, type, full, row) 
+                {
                     var id = full.id;
                     return `
                         <div class="operations">
                             <a href="#" class="edit" onclick="employeeTeamMasterEditRow(${id});"><i class="fas fa-edit"></i>Edit</a>
                             <a href="#" class="view" onclick="employeeTeamMasterViewRow(${id});"><i class="fas fa-eye"></i>View</a>
                             <a href="#" class="delete" onclick="employeeTeamMasterDeleteRow(${id});"><i class="fas fa-trash"></i>Delete</a>
+                            <a href="#" class="details" onclick="openDetailsModal(${id});"><i class="fas fa-info"></i>Details</a>
                         </div>`;
                 }
             }
@@ -643,6 +662,7 @@ $('#employee_team_master_data_table_modal').on('shown.bs.modal', function () {
         }
     // get option  in travel master
     var branch_hid_val=$("#hidden_team_master_employee_branch").val();
+
     $.ajax({
             url: BASE_URL + "index.php/" + hrController + "/get_branch_id_option_in_team",
             type: 'GET',
@@ -671,6 +691,268 @@ $('#employee_team_master_data_table_modal').on('shown.bs.modal', function () {
     // get option  in travel master
     });
 //get branch id in team 
+
+
+
+
+
+// function openDetailsModal(id) {
+//     alert(id);
+//     $("#hiddenIdField").val(id);
+//     $("#detailsModal").modal("show");
+
+//     $.ajax({
+//         "url": BASE_URL + "index.php/" + hrController + "/get_employee_team_master_details_for_modal",
+//         method: 'POST',
+//         data: { id: id, li_token: token },
+//         success: function(response) {
+//             console.log(response);
+//             var data = JSON.parse(response);
+
+//             if (data.data && data.data.length > 0) {
+//                 var teamData = data.data[0];
+//                 var teamName = teamData.team_name;
+//                 var teamLeaderName = teamData.team_leader_name;
+//                 var branchName = teamData.branch_name;
+//                 var departmentName = teamData.department_name;
+//                 var teamMembers = data.data;
+
+//                 var modalContent = '<h5>Team: ' + teamName + '</h5>';
+//                 modalContent += '<p>Team Leader: ' + teamLeaderName + '</p>';
+//                 modalContent += '<p>Branch: ' + branchName + '</p>';
+//                 modalContent += '<p>Department: ' + departmentName + '</p>';
+
+//                 if (Array.isArray(teamMembers) && teamMembers.length > 0) {
+//                     modalContent += '<table class="table">';
+//                     modalContent += '<thead><tr><th>Team Member Name</th><th>Address</th><th>Mobile Phone</th></tr></thead>';
+//                     modalContent += '<tbody>';
+
+//                     teamMembers.forEach(function(member) {
+//                         var members = member.team_members.split(', ');
+//                         members.forEach(function(memberName) {
+//                             modalContent += '<tr>';
+//                             modalContent += '<td>' + memberName + '</td>';
+//                             modalContent += '<td>' + buildAddressHTML(member) + '</td>';
+//                             modalContent += '<td>' + member.mobile_phone + '</td>';
+//                             modalContent += '</tr>';
+//                         });
+//                     });
+
+//                     modalContent += '</tbody></table>';
+//                 } else {
+//                     modalContent += '<p>No team members found.</p>';
+//                 }
+
+//                 $('#detailsModal .modal-body').html(modalContent);
+//                 $("#detailsModal").modal("show");
+//             } else {
+//                 console.error('No data found.');
+//             }
+//         },
+//         error: function(xhr, status, error) {
+//             // Handle errors
+//             console.error(xhr.responseText);
+//         }
+//     });
+// }
+
+function buildAddressHTML(member) {
+    console.log("mmmmmm",member);
+    var addressHTML = '';
+
+    addressHTML += member.team_member_address_1 + '<br>';
+    if (member.team_member_address_2) addressHTML += member.team_member_address_2 + '<br>';
+    if (member.team_member_address_3) addressHTML += member.team_member_address_3 + '<br>';
+    if (member.team_member_address_4) addressHTML += member.team_member_address_4 + '<br>';
+
+    return addressHTML;
+}
+
+
+// function openDetailsModal(id) {
+//     alert(id);
+//     $("#hiddenIdField").val(id);
+//     $("#detailsModal").modal("show");
+
+//     $.ajax({
+//         "url": BASE_URL + "index.php/" + hrController + "/get_employee_team_master_details_for_modal",
+//         method: 'POST',
+//         data: { id: id, li_token: token },
+//         success: function(response) {
+//             console.log(response);
+//             var data = JSON.parse(response);
+
+//             var modalContent = '';
+
+          
+
+//             if (data.data && data.data.length > 0) {
+
+//                 var teamData = data.data[0];
+//                 var teamName = teamData.team_name;
+//                 alert(teamName);
+//                 var teamLeaderName = teamData.team_leader_name;
+//                 var branchName = teamData.branch_name;
+//                 var departmentName = teamData.department_name;
+
+//                 modalContent += '<h5>Team: ' + teamName + '</h5>';
+//                 modalContent += '<p>Team Leader: ' + teamLeaderName + '</p>';
+//                 modalContent += '<p>Branch: ' + branchName + '</p>';
+//                 modalContent += '<p>Department: ' + departmentName + '</p>';
+//                 var teamMembers = data.data;
+             
+//                 var modalContent = '<table class="table">';
+//                 modalContent += '<thead><tr><th>Team Member Name</th><th>Address</th><th>Mobile Phone</th></tr></thead>';
+//                 modalContent += '<tbody>';
+
+//                 data.data.forEach(function(member) {
+//                     modalContent += '<tr>';
+//                     modalContent += '<td>' + member.team_member_name + '</td>';
+//                     modalContent += '<td>' + buildAddressHTML(member) + '</td>';
+//                     modalContent += '<td>' + member.team_member_phone + '</td>';
+//                     modalContent += '</tr>';
+//                 });
+
+//                 modalContent += '</tbody></table>';
+
+//                 $('#detailsModal .modal-body').html(modalContent);
+//             } else {
+//                 console.error('No data found.');
+//             }
+//         },
+//         error: function(xhr, status, error) {
+//             // Handle errors
+//             console.error(xhr.responseText);
+//         }
+//     });
+// }
+
+function openDetailsModal(id) {
+    alert(id);
+    $("#hiddenIdField").val(id);
+    $("#detailsModal").modal("show");
+
+    $.ajax({
+        "url": BASE_URL + "index.php/" + hrController + "/get_employee_team_master_details_for_modal",
+        method: 'POST',
+        data: { id: id, li_token: token },
+        success: function(response) {
+            console.log(response);
+            var data = JSON.parse(response);
+
+            var modalContent = '<h5><b>TEAM DETAILS</b></h5>'; // Start modal content with a header
+
+            if (data.data && data.data.length > 0) {
+                var teamData = data.data[0];
+                var teamName = teamData.team_name;
+                var teamLeaderName = teamData.team_leader_name;
+                var branchName = teamData.branch_name;
+                var departmentName = teamData.department_name;
+
+                modalContent += '<p>Team: ' + teamName + '</p>';
+                modalContent += '<p>Team Leader: ' + teamLeaderName + '</p>';
+                modalContent += '<p>Branch: ' + branchName + '</p>';
+                modalContent += '<p>Department: ' + departmentName + '</p>';
+
+                modalContent += '<table class="table">';
+                modalContent += '<thead><tr><th>Team Member Name</th><th>Address</th><th>Mobile Phone</th></tr></thead>';
+                modalContent += '<tbody>';
+
+                data.data.forEach(function(member) {
+                    modalContent += '<tr>';
+                    modalContent += '<td>' + member.team_member_name + '</td>';
+                    modalContent += '<td>' + buildAddressHTML(member) + '</td>';
+                    modalContent += '<td>' + member.team_member_phone + '</td>';
+                    modalContent += '</tr>';
+                });
+
+                modalContent += '</tbody></table>';
+
+                $('#detailsModal .modal-body').html(modalContent);
+            } else {
+                $('#detailsModal .modal-body').html('<p>No data found.</p>'); // Show a message if no data is found
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+}
+
+
+
+
+
+
+
+$('#generatePDFButton').on('click', function() {
+   
+    var id = $("#hiddenIdField").val();
+   
+   
+    $.ajax({
+        url: BASE_URL + 'index.php/' + hrController + '/generate_pdf_for_teams', 
+        method: 'POST',
+        data: {
+           id:id,
+            li_token: token
+        },
+        xhrFields: {
+            responseType: 'blob' 
+        },
+        success: function(response, status, xhr) {
+            // Convert the blob to a downloadable file
+            var blob = new Blob([response], { type: 'application/pdf' });
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'generated_pdf_from_modal.pdf';
+            link.click();
+        },
+        error: function(xhr, status, error) {
+            console.error('Error generating PDF:', xhr.responseText);
+        }
+    });
+});
+
+$("#employee_team_master_data_table_add_new").on("click", function() {
+    $("#flag_id").val("0");
+
+    var modalId = "#employee_team_master_data_table_modal";
+    $(modalId).modal("show");
+
+    // Clear text fields
+    $(modalId + ' input[type="text"]').val('');
+    // Reset select2 dropdowns
+    $(modalId + ' select').each(function() {
+        if ($(this).hasClass('select2')) {
+            $(this).val('').trigger('change');
+        }
+    });
+});
+
+$("#employee_team_master_data_table_filter_btn").on("click", function() {
+
+  $("#flag_id").val('0');
+   $("#employee_team_master_data_table_filter_modal").modal("show");
+});
+
+
+$("#employee_team_master_data_table_reset_filter").on("click", function() {
+
+  
+     var table = $('#employee_team_master_data_table').DataTable();
+    var modal = $('#employee_team_master_data_table_filter_modal');
+    modal.find("select").val("0");
+    table.columns().search('');
+    table.search('').draw();
+  
+   
+    $(this).hide();
+
+});
+
+
+
 
 
 
