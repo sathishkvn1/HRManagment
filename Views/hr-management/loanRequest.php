@@ -31,21 +31,63 @@
                 <div class="combination_datatable" id="company_strucure">
                       <!-- tab ul -->
                       <ul class="nav nav-tabs">
-                <li class="nav-item">
-                  <a class="nav-link active" id="li_loan_request_tab" data-toggle="tab" href="#loan_request_tab" role="tab" aria-selected="false">Request</a>
-                </li>
-						
-            
-                
-                <li class="nav-item">
-                  <a class="nav-link" id="li_new_request_tab" data-toggle="tab" href="#loan_new_request_tab" role="tab"  aria-selected="false">New Request</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_verified_tab" data-toggle="tab" href="#loan_verified_tab" role="tab"  aria-selected="false">Verified</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_approved_tab" data-toggle="tab" href="#loan_approved_tab" role="tab"  aria-selected="false">Approved</a>
-                </li>
+                          <?php 
+                          
+                                $is_first='yes';
+                              foreach($tab as $tab_item):
+                                if($is_first=='yes')
+                                    $class='active';
+                                else
+                                    $class='';
+                                if($tab_item->sub_menu_tab=='Request')
+                                {
+                                    $loan_add= $tab_item->is_add_new;
+                                    $loan_edit= $tab_item->edit;
+                                    $loan_view= $tab_item->view;
+                                    $loan_delete= $tab_item->delete;
+                                    $tab_id='li_loan_request_tab';
+                                }
+                                else if($tab_item->sub_menu_tab=='New Request')
+                                {
+                                    // $request_add=$tab_item->is_add_new;
+                                    //  $request_edit= $tab_item->edit;
+                                    $request_view= $tab_item->view;
+                                    // $request_delete= $tab_item->delete;
+                                    $tab_id='li_new_request_travel_tab';
+                                }
+                                else if($tab_item->sub_menu_tab=='Verified')
+                                {
+                                    $verified_add=$tab_item->is_add_new;
+                                    $verified_view= $tab_item->view;
+                                    $tab_id='li_travel_verified_tab';
+                                }
+                                else
+                                {
+                                    $status_add=$tab_item->is_add_new;
+                                    $status_view= $tab_item->view;
+                                    $tab_id='li_travel_approved_tab';
+                                }
+                              ?>
+                            <li class="nav-item">
+                            <a class="nav-link <?php echo $class;?>" id="<?php echo $tab_id;?>" data-toggle="tab" href="<?php echo $tab_item->page_link ;?>" role="tab" aria-selected="false"><?php echo $tab_item->sub_menu_tab ;?></a>
+                            </li>
+                            
+                             <?php 
+                                $is_first='no';
+                                endforeach;
+                                ?>
+                <!--<li class="nav-item">-->
+                <!--  <a class="nav-link active" id="li_loan_request_tab" data-toggle="tab" href="#loan_request_tab" role="tab" aria-selected="false">Request</a>-->
+                <!--</li>-->
+                <!--<li class="nav-item">-->
+                <!--  <a class="nav-link" id="li_new_request_tab" data-toggle="tab" href="#loan_new_request_tab" role="tab"  aria-selected="false">New Request</a>-->
+                <!--</li>-->
+                <!--<li class="nav-item">-->
+                <!--  <a class="nav-link" id="li_verified_tab" data-toggle="tab" href="#loan_verified_tab" role="tab"  aria-selected="false">Verified</a>-->
+                <!--</li>-->
+                <!--<li class="nav-item">-->
+                <!--  <a class="nav-link" id="li_approved_tab" data-toggle="tab" href="#loan_approved_tab" role="tab"  aria-selected="false">Approved</a>-->
+                <!--</li>-->
                
               </ul>
                      <!-- ./ tab ul -->
@@ -60,7 +102,11 @@
 
                                             <div class="combined_buttons">
                                                 <div class="add_new_btn_div">
+                                                    <?php 
+                                                        if($loan_add=='yes'):
+                                                    ?>
                                                     <button id="loan_request_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                                                 <?php endif;?>
                                                  </div>
                                                 <div class="filter_btn_div">
                                                 <button id="loan_request_data_table_filter_btn" class="customise_filter_button" data-value="employee_data_table"><i class="fas fa-filter"></i>Filter</button>
@@ -347,10 +393,16 @@
            data: "id",
            render: function (data, type, row) {
                return `
-                  <div class="operations"> 
+                  <div class="operations">
+                  <?php    if($loan_edit=='yes'): ?>
                   <a href="#" class="edit"  onclick="editLoanRequest('${data}');"><i class="fas fa-edit"></i>Edit</a>
+                  <?php endif;
+                            if($loan_view=='yes'): ?>
                   <a href="#" class="view" onclick="viewLoanRequest('${data}');"><i class="fas fa-eye" ></i>View</a>
+                  <?php endif;
+                            if($loan_delete=='yes'): ?>
                   <a href="#" class="delete" onclick="deleteLoanRequest('${data}');"><i class="fas fa-trash" ></i>Delete</a>
+                  <?php endif;?>
                   </div>`;
             
            }

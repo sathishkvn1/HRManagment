@@ -265,8 +265,9 @@ function loadDataTableForTravelRequestApproved(){
                     var id = full.id;
                     return `
                         <div class="operations">
-                           
+                            <?php if($status_view=='yes'): ?>
                             <a href="#" class="view" onclick="travelApprovedViewRow(${id});"><i class="fas fa-eye"></i>View</a>
+                             <?php endif; ?>
                         </div>`;
                 }
             }

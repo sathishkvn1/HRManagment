@@ -28,27 +28,59 @@
             <div class="combination_datatable" id="company_strucure">
               <!-- tab start here -->
               <ul class="nav nav-tabs">
-                <li class="nav-item">
-                  <a class="nav-link active" id="li_travel_request_status_tab"data-toggle="tab" href="#travel_request_status_tab" role="tab"  aria-selected="true">Travel Request Status</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_loan_request_status_tab" data-toggle="tab" href="#loan_request_status_tab" role="tab"  aria-selected="false">Loan Request Status</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_loan_status_tab" data-toggle="tab" href="#loan_status_tab" role="tab"  aria-selected="false">Loan Status</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_leave_request_tab" data-toggle="tab" href="#leave_request_tab" role="tab"  aria-selected="false">Leave Request Status</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_marital_staus_tab" data-toggle="tab" href="#marital_staus_tab" role="tab"  aria-selected="false">Marital Status</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_relation_tab" data-toggle="tab" href="#relation_tab" role="tab"  aria-selected="false">Relation</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_gender_tab" data-toggle="tab" href="#gender_tab" role="tab"  aria-selected="false">Gender</a>
-                </li>
+                                             <?php 
+                          
+                                $is_first='yes';
+                              foreach($tab as $tab_item):
+                                if($is_first=='yes')
+                                    $class='active';
+                                else
+                                    $class='';
+                                if($tab_item->sub_menu_tab=='Travel Request Status')
+                                {
+                                    $travel_add= $tab_item->is_add_new;
+                                    $tab_id='li_travel_request_status_tab';
+                                }
+                                else if($tab_item->sub_menu_tab=='Loan Request Status')
+                                {
+                                    $loan_request_add=$tab_item->is_add_new;
+                                    $tab_id='li_loan_request_status_tab';
+                                }
+                                else if($tab_item->sub_menu_tab=='Loan Status')
+                                {
+                                    $loan_add=$tab_item->is_add_new;
+                                    $tab_id='li_loan_status_tab';
+                                }
+                                  else if($tab_item->sub_menu_tab=='Leave Request Status')
+                                {
+                                    $leave_add=$tab_item->is_add_new;
+                                    $tab_id='li_leave_request_tab';
+                                }
+                                  else if($tab_item->sub_menu_tab=='Marital Status')
+                                {
+                                    $marital_add=$tab_item->is_add_new;
+                                    $tab_id='li_marital_staus_tab';
+                                }
+                                  else if($tab_item->sub_menu_tab=='Relation')
+                                {
+                                    $relation_add=$tab_item->is_add_new;
+                                    $tab_id='li_relation_tab';
+                                }
+                                else
+                                {
+                                    $genter_add=$tab_item->is_add_new;
+                                    $tab_id='li_gender_tab';
+                                }
+                              ?>
+                            <li class="nav-item">
+                            <a class="nav-link <?php echo $class;?>" id="<?php echo $tab_id;?>" data-toggle="tab" href="<?php echo $tab_item->page_link ;?>" role="tab" aria-selected="false"><?php echo $tab_item->sub_menu_tab ;?></a>
+                            </li>
+                            
+                             <?php 
+                                $is_first='no';
+                                endforeach;
+                                ?> 
+               
               
             </ul>
               <!-- tab end  here -->

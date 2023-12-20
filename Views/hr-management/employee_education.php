@@ -2,7 +2,11 @@
            <div id="education_tab" class="reviewBlock">
            <div class="combined_buttons">
                    <div class="add_new_btn_div">
+                       <?php 
+                          if($education_add=='yes'):
+                          ?>
                         <button id="education_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                    <?php endif;?>
                    </div>
                     <div class="filter_btn_div">
                         <button id="education_data_table_filter_btn" class="customise_filter_button" data-value="employee_data_table"><i class="fas fa-filter"></i>Filter</button>
@@ -293,9 +297,15 @@ $('#education_data_table_filter_modal').on('shown.bs.modal', function () {
             
                return `
                   <div class="operations"> 
+                  <?php  if($education_edit=='yes'): ?>
                   <a href="#" class="edit"  onclick="editEducation('${data}');"><i class="fas fa-edit"></i>Edit</a>
+                  <?php endif;
+                            if($education_view=='yes'): ?>
                   <a href="#" class="view" onclick="viewEducation('${data}');"><i class="fas fa-eye" ></i>View</a>
+                  <?php endif;
+                            if($education_delete=='yes'): ?>
                   <a href="#" class="delete" onclick="deleteEducation('${data}');"><i class="fas fa-trash" ></i>Delete</a>
+                  <?php endif; ?>
                   </div>`;
             
            }

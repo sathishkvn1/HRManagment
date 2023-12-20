@@ -36,35 +36,113 @@
                 <div class="combination_datatable" id="company_strucure">
                       <!-- tab ul -->
                       <ul class="nav nav-tabs">
+                           <?php 
+                          
+                                $is_first='yes';
+                              foreach($tab as $tab_item):
+                                if($is_first=='yes')
+                                    $class='active';
+                                else
+                                    $class='';
+                                if($tab_item->sub_menu_tab=='Employees')
+                                {
+                                    $employee_add= $tab_item->is_add_new;
+                                     $employee_edit= $tab_item->is_edit;
+                                     $employee_view= $tab_item->is_view;
+                                     $employee_delete= $tab_item->is_delete;
+                                    $tab_id='li_employee_tab';
+                                }
+                                else if($tab_item->sub_menu_tab=='Work History')
+                                {
+                                    $branch_add=$tab_item->is_add_new;
+                                     $branch_edit= $tab_item->is_edit;
+                                     $branch_view= $tab_item->is_view;
+                                     $branch_delete= $tab_item->is_delete;
+                                    $tab_id='li_work_history_tab';
+                                }
+                                else if($tab_item->sub_menu_tab=='Skills')
+                                {
+                                    $skills_add=$tab_item->is_add_new;
+                                     $skills_edit= $tab_item->is_edit;
+                                     $skills_view= $tab_item->is_view;
+                                     $skills_delete= $tab_item->is_delete;
+                                    $tab_id='li_skills_tab';
+                                }
+                                  else if($tab_item->sub_menu_tab=='Languages')
+                                {
+                                    $language_add=$tab_item->is_add_new;
+                                    $language_edit= $tab_item->is_edit;
+                                     $language_view= $tab_item->is_view;
+                                     $language_delete= $tab_item->is_delete;
+                                    $tab_id='li_languages_tab';
+                                }
+                                  else if($tab_item->sub_menu_tab=='Certifications')
+                                {
+                                    $certification_add=$tab_item->is_add_new;
+                                    $certification_edit= $tab_item->is_edit;
+                                     $certification_view= $tab_item->is_view;
+                                     $certification_delete= $tab_item->is_delete;
+                                    $tab_id='li_certifications_tab';
+                                }
+                                  else if($tab_item->sub_menu_tab=='Education')
+                                {
+                                    $education_add=$tab_item->is_add_new;
+                                    $education_edit= $tab_item->is_edit;
+                                     $education_view= $tab_item->is_view;
+                                     $education_delete= $tab_item->is_delete;
+                                    $tab_id='li_education_tab';
+                                }
+                                 else if($tab_item->sub_menu_tab=='Contacts')
+                                {
+                                    $contact_add=$tab_item->is_add_new;
+                                    $contact_edit= $tab_item->is_edit;
+                                     $contact_view= $tab_item->is_view;
+                                     $contact_delete= $tab_item->is_delete;
+                                    $tab_id='li_contacts_tab';
+                                }
+                                else
+                                {
+                                    $department_add=$tab_item->is_add_new;
+                                    $dependent_edit= $tab_item->is_edit;
+                                     $dependent_view= $tab_item->is_view;
+                                     $dependent_delete= $tab_item->is_delete;
+                                    $tab_id='li_dependents_tab';
+                                }
+                              ?>
                             <li class="nav-item">
-                            <a class="nav-link active" id="li_employee_tab" data-toggle="tab" href="#employee_tab" role="tab" aria-selected="false">Employees</a>
+                            <a class="nav-link <?php echo $class;?>" id="<?php echo $tab_id;?>" data-toggle="tab" href="<?php echo $tab_item->page_link ;?>" role="tab" aria-selected="false"><?php echo $tab_item->sub_menu_tab ;?></a>
                             </li>
+                            
+                             <?php 
+                                $is_first='no';
+                                endforeach;
+                                ?> 
 
-                            <li class="nav-item">
-                            <a class="nav-link " id="li_work_history_tab" data-toggle="tab" href="#work_history_tab" role="tab" aria-selected="false">Work History</a>
-                            </li>
-                            <li class="nav-item">
-                            <a class="nav-link " id="li_skills_tab" data-toggle="tab" href="#skills_tab" role="tab" aria-selected="false">Skills</a>
-                            </li>
+                            <!--<li class="nav-item">-->
+                            <!--<a class="nav-link " id="li_work_history_tab" data-toggle="tab" href="#work_history_tab" role="tab" aria-selected="false">Work History</a>-->
+                            <!--</li>-->
+                            <!--<li class="nav-item">-->
+                            <!--<a class="nav-link " id="li_skills_tab" data-toggle="tab" href="#skills_tab" role="tab" aria-selected="false">Skills</a>-->
+                            <!--</li>-->
                                     
                            
-                            <li class="nav-item">
-                            <a class="nav-link" id="li_education_tab" data-toggle="tab" href="#education_tab" role="tab"  aria-selected="false">Education</a>
-                            </li>
+                            <!--<li class="nav-item">-->
+                            <!--<a class="nav-link" id="li_education_tab" data-toggle="tab" href="#education_tab" role="tab"  aria-selected="false">Education</a>-->
+                            <!--</li>-->
 
-                            <li class="nav-item">
-                            <a class="nav-link" id="li_certifications_tab" data-toggle="tab" href="#certifications_tab" role="tab"  aria-selected="false">Certifications</a>
-                            </li>
-                            <li class="nav-item">
-                            <a class="nav-link" id="li_languages_tab" data-toggle="tab" href="#languages_tab" role="tab"  aria-selected="false">Languages</a>
-                            </li>
-                            <li class="nav-item">
-                            <a class="nav-link" id="li_dependents_tab" data-toggle="tab" href="#dependents_tab" role="tab"  aria-selected="false">Dependents</a>
-                            </li>
+                            <!--<li class="nav-item">-->
+                            <!--<a class="nav-link" id="li_certifications_tab" data-toggle="tab" href="#certifications_tab" role="tab"  aria-selected="false">Certifications</a>-->
+                            <!--</li>-->
+                            <!--<li class="nav-item">-->
+                            <!--<a class="nav-link" id="li_languages_tab" data-toggle="tab" href="#languages_tab" role="tab"  aria-selected="false">Languages</a>-->
+                            <!--</li>-->
+                            <!--<li class="nav-item">-->
+                            <!--<a class="nav-link" id="li_dependents_tab" data-toggle="tab" href="#dependents_tab" role="tab"  aria-selected="false">Dependents</a>-->
+                            <!--</li>-->
                         
-                            <li class="nav-item">
-                            <a class="nav-link" id="li_contacts_tab" data-toggle="tab" href="#contacts_tab" role="tab"  aria-selected="false">Contacts</a>
-                            </li> 
+                            <!--<li class="nav-item">-->
+                            <!--<a class="nav-link" id="li_contacts_tab" data-toggle="tab" href="#contacts_tab" role="tab"  aria-selected="false">Contacts</a>-->
+                            <!--</li> -->
                         </ul>
                      <!-- ./ tab ul -->
 
@@ -78,7 +156,11 @@
 
                                             <div class="combined_buttons">
                                                 <div class="add_new_btn_div">
+                                                    <?php 
+                                                      if($branch_add=='yes'):
+                                                      ?>
                                                     <button id="employee_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                                                    <?php endif; ?>
                                                  </div>
                                                 <div class="filter_btn_div">
                                                 <button id="employee_data_table_filter_btn" class="customise_filter_button" data-value="employee_data_table"><i class="fas fa-filter"></i>Filter</button>
@@ -1181,9 +1263,15 @@ function loadDataTableForEmployee() {
         render: function (data, type, row) {
           return `
             <div class="operations">
+            <?php  if($employee_edit=='yes'): ?>
               <a href="#" class="edit" onclick="editEmployee('${row.employee_id}','${row.employment_details_id}');"><i class="fas fa-edit"></i>Edit</a>
+              <?php endif;
+                            if($employee_view=='yes'): ?>
               <a href="#" class="view" onclick="viewEmployee('${row.employee_id}');"><i class="fas fa-eye"></i>View</a>
+              <?php endif;
+                            if($employee_delete=='yes'): ?>
               <a href="#" class="delete" onclick="deleteEmployee('${row.employee_id}','${row.employment_details_id}');"><i class="fas fa-trash"></i>Delete</a>
+              <?php endif; ?>
             </div>`;
         }
       }

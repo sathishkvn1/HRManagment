@@ -308,8 +308,9 @@ function loadDataTableForNewTravelRequest(){
                     var id = full.id;
                     return `
                         <div class="operations">
-                           
+                            <?php  if($request_view=='yes'): ?>
                             <a href="#" class="view" onclick="travelNewRequestViewRow(${id});"><i class="fas fa-eye"></i>View</a>
+                            <?php endif;?>
                         </div>`;
                 }
             }

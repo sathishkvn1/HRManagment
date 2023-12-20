@@ -3,7 +3,11 @@
         <div id="" class="reviewBlock">
              <div class="combined_buttons">
                  <div class="add_new_btn_div">
+                      <?php 
+                      if($branch_add=='yes'):
+                      ?>
                    <button id="employee_employment_details_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                  <?php endif;?>
                   </div>
                 
               
@@ -300,9 +304,15 @@ $(document).ready( function () {
                    
                     return `
                         <div class="operations">
+                        <?php if($branch_edit=='yes'): ?>
                             <a href="#" class="edit" onclick="employeeEmploymentDetailsEditRow('${data}');"><i class="fas fa-edit"></i>Edit</a>
+                            <?php endif;
+                            if($branch_view=='yes'): ?>
                             <a href="#" class="view" onclick="employeeEmploymentDetailsViewRow('${data}');"><i class="fas fa-eye"></i>View</a>
+                            <?php endif;
+                            if($branch_delete=='yes'): ?>
                             <a href="#" class="delete" onclick="employeeEmploymentDetailsDeleteRow('${data}');"><i class="fas fa-trash"></i>Delete</a>
+                            <?php endif; ?>
                         </div>`;
                 }
             }

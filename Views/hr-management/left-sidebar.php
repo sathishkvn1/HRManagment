@@ -18,152 +18,41 @@
               <!-- Add icons to the links using the .nav-icon class
                   with font-awesome or any other icon font library -->
               <!--  one section --- -->
+              <?php 
+                foreach($mainMenu as $menu):
+              ?>
                 <li class="nav-item has-treeview menu-close sidebar-shadow-top-bottom">
                   <a href="#" class="nav-link active bg-purewhite text-dark no-shadow">
                     <i class="fa fa-cubes"></i>
                     <p>
-                      Admin
+                    <?php echo $menu->main_menu ;?>
                       <i class="right fas fa-angle-left"></i>
                     </p>
                   </a>
                   <ul class="nav nav-treeview">
-                
+                  <?php 
+                   $subMenus = $sub_menus[$menu->id]; 
+                   foreach($subMenus as $sub):
+                  ?>
                     <li class="nav-item">
                   
-                      <a href="<?php echo base_url(CONTROLLER_HR."/company");?>" class="nav-link">
+                      <a href="<?php echo base_url($sub->page_link."/".$sub->id);?>" class="nav-link">
                         <i class="fa fa-building"></i>
-                        <p>Company Structure</p>
+                        <p><?php echo $sub->sub_menu ;?></p>
                       </a>
                     </li>
-                    <li class="nav-item">
-                      <a href="<?php echo base_url(CONTROLLER_HR."/job_details");?>" class="nav-link">
-                        <i class="fa fa-columns"></i>
-                        <p>Job Details Setup</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="<?php echo base_url(CONTROLLER_HR."/qualification");?>" class="nav-link">
-                        <i class="fa fa-check-square"></i>
-                        <p>Qualification</p>
-                      </a>
-                    </li>
-                   
-                    <li class="nav-item">
-                      <a href="<?php echo base_url(CONTROLLER_HR."/record_status");?>" class="nav-link">
-                        <i class="fa fa-check-square"></i>
-                        <p>RecordStatus</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="<?php echo base_url(CONTROLLER_HR."/setup_data");?>" class="nav-link">
-                        <i class="fa fa-check-square"></i>
-                        <p>Setup Data</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="<?php echo base_url(CONTROLLER_HR."/assets");?>" class="nav-link">
-                        <i class="fa fa-check-square"></i>
-                        <p>Assets</p>
-                      </a>
-                    </li>
-
+                    <?php 
+                      endforeach;
+                    ?>                  
                   </ul>
                 </li>
+                <?php 
+                endforeach;
+              ?>
               <!--  ./ one section --- -->
 
-               <!--  one section --- -->
-                <li class="nav-item has-treeview menu-close sidebar-shadow-top-bottom">
-                  <a href="#" class="nav-link active bg-purewhite text-dark no-shadow">
-                    <i class="fa fa-grip-horizontal"></i>
-                    <p>
-                    Employees
-                      <i class="right fas fa-angle-left"></i>
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <!-- <li class="nav-item">
-                      <a href="#" class="nav-link">
-                        <i class="fa fa-users"></i>
-                        <p>Employees</p>
-                      </a>
-                    </li> -->
-                    <li class="nav-item">
-                      <a href="<?php echo base_url(CONTROLLER_HR."/employee");?>" class="nav-link">
-                        <i class="fa fa-check-square"></i>
-                        <p>Employee</p>
-                      </a>
-                    </li>
 
-                    <!-- <li class="nav-item">
-                      <p><-?php echo "controller" . CONTROLLER_HR. "/employee; " ?> </p>
-                       
-                    </li> -->
-
-                    
-                  
-                    
-                  
-                    <li class="nav-item">
-                      <a href="<?php echo base_url(CONTROLLER_HR."/teams");?>" class="nav-link">
-                        <i class="fa fa-users"></i>
-                        <p>Teams</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              <!-- ./ one section --- -->
-
-                <!--  one section  for loan--- -->
-                <li class="nav-item has-treeview menu-close sidebar-shadow-top-bottom">
-                  <a href="#" class="nav-link active bg-purewhite text-dark no-shadow">
-                    <i class="fa fa-grip-horizontal"></i>
-                    <p>
-                    Loan
-                      <i class="right fas fa-angle-left"></i>
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                 
-                    <li class="nav-item">
-                      <a href="<?php echo base_url(CONTROLLER_HR."/loan_request");?>" class="nav-link">
-                        <i class="fa fa-check-square"></i>
-                        <p>Request</p>
-                      </a>
-                    </li>
-                    
-                  </ul>
-                </li>
-              <!-- ./ one section --- -->
-
-                <!--  one section --- -->
-                <li class="nav-item has-treeview menu-close sidebar-shadow-top-bottom">
-                  <a href="#" class="nav-link active bg-purewhite text-dark no-shadow">
-                    <i class="fa fa-grip-horizontal"></i>
-                    <p>Travel Management
-                      <i class="right fas fa-angle-left"></i>
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <!-- <li class="nav-item">
-                      <a href="#" class="nav-link">
-                        <i class="fa fa-users"></i>
-                        <p>Employees</p>
-                      </a>
-                    </li> -->
-                    <li class="nav-item">
-                      <a href="<?php echo base_url(CONTROLLER_HR."/travel");?>" class="nav-link">
-                        <i class="fa fa-check-square"></i>
-                        <p>Travel</p>
-                      </a>
-                    </li>
-                  
-                   
-                  </ul>
-                </li>
-              <!-- ./ one section --- -->
-
-              
-                <!--  one section --- -->
+ <!--  one section --- -->
                 <li class="nav-item has-treeview menu-close sidebar-shadow-top-bottom">
                   <a href="#" class="nav-link active bg-purewhite text-dark no-shadow">
                     <i class="fa fa-grip-horizontal"></i>
@@ -185,17 +74,25 @@
                 </li>
               <!-- ./ one section --- -->
             
-
-
-
-      
-           
-
-
-
-
-
-         
+         <li class="nav-item has-treeview menu-close sidebar-shadow-top-bottom">
+                  <a href="#" class="nav-link active bg-purewhite text-dark no-shadow">
+                    <i class="fa fa-grip-horizontal"></i>
+                    <p>User Rights
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                  
+                    <li class="nav-item">
+                      <a href="<?php echo base_url(CONTROLLER_HR."/user_rights");?>" class="nav-link">
+                        <i class="fa fa-check-square"></i>
+                        <p>User Rights</p>
+                      </a>
+                    </li>
+                  
+                   
+                  </ul>
+                </li>
 
            
               

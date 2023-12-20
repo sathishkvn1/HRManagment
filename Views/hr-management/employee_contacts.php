@@ -2,7 +2,12 @@
             <div id="education_tab" class="reviewBlock">
             <div class="combined_buttons">
                    <div class="add_new_btn_div">
+                        <?php 
+                          if($contact_add=='yes'):
+                        ?>
+                                                                                                              
                      <button id="contact_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                  <?php endif;?>
                    </div>
                 </div>
             </div>
@@ -161,10 +166,16 @@
            data: "id",
            render: function (data, type, row) {
                return `
-                  <div class="operations"> 
+                  <div class="operations">
+                  <?php  if($contact_edit=='yes'): ?>
                   <a href="#" class="edit"  onclick="editContacts('${data}');"><i class="fas fa-edit"></i>Edit</a>
+                  <?php endif;
+                            if($contact_view=='yes'): ?>
                   <a href="#" class="view" onclick="viewContacts('${data}');"><i class="fas fa-eye" ></i>View</a>
+                  <?php endif;
+                            if($contact_view=='yes'): ?>
                   <a href="#" class="delete" onclick="deleteContacts('${data}');"><i class="fas fa-trash" ></i>Delete</a>
+                  <?php endif; ?>
                   </div>`;
             
            }

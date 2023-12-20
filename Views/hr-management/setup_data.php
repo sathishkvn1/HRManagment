@@ -28,15 +28,56 @@
             <div class="combination_datatable" id="company_strucure">
               <!-- tab start here -->
               <ul class="nav nav-tabs">
-                <li class="nav-item">
-                  <a class="nav-link active" id="li_transportation_means_tab"data-toggle="tab" href="#transportation_means_tab" role="tab"  aria-selected="true">Transportation Means</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_leave_category_tab" data-toggle="tab" href="#leave_category_tab" role="tab"  aria-selected="false">Leave Category/Type</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_loan_type_tab" data-toggle="tab" href="#loan_type_tab_tab" role="tab"  aria-selected="false">Loan Type</a>
-                </li>
+                                             <?php 
+                          
+                                $is_first='yes';
+                              foreach($tab as $tab_item):
+                                if($is_first=='yes')
+                                    $class='active';
+                                else
+                                    $class='';
+                                if($tab_item->sub_menu_tab=='Transportation Means')
+                                {
+                                    $transportation_add= $tab_item->is_add_new;
+                                     $transportation_edit= $tab_item->is_edit;
+                                     $transportation_view= $tab_item->is_view;
+                                     $transportation_delete= $tab_item->is_delete;
+                                    $tab_id='li_transportation_means_tab';
+                                }
+                                else if($tab_item->sub_menu_tab=='Leave Category/Type')
+                                {
+                                    $type_add=$tab_item->is_add_new;
+                                     $type_edit= $tab_item->is_edit;
+                                     $type_view= $tab_item->is_view;
+                                     $type_delete= $tab_item->is_delete;
+                                    $tab_id='li_leave_category_tab';
+                                }
+                                else
+                                {
+                                    $loan_add=$tab_item->is_add_new;
+                                     $loan_edit= $tab_item->is_edit;
+                                     $loan_view= $tab_item->is_view;
+                                     $loan_delete= $tab_item->is_delete;
+                                    $tab_id='li_loan_type_tab';
+                                }
+                              ?>
+                            <li class="nav-item">
+                            <a class="nav-link <?php echo $class;?>" id="<?php echo $tab_id;?>" data-toggle="tab" href="<?php echo $tab_item->page_link ;?>" role="tab" aria-selected="false"><?php echo $tab_item->sub_menu_tab ;?></a>
+                            </li>
+                            
+                             <?php 
+                                $is_first='no';
+                                endforeach;
+                                ?> 
+                <!--<li class="nav-item">-->
+                <!--  <a class="nav-link active" id="li_transportation_means_tab"data-toggle="tab" href="#transportation_means_tab" role="tab"  aria-selected="true">Transportation Means</a>-->
+                <!--</li>-->
+                <!--<li class="nav-item">-->
+                <!--  <a class="nav-link" id="li_leave_category_tab" data-toggle="tab" href="#leave_category_tab" role="tab"  aria-selected="false">Leave Category/Type</a>-->
+                <!--</li>-->
+                <!--<li class="nav-item">-->
+                <!--  <a class="nav-link" id="li_loan_type_tab" data-toggle="tab" href="#loan_type_tab_tab" role="tab"  aria-selected="false">Loan Type</a>-->
+                <!--</li>-->
               
               
               </ul>
@@ -48,7 +89,12 @@
                           <div id="company_structure_table_top" class="reviewBlock">
                             <div class="combined_buttons">
                                <div class="add_new_btn_div">
+                                   <?php 
+                                        if($transportation_add=='yes'):
+                                    ?>
+                                   
                                   <button id="transportation_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                                <?php endif;?>
                                </div>           
                             </div>
                           </div>
@@ -84,7 +130,12 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                           <div class="combined_buttons">
                             <div class="add_new_btn_div">
+                                <?php 
+                                        if($type_add=='yes'):
+                                    ?>
+                                   
                               <button id="leave_category_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                            <?php endif;?>
                             </div>           
                           </div>
                         </div>
@@ -115,7 +166,12 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                         <div class="combined_buttons">
                             <div class="add_new_btn_div">
+                                <?php 
+                                        if($loan_add=='yes'):
+                                    ?>
+                                   
                               <button id="loan_type_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                            <?php endif;?>
                             </div>           
                           </div>
                         </div>
@@ -366,9 +422,15 @@ function loadDataTableForTransportation() {
                 render: function (data, type, row) {
                     return `
                         <div class="operations"> 
+                        <?php if($transportation_edit=='yes'): ?>
                             <a href="#" class="edit" onclick="editTransportation('${data}');"><i class="fas fa-edit"></i>Edit</a>
+                            <?php endif;
+                            if($transportation_view=='yes'): ?>
                             <a href="#" class="view" onclick="viewTransportation('${data}');"><i class="fas fa-eye"></i>View</a>
+                            <?php endif;
+                            if($transportation_delete=='yes'): ?>
                             <a href="#" class="delete"  onclick="deleteTransportation('${data}');"><i class="fas fa-trash"></i>Delete</a>
+                            <?php endif; ?>
                         </div>`;
                 }
             }
@@ -556,10 +618,16 @@ function loadDataTableForLeaveCategory() {
                 data: "id",
                 render: function (data, type, row) {
                     return `
-                        <div class="operations"> 
+                        <div class="operations">
+                         <?php if($type_edit=='yes'): ?>
                             <a href="#" class="edit" onclick="editLeaveCategory('${data}');"><i class="fas fa-edit"></i>Edit</a>
+                             <?php endif;
+                            if($type_view=='yes'): ?>
                             <a href="#" class="view" onclick="viewLeaveCategory('${data}');"><i class="fas fa-eye"></i>View</a>
+                             <?php endif;
+                            if($type_delete=='yes'): ?>
                             <a href="#" class="delete"  onclick="deleteLeaveCategory('${data}');"><i class="fas fa-trash"></i>Delete</a>
+                             <?php endif; ?>
                         </div>`;
                 }
             }
@@ -748,10 +816,16 @@ function loadDataTableForLoanType() {
                 data: "id",
                 render: function (data, type, row) {
                     return `
-                        <div class="operations"> 
+                        <div class="operations">
+                         <?php if($loan_edit=='yes'): ?>
                             <a href="#" class="edit" onclick="editLoanType('${data}');"><i class="fas fa-edit"></i>Edit</a>
+                             <?php endif;
+                            if($loan_view=='yes'): ?>
                             <a href="#" class="view" onclick="viewLoanType('${data}');"><i class="fas fa-eye"></i>View</a>
+                             <?php endif;
+                            if($loan_delete=='yes'): ?>
                             <a href="#" class="delete"  onclick="deleteLoanType('${data}');"><i class="fas fa-trash"></i>Delete</a>
+                             <?php endif; ?>
                         </div>`;
                 }
             }

@@ -17,27 +17,46 @@ class HRMaster extends CI_Controller {
         parent::__construct();
         $this->load->helper('url');
 		$this->load->model("hr-management/HrModel");
+		$this->load->model("hr-management/HrMenuModel");
     }
 	
-	public function index()
-	{
-        $company_id = 91;
-		$_SESSION['user_id'] = 1;
-        $_SESSION['company_id_in_hr'] = $company_id;
+// 	public function index()
+// 	{
+//         $company_id = 1;
+// 		$_SESSION['user_id'] = 1;
+//         $_SESSION['company_id_in_hr'] = $company_id;
        
         
-		$this->load->view('hr-management/index');
+// 		$this->load->view('hr-management/index');
+		
+// 	}
+		public function index()
+	{
+        $company_id                      = 1;
+		   $_SESSION['user_id']             = 1;
+        $_SESSION['company_id_in_hr']    = $company_id;
+        $user_role_id                    = $_SESSION['USER_ROLE_ID'];
+        $data                            = $this->get_menu_list($user_role_id);
+
+		$this->load->view('hr-management/index',$data);
 		
 	}
 
     
-	public function company()
+	public function company($sub_menu_id="")
 	{
 		$data = array();
         $company_id_in_hr = $this->session->userdata('company_id_in_hr');
-		$data["states"]  = $this->HrModel->get_states();
-		$data["country"]  = $this->HrModel->get_country();
+        $user_role_id                    = $_SESSION['USER_ROLE_ID'];
+
+        $data                          =$this->get_menu_list($user_role_id);
+        $data2["tab"]                  =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+       
+		$data["states"]    = $this->HrModel->get_states();
+		$data["country"]   = $this->HrModel->get_country();
         $data["branches"]  = $this->HrModel->get_branches($company_id_in_hr);
+        $data 			   = (object) array_merge((array) $data,(array) $data2);
+
 		$this->load->view('hr-management/company',$data);
 	}
 
@@ -169,9 +188,14 @@ public function save_company_details()
 
 
     //job detailes created by mashu
-	public function job_details()
+	public function job_details($sub_menu_id="")
 	{
 		$data = array();
+		$user_role_id                    = $_SESSION['USER_ROLE_ID'];
+
+        $data                          =$this->get_menu_list($user_role_id);
+        $data["tab"]                  =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+       
 		$this->load->view('hr-management/job_details_setup',$data);
 	}
     
@@ -446,6 +470,12 @@ public function delete_address_by_id()
 
 
 public function qualification(){
+    $data                   =array();
+    $user_role_id           = $_SESSION['USER_ROLE_ID'];
+
+    $data                   =$this->get_menu_list($user_role_id);
+    $data["tab"]            =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+    
     $this->load->view('hr-management/qualification',$data);
 }
 
@@ -1234,9 +1264,14 @@ public function save_projects()
           echo json_encode($response);
       }
 
-      public function record_status()
+      public function record_status($sub_menu_id="")
       {
-         
+            $data                   =array();
+            $user_role_id           = $_SESSION['USER_ROLE_ID'];
+
+            $data                   =$this->get_menu_list($user_role_id);
+            $data["tab"]           =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+       
           $this->load->view('hr-management/record_status',$data);
       }
 
@@ -1289,7 +1324,13 @@ public function save_projects()
                     echo json_encode(['data' => $data]);
                 }
 
-                public function setup_data(){
+                public function setup_data($sub_menu_id=""){
+                    $data = array();
+                    $user_role_id                    = $_SESSION['USER_ROLE_ID'];
+
+                    $data                          =$this->get_menu_list($user_role_id);
+                    $data["tab"]                  =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+                    
                     $this->load->view('hr-management/setup_data',$data);
                 }
                 
@@ -1539,7 +1580,12 @@ public function save_projects()
                     echo json_encode($response);
                 }
 
-                public function assets(){
+                public function assets($sub_menu_id=""){
+                    $data = array();
+                    $user_role_id                    = $_SESSION['USER_ROLE_ID'];
+
+                    $data                          =$this->get_menu_list($user_role_id);
+                    $data["tab"]                  =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
                     $this->load->view('hr-management/assets',$data);
                 }
 
@@ -1785,11 +1831,16 @@ public function save_projects()
                         echo json_encode($response);
                     }
 
-                    public function employee(){
+                    public function employee($sub_menu_id=""){
                         // echo APPPATH;
                         // die;
                         $company_id_in_hr = $this->session->userdata('company_id_in_hr');
                         $data = array();
+                        $user_role_id                    = $_SESSION['USER_ROLE_ID'];
+
+                        $data                          =$this->get_menu_list($user_role_id);
+                        $data1["tab"]                  =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+       
                         $data["gender"]  = $this->HrModel->get_gender();
                         $data["marital_status"]  = $this->HrModel->get_marital_status_status();
                         $data["states"]  = $this->HrModel->get_states();
@@ -1823,7 +1874,8 @@ public function save_projects()
                         $data["all_employee_in_company"]  = $this->HrModel->get_all_employee_in_company();
                         $data["employee_name_skills"]  = $this->HrModel->get_job_in_employee_name();
                         $data["employee_skills"]  = $this->HrModel->get_employee_skill_options();
-                        
+                        $data 			   = (object) array_merge((array) $data,(array) $data1);
+
                         $this->load->view('hr-management/employee',$data);
                     }
 
@@ -2429,14 +2481,19 @@ public function save_projects()
             echo json_encode($response);
         }
 
-        public function loan_request(){
+        public function loan_request($sub_menu_id=""){
             $data = array();
-            $company_id_in_hr = $this->session->userdata('company_id_in_hr');
-            $data["employee_names"]  = $this->HrModel->get_employee_names($company_id_in_hr);
-            $data["loan_type"]  = $this->HrModel->get_loan_details_internal();
-            $data["loan_status"]  = $this->HrModel->get_loan_request_status();
+            $company_id_in_hr       = $this->session->userdata('company_id_in_hr');
+            $user_role_id           = $_SESSION['USER_ROLE_ID'];
+
+            $data                   =$this->get_menu_list($user_role_id);
+            $data["tab"]            =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+       
+            $data["employee_names"]      = $this->HrModel->get_employee_names($company_id_in_hr);
+            $data["loan_type"]           = $this->HrModel->get_loan_details_internal();
+            $data["loan_status"]         = $this->HrModel->get_loan_request_status();
             $data["new_request_status"]  = $this->HrModel->get_loan_request_fr_new_request();
-            $data["verify_status"]  = $this->HrModel->get_loan_request_fr_verification();
+            $data["verify_status"]       = $this->HrModel->get_loan_request_fr_verification();
             
             // status_id_fr_approval
             
@@ -3036,10 +3093,15 @@ public function delete_employee_employment_details_by_id(){
 
 
 // ./team load page 
-public function teams()
+public function teams($sub_menu_id="")
     {
         
         $data = array();
+        $user_role_id                    = $_SESSION['USER_ROLE_ID'];
+
+        $data                          =$this->get_menu_list($user_role_id);
+        $data["tab"]                  =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+        
 		$this->load->view('hr-management/teams',$data);
     }
 
@@ -3207,9 +3269,14 @@ public function teams()
                    ->set_output($data);
         }
 
-         public function travel()
+         public function travel($sub_menu_id="")
 	{
 		$data = array();
+		$user_role_id                  = $_SESSION['USER_ROLE_ID'];
+
+        $data                          = $this->get_menu_list($user_role_id);
+        $data["tab"]                  = $this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+       
         $data["transportation_means"]  = $this->HrModel->get_transportation_means();
          $data["travel_request"]  = $this->HrModel->get_travel_request();
         $data["travel_verified_request"]  = $this->HrModel->get_travel_verified();
@@ -3930,6 +3997,109 @@ public function get_calendar_details_by_id()
     echo json_encode($response);
 }
 
+public function get_menu_list($role="")
+{
+ 
+     $result             = $this->HrMenuModel->get_main_menu_permission($role);
+     $data['mainMenu']   = $result;
+     
+     $data['sub_menus'] = array();
+    
+     foreach ($data['mainMenu'] as $main_item) {
+         $main_item->sub_menu = $this->HrMenuModel->get_sub_menu_permission($main_item->id,$role);
+         $data['sub_menus'][$main_item->id] = $main_item->sub_menu;
+     }
+    
+     return $data;
+        //  echo json_encode($data);
+}
+
+//   public function get_menu_list1($role="")
+//   {
+//         $this->load->model('hr-management/User_rights_model');
+    
+//         $result             = $this->User_rights_model->get_main_menu($role);
+//         $data['mainMenu']   = $result;
+        
+//         $data['sub_menus'] = array();
+    
+//         foreach ($data['mainMenu'] as $main_item) {
+//             $main_item->sub_menu = $this->User_rights_model->get_sub_menu($main_item->id,$role);
+//             $data['sub_menus'][$main_item->id] = $main_item->sub_menu;
+//         }
+        
+//             echo json_encode($data);
+//   }
+   
+   
+   
+   public function user_rights()
+   {
+       
+        // $this->load->model('hr-management/User_rights_model');
+        $res                = $this->HrMenuModel->get_user_role();
+      
+        $data['userRole']   = $res;
+        $data['li_token']		=$_SESSION['li_token'];
+       
+		$this->load->view('hr-management/user_rights',$data);
+   }
+
+public function  get_all_menu_list($role="")
+{
+    // $this->load->model('hr-management/User_rights_model');
+    
+        $result             = $this->HrMenuModel->get_all_main_menu_permission($role);
+        $data['mainMenu']   = $result;
+        // print_r($result);
+        // exit;
+        $data['sub_menus'] = array();
+    
+        foreach ($data['mainMenu'] as $main_item) {
+            $main_item->sub_menu = $this->HrMenuModel->get_all_sub_menu_permission($main_item->id,$role);
+            $data['sub_menus'][$main_item->id] = $main_item->sub_menu;
+        }
+       
+            echo json_encode($data);
+}
+
+
+ public function save_menu_permission()
+    {
+       
+        // $userId                 = $this->input->post('user_id');
+       $role                    = $this->input->post('user_role');
+       $selectedMainMenuItems   = $this->input->post('main_Menu');
+       $selectedSubMenus        = $this->input->post('submenu');
+       $token                   = $this->input->post('li_token');
+        $allSubMenuIds          = array();
+         $allMenuIds            	  =$this->HrMenuModel->get_all_main_menu_permission($role);
+         
+   foreach ($allMenuIds as $menu) {
+		$menuId=$menu->id;
+		$data = array(
+			
+			'is_granted'   => in_array($menuId, $selectedMainMenuItems) ? 'yes' : 'no',
+		);
+		$where  = "main_menu_id='{$menuId}' AND role_id='{$role}'";
+		$result= $this->HrMenuModel->update_main_menu_permission($data,$where);
+		$allSubMenuIds=$this->HrMenuModel->get_all_sub_menu_permission($menu->id,$role);
+		
+		foreach ($allSubMenuIds as $subMenu) {
+		$subMenuId=$subMenu->id;
+		$data = array(
+			
+			'is_granted'   => in_array($subMenuId, $selectedSubMenus) ? 'yes' : 'no',
+		);
+		$where  = "sub_menu_id='{$subMenuId}' AND role_id='{$role}'";
+		$result= $this->HrMenuModel->update_sub_menu_permission($data,$where);
+	}
+	}
+       
+    
+        if($result)
+            echo "Success";
+    }
 }
 
 

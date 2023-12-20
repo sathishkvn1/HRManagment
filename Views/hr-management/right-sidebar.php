@@ -6,7 +6,7 @@
             <div class="user-panel mt-2 pb-3 mb-2 d-flex align-items-center">
               <div class="image">
               
-                <img src="<?php  echo base_url("hrmanagement/dist/img/user2-160x160.jpg");?>" class="img-circle elevation-2" alt="User Image">
+                <img src="<?php  echo base_url("hr-management/dist/img/user2-160x160.jpg");?>" class="img-circle elevation-2" alt="User Image">
               </div>
               <div class="info">
                 <a href="#" class="d-block">Alexander Pierce</a>

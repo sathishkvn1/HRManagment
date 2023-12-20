@@ -6,7 +6,11 @@
 
                           <div class="combined_buttons">
                               <div class="add_new_btn_div">
+                                   <?php 
+                                        if($travel_add=='yes'):
+                                    ?>
                                   <button id="travel_status_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              <?php endif;?>
                               </div>
                               <div class="filter_btn_div">
                               <button id="travel_status_data_table_filter_btn" class="customise_filter_button" data-value="employee_data_table"><i class="fas fa-filter"></i>Filter</button>
@@ -332,9 +336,16 @@ function loadDataTableForTravelStatus(){
                     var id = full.id;
                     return `
                         <div class="operations">
+                         <?php 
+                         if($travel_edit=='yes'): ?>
                             <a href="#" class="edit" onclick="travelStatusEditRow(${id});"><i class="fas fa-edit"></i>Edit</a>
+                             <?php endif;
+                            if($travel_view=='yes'): ?>
                             <a href="#" class="view" onclick="travelStatusViewRow(${id});"><i class="fas fa-eye"></i>View</a>
+                             <?php endif;
+                            if($travel_delete=='yes'): ?>
                             <a href="#" class="delete" onclick="travelStatusDeleteRow(${id});"><i class="fas fa-trash"></i>Delete</a>
+                             <?php endif; ?>
                         </div>`;
                 }
             }

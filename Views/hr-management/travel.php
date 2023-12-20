@@ -34,18 +34,68 @@
             <div class="combination_datatable" id="company_strucure">
               <!-- tab start here -->
               <ul class="nav nav-tabs">
-                <li class="nav-item">
-                  <a class="nav-link active" id="li_travel_status_tab"data-toggle="tab" href="#travel_status_tab" role="tab"  aria-selected="true">Travel Status</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_new_request_travel_tab" data-toggle="tab" href="#new_request_travel_tab" role="tab"  aria-selected="false">New Request</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_travel_verified_tab" data-toggle="tab" href="#travel_verified_tab" role="tab"  aria-selected="false">Verified</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_travel_approved_tab" data-toggle="tab" href="#travel_approved_tab" role="tab"  aria-selected="false">Approved</a>
-                </li>
+                  <?php 
+                          
+                                $is_first='yes';
+                              foreach($tab as $tab_item):
+                                if($is_first=='yes')
+                                    $class='active';
+                                else
+                                    $class='';
+                                    
+                                if($tab_item->sub_menu_tab=='Travel Status')
+                                {
+                                    $travel_add= $tab_item->is_add_new;
+                                     $travel_edit= $tab_item->is_edit;
+                                      $travel_view= $tab_item->is_view;
+                                       $travel_delete= $tab_item->is_delete;
+                                    $tab_id='li_travel_status_tab';
+                                }
+                                else if($tab_item->sub_menu_tab=='New Request')
+                                {
+                                    $request_add=$tab_item->is_add_new;
+                                    $request_edit= $tab_item->is_edit;
+                                      $request_view= $tab_item->is_view;
+                                       $request_delete= $tab_item->is_delete;
+                                    $tab_id='li_new_request_travel_tab';
+                                }
+                                else if($tab_item->sub_menu_tab=='Verified')
+                                {
+                                    $verified_add=$tab_item->is_add_new;
+                                    $verifiedt_edit= $tab_item->is_edit;
+                                      $verified_view= $tab_item->is_view;
+                                       $verified_delete= $tab_item->is_delete;
+                                    $tab_id='li_travel_verified_tab';
+                                }
+                                else
+                                {
+                                    $status_add=$tab_item->is_add_new;
+                                    $status_edit= $tab_item->is_edit;
+                                      $status_view= $tab_item->is_view;
+                                       $status_delete= $tab_item->is_delete;
+                                    $tab_id='li_travel_approved_tab';
+                                }
+                              ?>
+                            <li class="nav-item">
+                            <a class="nav-link <?php echo $class;?>" id="<?php echo $tab_id;?>" data-toggle="tab" href="<?php echo $tab_item->page_link ;?>" role="tab" aria-selected="false"><?php echo $tab_item->sub_menu_tab ;?></a>
+                            </li>
+                            
+                             <?php 
+                                $is_first='no';
+                                endforeach;
+                                ?>
+                <!--<li class="nav-item">-->
+                <!--  <a class="nav-link active" id="li_travel_status_tab"data-toggle="tab" href="#travel_status_tab" role="tab"  aria-selected="true">Travel Status</a>-->
+                <!--</li>-->
+                <!--<li class="nav-item">-->
+                <!--  <a class="nav-link" id="li_new_request_travel_tab" data-toggle="tab" href="#new_request_travel_tab" role="tab"  aria-selected="false">New Request</a>-->
+                <!--</li>-->
+                <!--<li class="nav-item">-->
+                <!--  <a class="nav-link" id="li_travel_verified_tab" data-toggle="tab" href="#travel_verified_tab" role="tab"  aria-selected="false">Verified</a>-->
+                <!--</li>-->
+                <!--<li class="nav-item">-->
+                <!--  <a class="nav-link" id="li_travel_approved_tab" data-toggle="tab" href="#travel_approved_tab" role="tab"  aria-selected="false">Approved</a>-->
+                <!--</li>-->
                
               
               

@@ -28,15 +28,56 @@
             <div class="combination_datatable" id="company_strucure">
               <!-- tab start here -->
               <ul class="nav nav-tabs">
-                <li class="nav-item">
-                  <a class="nav-link active" id="li_job_title_tab"data-toggle="tab" href="#job_title_tab" role="tab"  aria-selected="true">Job Titles/Designation</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_pay_scales_tab" data-toggle="tab" href="#pay_scales_tab" role="tab"  aria-selected="false">Pay Scales</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_employment_status_tab" data-toggle="tab" href="#employment_status_tab" role="tab"  aria-selected="false">Employment Status</a>
-                </li>
+                               <?php 
+                          
+                                $is_first='yes';
+                              foreach($tab as $tab_item):
+                                if($is_first=='yes')
+                                    $class='active';
+                                else
+                                    $class='';
+                                if($tab_item->sub_menu_tab=='Job Titles/Designation')
+                                {
+                                    $job_add= $tab_item->is_add_new;
+                                     $job_edit= $tab_item->is_edit;
+                                     $job_view= $tab_item->is_view;
+                                     $job_delete= $tab_item->is_delete;
+                                    $tab_id='li_job_title_tab';
+                                }
+                                else if($tab_item->sub_menu_tab=='Pay Scales')
+                                {
+                                    $pay_add=$tab_item->is_add_new;
+                                    $pay_edit= $tab_item->is_edit;
+                                     $pay_view= $tab_item->is_view;
+                                     $pay_delete= $tab_item->is_delete;
+                                    $tab_id='li_pay_scales_tab';
+                                }
+                                else
+                                {
+                                    $status_add=$tab_item->is_add_new;
+                                    $status_edit= $tab_item->is_edit;
+                                     $status_view= $tab_item->is_view;
+                                     $status_delete= $tab_item->is_delete;
+                                    $tab_id='li_employment_status_tab';
+                                }
+                              ?>
+                            <li class="nav-item">
+                            <a class="nav-link <?php echo $class;?>" id="<?php echo $tab_id;?>" data-toggle="tab" href="<?php echo $tab_item->page_link ;?>" role="tab" aria-selected="false"><?php echo $tab_item->sub_menu_tab ;?></a>
+                            </li>
+                            
+                             <?php 
+                                $is_first='no';
+                                endforeach;
+                                ?> 
+                <!--<li class="nav-item">-->
+                <!--  <a class="nav-link active" id="li_job_title_tab"data-toggle="tab" href="#job_title_tab" role="tab"  aria-selected="true">Job Titles/Designation</a>-->
+                <!--</li>-->
+                <!--<li class="nav-item">-->
+                <!--  <a class="nav-link" id="li_pay_scales_tab" data-toggle="tab" href="#pay_scales_tab" role="tab"  aria-selected="false">Pay Scales</a>-->
+                <!--</li>-->
+                <!--<li class="nav-item">-->
+                <!--  <a class="nav-link" id="li_employment_status_tab" data-toggle="tab" href="#employment_status_tab" role="tab"  aria-selected="false">Employment Status</a>-->
+                <!--</li>-->
               
               
               </ul>
@@ -48,7 +89,11 @@
                           <div id="company_structure_table_top" class="reviewBlock">
                             <div class="combined_buttons">
                               <div class="add_new_btn_div">
+                                  <?php 
+                                        if($job_add=='yes'):
+                                    ?>
                                 <button id="job_title_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              <?php endif;?>
                               </div>           
                             </div>
                           </div>
@@ -86,7 +131,11 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                             <div class="combined_buttons">
                               <div class="add_new_btn_div">
+                                  <?php 
+                                        if($pay_add=='yes'):
+                                    ?>
                                 <button id="pay_scales_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              <?php endif;?>
                               </div>           
                             </div>
                         </div>
@@ -118,7 +167,11 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                             <div class="combined_buttons">
                               <div class="add_new_btn_div">
+                                  <?php 
+                                        if($status_add=='yes'):
+                                    ?>
                                 <button id="employment_status_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              <?php endif;?>
                               </div>           
                             </div>
                         </div>
@@ -389,9 +442,16 @@ function loadDataTableForJobTitle(){
                     var id = full.id;
                     return `
                         <div class="operations">
+                        <?php 
+                            if($job_edit=='yes'): ?>
                             <a href="#" class="edit" onclick="editJobTitle(${id});"><i class="fas fa-edit"></i>Edit</a>
+                            <?php endif;
+                            if($job_view=='yes'): ?>
                             <a href="#" class="view" onclick="viewJobTitle(${id});"><i class="fas fa-eye"></i>View</a>
+                            <?php endif;
+                            if($job_delete=='yes'): ?>
                             <a href="#" class="delete" onclick="deleteJobTitle(${id});"><i class="fas fa-trash"></i>Delete</a>
+                            <?php endif;?>
                         </div>`;
                 }
             }
@@ -438,9 +498,16 @@ function loadDataTableForPayScales(){
                     var pay_scale_id = full.id;
                     return `
                         <div class="operations">
+                          
+                            <?php if($pay_edit=='yes'): ?>
                             <a href="#" class="edit" onclick="editPayScale(${pay_scale_id});"><i class="fas fa-edit"></i>Edit</a>
+                            <?php endif;
+                            if($pay_view=='yes'): ?>
                             <a href="#" class="view" onclick="viewPayScale(${pay_scale_id});"><i class="fas fa-eye"></i>View</a>
+                            <?php endif;
+                            if($pay_delete=='yes'): ?>
                             <a href="#" class="delete" onclick="deletePayScale(${pay_scale_id});"><i class="fas fa-trash"></i>Delete</a>
+                            <?php endif; ?>
                         </div>`;
                 }
             }
@@ -486,9 +553,15 @@ function loadDataTableForEmploymentStatus(){
                     var employment_status_id = full.id;
                     return `
                         <div class="operations">
+                         <?php if($status_edit=='yes'): ?>
                             <a href="#" class="edit" onclick="editEmploymentStatus(${employment_status_id});"><i class="fas fa-edit"></i>Edit</a>
+                        <?php endif;
+                        if($status_view=='yes'): ?>
                             <a href="#" class="view" onclick="viewEmploymentStatus(${employment_status_id});"><i class="fas fa-eye"></i>View</a>
+                            <?php endif;
+                        if($status_delete=='yes'): ?>
                             <a href="#" class="delete" onclick="deleteEmploymentStatus(${employment_status_id});"><i class="fas fa-trash"></i>Delete</a>
+                            <?php endif; ?>
                         </div>`;
                 }
             }

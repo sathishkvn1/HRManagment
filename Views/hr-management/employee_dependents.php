@@ -2,7 +2,11 @@
                 <div id="education_tab" class="reviewBlock">
                 <div class="combined_buttons">
                    <div class="add_new_btn_div">
+                       <?php 
+                          if($dependent_add=='yes'):
+                          ?>
                      <button id="dependent_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                   <?php endif; ?>
                    </div>
                 </div>
             </div>
@@ -158,9 +162,15 @@
            render: function (data, type, row) {
                return `
                   <div class="operations"> 
+                  <?php   if($dependent_edit=='yes'): ?>
                   <a href="#" class="edit"  onclick="editDependents('${data}');"><i class="fas fa-edit"></i>Edit</a>
+                  <?php endif;
+                            if($dependent_view=='yes'): ?>
                   <a href="#" class="view" onclick="viewDependents('${data}');"><i class="fas fa-eye" ></i>View</a>
+                  <?php endif;
+                            if($dependent_delete=='yes'): ?>
                   <a href="#" class="delete" onclick="deleteDependents('${data}');"><i class="fas fa-trash" ></i>Delete</a>
+                  <?php endif; ?>
                   </div>`;
             
            }

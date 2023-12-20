@@ -28,20 +28,57 @@
             <div class="combination_datatable" id="company_strucure">
               <!-- tab start here -->
               <ul class="nav nav-tabs">
-                <li class="nav-item">
-                  <a class="nav-link active" id="li_group_tab"data-toggle="tab" href="#group_tab_tab" role="tab"  aria-selected="true">Group</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_category_tab" data-toggle="tab" href="#category_tab" role="tab"  aria-selected="false">Category</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_status_tab" data-toggle="tab" href="#status_tab" role="tab"  aria-selected="false">Status</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="li_return_reason_tab" data-toggle="tab" href="#return_reason_tab" role="tab"  aria-selected="false">Return Reason</a>
-                </li>
+                                 <?php 
               
-              
+                    $is_first='yes';
+                  foreach($tab as $tab_item):
+                    if($is_first=='yes')
+                        $class='active';
+                    else
+                        $class='';
+                   if($tab_item->sub_menu_tab=='Group')
+                    {
+                        $group_add=$tab_item->is_add_new;
+                         $group_edit= $tab_item->is_edit;
+                         $group_view= $tab_item->is_view;
+                         $group_delete= $tab_item->is_delete;
+                        $tab_id='li_group_tab';
+                    }
+                    else if($tab_item->sub_menu_tab=='Category')
+                    {
+                        $category_add=$tab_item->is_add_new;
+                         $category_edit= $tab_item->is_edit;
+                         $category_view= $tab_item->is_view;
+                         $category_delete= $tab_item->is_delete;
+                        $tab_id='li_category_tab';
+                    }
+                      else if($tab_item->sub_menu_tab=='Status')
+                    {
+                        $status_add=$tab_item->is_add_new;
+                         $status_edit= $tab_item->is_edit;
+                         $status_view= $tab_item->is_view;
+                         $status_delete= $tab_item->is_delete;
+                        $tab_id='li_status_tab';
+                    }
+                     
+                    else
+                    {
+                        $reason_add=$tab_item->is_add_new;
+                         $reason_edit= $tab_item->is_edit;
+                         $reason_view= $tab_item->is_view;
+                         $reason_delete= $tab_item->is_delete;
+                        $tab_id='li_return_reason_tab';
+                    }
+                  ?>
+                <li class="nav-item">
+                     <a class="nav-link <?php echo $class;?>" id="<?php echo $tab_id;?>" data-toggle="tab" href="<?php echo $tab_item->page_link ;?>" role="tab" aria-selected="false"><?php echo $tab_item->sub_menu_tab ;?></a>
+
+                </li>
+                 <?php 
+                    $is_first='no';
+                    endforeach;
+                    ?> 
+
               </ul>
               <!-- tab end  here -->
               <div class="tab-content">
@@ -51,7 +88,11 @@
                             <div id="company_structure_table_top" class="reviewBlock">
                             <div class="combined_buttons">
                               <div class="add_new_btn_div">
+                                  <?php 
+                                        if($group_add=='yes'):
+                                    ?>
                                 <button id="asset_group_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                             <?php endif; ?>
                               </div>           
                             </div>
                             </div>
@@ -87,7 +128,11 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                           <div class="combined_buttons">
                             <div class="add_new_btn_div">
+                                 <?php 
+                                        if($category_add=='yes'):
+                                    ?>
                                 <button id="category_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                            <?php endif;?>
                             </div>           
                           </div>
                         </div>
@@ -167,7 +212,11 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                           <div class="combined_buttons">
                             <div class="add_new_btn_div">
+                                 <?php 
+                                        if($reason_add=='yes'):
+                                    ?>
                                 <button id="return_reason_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                                <?php endif;?>
                             </div>           
                           </div>
                         </div>
@@ -432,9 +481,15 @@ function loadDataTableForGroup() {
                 render: function (data, type, row) {
                     return `
                         <div class="operations"> 
+                        <?php if($group_edit=='yes'): ?>
                             <a href="#" class="edit" onclick="editGroup('${data}');"><i class="fas fa-edit"></i>Edit</a>
+                            <?php endif;
+                            if($group_view=='yes'): ?>
                             <a href="#" class="view" onclick="viewGroup('${data}');"><i class="fas fa-eye"></i>View</a>
+                            <?php endif;
+                            if($group_delete=='yes'): ?>
                             <a href="#" class="delete"  onclick="deleteGroup('${data}');"><i class="fas fa-trash"></i>Delete</a>
+                            <?php endif; ?>
                         </div>`;
                 }
             }
@@ -622,9 +677,15 @@ function loadDataTableForCategory() {
                 render: function (data, type, row) {
                     return `
                         <div class="operations"> 
+                        <?php if($category_edit=='yes'): ?>
                             <a href="#" class="edit" onclick="editCategory('${data}');"><i class="fas fa-edit"></i>Edit</a>
+                            <?php endif;
+                            if($category_view=='yes'): ?>
                             <a href="#" class="view" onclick="viewCategory('${data}');"><i class="fas fa-eye"></i>View</a>
+                            <?php endif;
+                            if($category_delete=='yes'): ?>
                             <a href="#" class="delete"  onclick="deleteCategory('${data}');"><i class="fas fa-trash"></i>Delete</a>
+                            <?php endif; ?>
                         </div>`;
                 }
             }
@@ -812,9 +873,15 @@ $('#return_reason_data_table').DataTable({
             render: function (data, type, row) {
                 return `
                     <div class="operations"> 
+                    <?php  if($reason_edit=='yes'): ?>
                         <a href="#" class="edit" onclick="editReturnReason('${data}');"><i class="fas fa-edit"></i>Edit</a>
+                        <?php endif;
+                            if($reason_view=='yes'): ?>
                         <a href="#" class="view" onclick="viewReturnReason('${data}');"><i class="fas fa-eye"></i>View</a>
+                        <?php endif;
+                            if($reason_delete=='yes'): ?>
                         <a href="#" class="delete"  onclick="deleteReturnReason('${data}');"><i class="fas fa-trash"></i>Delete</a>
+                        <?php endif; ?>
                     </div>`;
             }
         }

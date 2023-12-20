@@ -31,12 +31,42 @@
                 <div class="combination_datatable" id="company_strucure">
                       <!-- tab ul -->
                         <ul class="nav nav-tabs">
+                             <?php 
+                          
+                                $is_first='yes';
+                              foreach($tab as $tab_item):
+                                if($is_first=='yes')
+                                    $class='active';
+                                else
+                                    $class='';
+                                if($tab_item->sub_menu_tab=='Team Master')
+                                {
+                                    $team_add= $tab_item->is_add_new;
+                                    $team_edit= $tab_item->is_edit;
+                                    $team_view= $tab_item->is_view;
+                                    $team_delete= $tab_item->is_delete;
+                                    $tab_id='li_teams_master_tab';
+                                }
+                               
+                                else
+                                {
+                                    $employee_add=$tab_item->is_add_new;
+                                     $employee_edit= $tab_item->is_edit;
+                                    $employee_view= $tab_item->is_view;
+                                    $employee_delete= $tab_item->is_delete;
+                                    $tab_id='li_employee_team_tab';
+                                }
+                              ?>
                             <li class="nav-item">
-                                 <a class="nav-link active" id="li_teams_master_tab"data-toggle="tab" href="#teams_master_tab" role="tab" aria-selected="false">Team Master</a>
+                                 <a class="nav-link <?php echo $class;?>" id="<?php echo $tab_id;?>"data-toggle="tab" href="<?php echo $tab_item->page_link ;?>" role="tab" aria-selected="false"><?php echo $tab_item->sub_menu_tab ;?></a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="li_employee_team_tab" data-toggle="tab" href="#employee_team_tab" role="tab" aria-selected="false">Employee Team</a>
-                            </li>
+                             <?php 
+                                $is_first='no';
+                                endforeach;
+                                ?> 
+                            <!--<li class="nav-item">-->
+                            <!--    <a class="nav-link" id="li_employee_team_tab" data-toggle="tab" href="#employee_team_tab" role="tab" aria-selected="false">Employee Team</a>-->
+                            <!--</li>-->
                         </ul>
                      <!-- ./ tab ul -->
                     <!-- tab end  here -->

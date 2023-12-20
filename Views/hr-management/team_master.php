@@ -1,18 +1,22 @@
 
 <div id="employment_tab" class="reviewBlock">
 <div class="combined_buttons">
-                                                <div class="add_new_btn_div">
-                                                    <button id="employee_team_master_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
-                                                 </div>
-                                                <div class="filter_btn_div">
-                                                <button id="employee_team_master_data_table_filter_btn" class="customise_filter_button" data-value="employee_data_table"><i class="fas fa-filter"></i>Filter</button>
-                                                </div>
-                                                <div class="reset_filter_btn_div">
-                                                    <button id="employee_team_master_data_table_reset_filter"  style="display:none" class="cancel_filter_button"><i class="fas fa-times"></i> Cancel</button>
-                                                </div>
-                                                
-                                            </div>                  
-                </div>
+    <div class="add_new_btn_div">
+         <?php 
+            if($team_add=='yes'):
+        ?>
+        <button id="employee_team_master_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+     <?php endif; ?>
+     </div>
+    <div class="filter_btn_div">
+    <button id="employee_team_master_data_table_filter_btn" class="customise_filter_button" data-value="employee_data_table"><i class="fas fa-filter"></i>Filter</button>
+    </div>
+    <div class="reset_filter_btn_div">
+        <button id="employee_team_master_data_table_reset_filter"  style="display:none" class="cancel_filter_button"><i class="fas fa-times"></i> Cancel</button>
+    </div>
+    
+</div>                  
+</div>
                        
                         <!-- table  -->
                         <table id="employee_team_master_data_table" class="table table-striped">
@@ -255,9 +259,15 @@ function loadDataTableForTeamMaster(){
                     var id = full.id;
                     return `
                         <div class="operations">
+                        <?php if($team_edit=='yes'): ?>
                             <a href="#" class="edit" onclick="employeeTeamMasterEditRow(${id});"><i class="fas fa-edit"></i>Edit</a>
+                            <?php endif;
+                            if($team_view=='yes'): ?>
                             <a href="#" class="view" onclick="employeeTeamMasterViewRow(${id});"><i class="fas fa-eye"></i>View</a>
+                            <?php endif;
+                            if($team_delete=='yes'): ?>
                             <a href="#" class="delete" onclick="employeeTeamMasterDeleteRow(${id});"><i class="fas fa-trash"></i>Delete</a>
+                            <?php endif; ?>
                             <a href="#" class="details" onclick="openDetailsModal(${id});"><i class="fas fa-info"></i>Details</a>
                         </div>`;
                 }

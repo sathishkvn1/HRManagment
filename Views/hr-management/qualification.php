@@ -23,21 +23,78 @@
             <div class="combination_datatable" id="company_strucure">
               <!-- tab start here -->
                 <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link  active" id="qualification_skills_tab_link" data-toggle="tab" href="#qualification_skills_tab" aria-controls="company_department"  role="tab"  aria-selected="false">Skills</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="qualification_education_tab_link" data-toggle="tab" href="#qualification_education_tab"   role="tab"  aria-selected="false">Education</a>
-                    </li>        
-                    <li class="nav-item">
-                        <a class="nav-link" id="qualification_certification_tab_link" data-toggle="tab" href="#qualification_certification_tab"   role="tab"  aria-selected="false">Certification</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="qualification_languages_tab_link" data-toggle="tab" href="#qualification_languages_tab"   role="tab"  aria-selected="false">Languages</a>
-                    </li>  
-                    <li class="nav-item">
-                        <a class="nav-link" id="qualification_languages_proficiency_tab_link" data-toggle="tab" href="#languages_proficiency_tab"   role="tab"  aria-selected="false">Languages Proficiency</a>
-                    </li>         
+                                  <?php 
+                          
+                                $is_first='yes';
+                              foreach($tab as $tab_item):
+                                if($is_first=='yes')
+                                    $class='active';
+                                else
+                                    $class='';
+                                if($tab_item->sub_menu_tab=='Skills')
+                                {
+                                    $skills_add= $tab_item->is_add_new;
+                                     $skills_edit= $tab_item->is_edit;
+                                     $skills_view= $tab_item->is_view;
+                                     $skills_delete= $tab_item->is_delete;
+                                    $tab_id='qualification_skills_tab_link';
+                                }
+                                else if($tab_item->sub_menu_tab=='Education')
+                                {
+                                    $education_add=$tab_item->is_add_new;
+                                     $education_edit= $tab_item->is_edit;
+                                     $education_view= $tab_item->is_view;
+                                     $education_delete= $tab_item->is_delete;
+                                    $tab_id='qualification_education_tab_link';
+                                }
+                                 else if($tab_item->sub_menu_tab=='Certification')
+                                {
+                                    $certificate_add=$tab_item->is_add_new;
+                                    $certificate_edit= $tab_item->is_edit;
+                                     $certificate_view= $tab_item->is_view;
+                                     $certificate_delete= $tab_item->is_delete;
+                                    $tab_id='qualification_certification_tab_link';
+                                }
+                                 else if($tab_item->sub_menu_tab=='Languages')
+                                {
+                                    $language_add=$tab_item->is_add_new;
+                                     $language_edit= $tab_item->is_edit;
+                                     $language_view= $tab_item->is_view;
+                                     $language_delete= $tab_item->is_delete;
+                                    $tab_id='qualification_languages_tab_link';
+                                }
+                                else
+                                {
+                                    $proficiency_add=$tab_item->is_add_new;
+                                     $proficiency_edit= $tab_item->is_edit;
+                                     $proficiency_view= $tab_item->is_view;
+                                     $proficiency_delete= $tab_item->is_delete;
+                                    $tab_id='qualification_languages_proficiency_tab_link';
+                                }
+                              ?>
+                            <li class="nav-item">
+                            <a class="nav-link <?php echo $class;?>" id="<?php echo $tab_id;?>" data-toggle="tab" href="<?php echo $tab_item->page_link ;?>" role="tab" aria-selected="false"><?php echo $tab_item->sub_menu_tab ;?></a>
+                            </li>
+                            
+                             <?php 
+                                $is_first='no';
+                                endforeach;
+                                ?> 
+                    <!--<li class="nav-item">-->
+                    <!--    <a class="nav-link  active" id="qualification_skills_tab_link" data-toggle="tab" href="#qualification_skills_tab" aria-controls="company_department"  role="tab"  aria-selected="false">Skills</a>-->
+                    <!--</li>-->
+                    <!--<li class="nav-item">-->
+                    <!--    <a class="nav-link" id="qualification_education_tab_link" data-toggle="tab" href="#qualification_education_tab"   role="tab"  aria-selected="false">Education</a>-->
+                    <!--</li>        -->
+                    <!--<li class="nav-item">-->
+                    <!--    <a class="nav-link" id="qualification_certification_tab_link" data-toggle="tab" href="#qualification_certification_tab"   role="tab"  aria-selected="false">Certification</a>-->
+                    <!--</li>-->
+                    <!--<li class="nav-item">-->
+                    <!--    <a class="nav-link" id="qualification_languages_tab_link" data-toggle="tab" href="#qualification_languages_tab"   role="tab"  aria-selected="false">Languages</a>-->
+                    <!--</li>  -->
+                    <!--<li class="nav-item">-->
+                    <!--    <a class="nav-link" id="qualification_languages_proficiency_tab_link" data-toggle="tab" href="#languages_proficiency_tab"   role="tab"  aria-selected="false">Languages Proficiency</a>-->
+                    <!--</li>         -->
                 </ul>
               <!-- tab end  here -->
               <div class="tab-content">
@@ -47,7 +104,11 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                             <div class="combined_buttons">
                               <div class="add_new_btn_div">
+                                   <?php 
+                                        if($skills_add=='yes'):
+                                    ?>
                                 <button id="skills_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                                <?php endif;?>
                               </div>           
                             </div>
                         </div>
@@ -83,7 +144,11 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                             <div class="combined_buttons">
                               <div class="add_new_btn_div">
+                                   <?php 
+                                        if($education_add=='yes'):
+                                    ?>
                                 <button id="education_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              <?php endif;?>
                               </div>           
                             </div>
                         </div>
@@ -118,7 +183,11 @@
                  <div id="company_structure_table_top" class="reviewBlock">
                       <div class="combined_buttons">
                             <div class="add_new_btn_div">
+                                 <?php 
+                                        if($certification_add=='yes'):
+                                    ?>
                               <button id="certification_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                            <?php endif;?>
                             </div>           
                       </div>
                 </div>
@@ -156,7 +225,11 @@
                  <div id="company_structure_table_top" class="reviewBlock">
                  <div class="combined_buttons">
                               <div class="add_new_btn_div">
+                                   <?php 
+                                        if($language_add=='yes'):
+                                    ?>
                                 <button id="languages_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                              <?php endif;?>
                               </div>           
                             </div>
                 </div>
@@ -198,7 +271,11 @@
                  <div id="company_structure_table_top" class="reviewBlock">
                     <div class="combined_buttons">
                       <div class="add_new_btn_div">
+                           <?php 
+                                        if($proficiency_add=='yes'):
+                                    ?>
                         <button id="languages_proficiency_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                      <?php endif;?>
                       </div>           
                     </div>
                 </div>
@@ -870,10 +947,16 @@ function loadDataTableForSkills(){
            data: "id",
            render: function (data, type, row) {
                return `
-                  <div class="operations"> 
+                  <div class="operations">
+                  <?php   if($skills_edit=='yes'): ?>
                     <a href="#" class="edit" onclick="editSkill('${data}');"><i class="fas fa-edit"></i>Edit</a>
+                    <?php endif;
+                            if($skills_view=='yes'): ?>
                     <a href="#" class="view" onclick="viewSkill('${data}');"><i class="fas fa-eye"></i>View</a>
+                    <?php endif;
+                            if($skills_delete=='yes'): ?>
                     <a href="#" class="delete"  onclick="deleteSkill('${data}');"><i class="fas fa-trash"></i>Delete</a>
+                    <?php endif; ?>
                   </div>`;
             
            }
@@ -918,10 +1001,16 @@ function  loadDataTableForEducation(){
            data: "id",
            render: function (data, type, row) {
                return `
-                  <div class="operations"> 
+                  <div class="operations">
+                  <?php  if($education_edit=='yes'): ?>
                   <a href="#" class="edit"  onclick="editEducation('${data}');"><i class="fas fa-edit"></i>Edit</a>
+                  <?php endif;
+                            if($education_view=='yes'): ?>
                   <a href="#" class="view" onclick="viewEducation('${data}');"><i class="fas fa-eye" ></i>View</a>
+                  <?php endif;
+                            if($education_delete=='yes'): ?>
                   <a href="#" class="delete" onclick="deleteEducation('${data}');"><i class="fas fa-trash" ></i>Delete</a>
+                  <?php endif; ?>
                   </div>`;
             
            }
@@ -971,9 +1060,15 @@ function loadDataTableForCertification(){
            render: function (data, type, row) {
                return `
                   <div class="operations"> 
+                   <?php if($certification_edit=='yes'): ?>
                   <a href="#" class="edit" onclick="editCertification('${data}');"><i class="fas fa-edit" ></i>Edit</a>
+                   <?php endif;
+                            if($certification_view=='yes'): ?>
                   <a href="#" class="view" onclick="viewCertification('${data}');"><i class="fas fa-eye" ></i>View</a>
+                   <?php endif;
+                            if($certification_delete=='yes'): ?>
                   <a href="#" class="delete" onclick="deleteCertification('${data}');"><i class="fas fa-trash" ></i>Delete</a>
+                   <?php endif; ?>
                   </div>`;
             
            }
@@ -1019,9 +1114,15 @@ function loadDataTableForCertification(){
            render: function (data, type, row) {
                return `
                   <div class="operations"> 
+                  <?php  if($language_edit=='yes'): ?>
                     <a href="#" class="edit" onclick="editLanguages('${data}');"><i class="fas fa-edit" ></i>Edit</a>
+                    <?php endif;
+                            if($language_view=='yes'): ?>
                     <a href="#" class="view" onclick="viewLanguages('${data}');"><i class="fas fa-eye" ></i>View</a>
+                    <?php endif;
+                            if($language_delete=='yes'): ?>
                     <a href="#" class="delete" onclick="deleteLanguages('${data}');"><i class="fas fa-trash" ></i>Delete</a>
+                    <?php endif; ?>
                   </div>`;
             
            }
@@ -1068,9 +1169,15 @@ function loadDataTableForCertification(){
            render: function (data, type, row) {
                return `
                   <div class="operations"> 
+                  <?php  if($proficiency_edit=='yes'): ?>
                     <a href="#" class="edit" onclick="editLanguagesProficiency('${data}');"><i class="fas fa-edit" ></i>Edit</a>
+                    <?php endif;
+                            if($proficiency_view=='yes'): ?>
                     <a href="#" class="view" onclick="viewLanguagesProficiency('${data}');"><i class="fas fa-eye" ></i>View</a>
+                    <?php endif;
+                            if($proficiency_delete=='yes'): ?>
                     <a href="#" class="delete" onclick="deleteLanguagesProficiency('${data}');"><i class="fas fa-trash" ></i>Delete</a>
+                    <?php endif; ?>
                    </div>`;
             
            }

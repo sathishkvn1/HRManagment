@@ -1,7 +1,11 @@
    <div id="skills_tab" class="reviewBlock">
                                       <div class="combined_buttons">
                                                 <div class="add_new_btn_div">
+                                                    <?php 
+                                                      if($skills_add=='yes'):
+                                                      ?>
                                                     <button id="employee_skill_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                                                 <?php endif;?>
                                                  </div>
                                                 <div class="filter_btn_div">
                                                 <button id="employee_skill_data_table_filter_btn" class="customise_filter_button" data-value="employee_data_table"><i class="fas fa-filter"></i>Filter</button>
@@ -224,9 +228,15 @@ $(document).ready( function () {
                     var id = full.id;
                     return `
                         <div class="operations">
+                        <?php if($skills_edit=='yes'): ?>
                             <a href="#" class="edit" onclick="employeeSkillEditRow(${id});"><i class="fas fa-edit"></i>Edit</a>
+                            <?php endif;
+                            if($skills_view=='yes'): ?>
                             <a href="#" class="view" onclick="employeeSkillViewRow(${id});"><i class="fas fa-eye"></i>View</a>
+                            <?php endif;
+                            if($skills_delete=='yes'): ?>
                             <a href="#" class="delete" onclick="employeeSkillDeleteRow(${id});"><i class="fas fa-trash"></i>Delete</a>
+                            <?php endif; ?>
                         </div>`;
                 }
             }

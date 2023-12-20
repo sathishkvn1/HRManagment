@@ -226,8 +226,9 @@
               //     <div class="operations"><a href="#" class="view" onclick="viewNewRequest('${data}');"><i class="fas fa-eye"></i>View</a>  </div>`;
               return `
                   <div class="operations"> 
-               
+               <?php     if($request_view=='yes'): ?>
                   <a href="#" class="view" onclick="viewNewLoanRequest('${data}');"><i class="fas fa-eye" ></i>View</a>
+                  <?php endif; ?>
                 
                   </div>`;
            }

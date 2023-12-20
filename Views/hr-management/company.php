@@ -27,19 +27,51 @@
             <div class="combination_datatable" id="company_strucure">
               <!-- tab start here -->
               <ul class="nav nav-tabs">
-                <li class="nav-item">
-                  <a class="nav-link active"  data-toggle="tab" href="#company_structure_tab" aria-controls="company_structure"   role="tab"  aria-selected="true">Company</a>
+                  <?php 
+                    $is_first='yes';
+                  foreach($tab as $tab_item):
+                    if($is_first=='yes')
+                        $class='active';
+                    else
+                        $class='';
+                    if($tab_item->sub_menu_tab=='Company')
+                    {
+                        $company_add= $tab_item->is_add_new;
+                        $company_edit= $tab_item->is_edit;
+                        $company_view= $tab_item->is_view;
+                        $company_delete= $tab_item->is_delete;
+                        $aria_controls ="company_structure";
+                        $tab_id='';
+                    }
+                    else if($tab_item->sub_menu_tab=='Branch')
+                    {
+                        $branch_add=$tab_item->is_add_new;
+                        $branch_edit=$tab_item->is_edit;
+                        $branch_view=$tab_item->is_view;
+                        $branch_delete=$tab_item->is_delete;
+                        $aria_controls ="";
+                        $tab_id='company_address_tab_link';
+                    }
+                    else
+                    {
+                        $department_add=$tab_item->is_add_new;
+                        $department_edit=$tab_item->is_edit;
+                        $department_view=$tab_item->is_view;
+                        $department_delete=$tab_item->is_delete;
+                        $aria_controls ="company_department";
+                        $tab_id='company_department_tab_link';
+                    }
+                  ?>
+                  <li class="nav-item">
+                     
+                  <a class="nav-link <?php echo $class; ?>" id="<?php echo $tab_id;?>"  data-toggle="tab" href="<?php echo $tab_item->page_link ; ?>" aria-controls="<?php echo $aria_controls;?>"   role="tab"  aria-selected="true"><?php echo $tab_item->sub_menu_tab ;?></a>
                  
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="company_address_tab_link" data-toggle="tab" href="#company_address_tab"   role="tab"  aria-selected="false">Branch</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="company_department_tab_link" data-toggle="tab" href="#company_department_tab" aria-controls="company_department"  role="tab"  aria-selected="false">Department</a>
-                </li>
-              
-              
-              
+                <?php 
+                $is_first='no';
+                endforeach;
+                ?>  
+                  
               </ul>
               <!-- tab end  here -->
               <div class="tab-content">
@@ -49,7 +81,21 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                           <div class="combined_buttons">
                               <div class="add_new_btn_div">
+                                  <?php 
+                                //   print_r($tab);
+                                //   foreach($tab as $tab1):
+                                //       if($tab1->sub_menu_tab=='Company'):
+                                //       if($tab1->is_add_new=='yes'):
+                                          
+                                  if($company_add=='yes'):
+
+                                  ?>
                                 <button id="company_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                                <?php 
+                                    // endif;
+                                    endif;
+                                    // endforeach;
+                                ?>  
                               </div>           
                           </div>
                         </div>
@@ -96,7 +142,13 @@
                  <div id="company_structure_table_top" class="reviewBlock">
                   <div class="combined_buttons">
                               <div class="add_new_btn_div">
+                                  <?php 
+                                    if($department_add=='yes'):
+                                  ?>
                                 <button id="company_department_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                                <?php 
+                                    endif;
+                                ?>
                               </div>           
                         </div>
                 </div>
@@ -137,7 +189,13 @@
                  <div id="company_structure_table_top" class="reviewBlock">
                   <div class="combined_buttons">
                       <div class="add_new_btn_div">
+                          <?php 
+                          if($branch_add=='yes'):
+                          ?>
                         <button id="company_address_data_table_add_new" class="add_new_button" data-bs-toggle="modal" data-value="employee_data_table"><i class="fas fa-plus"></i> Add New</button>
+                      <?php 
+                        endif;
+                      ?>
                       </div>           
                   </div>
                 </div>
@@ -758,13 +816,17 @@ function loadDataTableForCompany(){
            render: function (data, type, row) {
                return `
                   <div class="operations"> 
-                   
+                   <?php if($company_edit=='yes'): ?>
                   <a href="#" class="edit" onclick="editCompany('${row.company_id}','${row.branch_id}');"><i class="fas fa-edit"></i>Edit</a>
-                  <a href="#" class="view" onclick="viewCompany('${row.company_id}','${row.branch_id}');"><i class="fas fa-edit"></i>View</a>
-                    
+                
+                  <?php endif;
+                  if($company_view=='yes'): ?>
+                    <a href="#" class="view" onclick="viewCompany('${row.company_id}','${row.branch_id}');"><i class="fas fa-edit"></i>View</a>
+                    <?php endif;
+                  if($company_delete=='yes'): ?> 
 
                   <a href="#" class="delete" onclick="deleteCompany('${row.company_id}', '${row.branch_id}');"><i class="fas fa-trash"></i>Delete</a>
-
+                    <?php endif; ?>
                    </div>`;
             
            }
@@ -1119,9 +1181,17 @@ function loadDataTableForDepartment(){
             render: function (data, type, row) {
             return `
                     <div class="operations"> 
+                     <?php if($department_edit=='yes'): ?>
                       <a href="#" class="edit"  onclick="editDepartment('${data}');"><i class="fas fa-edit"></i>Edit</a>
+                      <?php endif;
+                      if($department_view=='yes'):
+                      ?>
                       <a href="#" class="view" onclick="viewDepartment('${data}');"><i class="fas fa-eye" ></i>View</a>
+                      <?php endif;
+                      if($department_delete=='yes'):
+                      ?>
                       <a href="#" class="delete" onclick="deleteDepartment('${data}');"><i class="fas fa-trash" ></i>Delete</a>
+                      <?php endif;?>
                     </div>`;
             }
         }
@@ -1258,10 +1328,19 @@ function editDepartment(id) {
             data: "id",
             render: function (data, type, row) {
             return `
-                    <div class="operations"> 
+                     <div class="operations"> 
+                    <?php  if($branch_edit=='yes'):
+                      ?>
                       <a href="#" class="edit" onclick="editAddress('${data}');"><i class="fas fa-edit" ></i>Edit</a>
+                      <?php endif;
+                      if($branch_view=='yes'):
+                      ?>
                       <a href="#" class="view" onclick="viewAddress('${data}');"><i class="fas fa-eye" ></i>View</a>
+                      <?php endif;
+                      if($branch_delete=='yes'):
+                      ?>
                       <a href="#" class="delete" onclick="deleteAddress('${data}');"><i class="fas fa-trash" ></i>Delete</a>
+                      <?php endif;?>
                     </div>`;
             }
         }
