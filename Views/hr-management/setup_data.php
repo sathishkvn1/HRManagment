@@ -122,6 +122,11 @@
                             <!-- ./ for loading CompanyStructure DataTable -->
                     </div>
                   <!-- ./tab1  --- -->
+                 <!-- one tab -->
+                      <div class="tab-pane fade" id="overtime_type_tab" role="tabpanel" aria-labelledby="overtime_type_tab">     
+                      <?php include("setupdata_overtime.php");?>
+                   </div>
+                  <!-- ./one tab -->
 
 
                     <!--tab 2   ------ -->

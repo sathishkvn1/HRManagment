@@ -52,27 +52,7 @@
               <!--  ./ one section --- -->
 
 
- <!--  one section --- -->
-                <li class="nav-item has-treeview menu-close sidebar-shadow-top-bottom">
-                  <a href="#" class="nav-link active bg-purewhite text-dark no-shadow">
-                    <i class="fa fa-grip-horizontal"></i>
-                    <p>Calender
-                      <i class="right fas fa-angle-left"></i>
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                  
-                    <li class="nav-item">
-                      <a href="<?php echo base_url(CONTROLLER_HR."/calender");?>" class="nav-link">
-                        <i class="fa fa-check-square"></i>
-                        <p>Calender</p>
-                      </a>
-                    </li>
-                  
-                   
-                  </ul>
-                </li>
-              <!-- ./ one section --- -->
+
             
          <li class="nav-item has-treeview menu-close sidebar-shadow-top-bottom">
                   <a href="#" class="nav-link active bg-purewhite text-dark no-shadow">

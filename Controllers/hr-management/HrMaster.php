@@ -32,7 +32,7 @@ class HRMaster extends CI_Controller {
 // 	}
 		public function index()
 	{
-        $company_id                      = 1;
+        $company_id                      = 91;
 		   $_SESSION['user_id']             = 1;
         $_SESSION['company_id_in_hr']    = $company_id;
         $user_role_id                    = $_SESSION['USER_ROLE_ID'];
@@ -3880,122 +3880,7 @@ public function generate_pdf_for_teams() {
     }
 }
 
-public function calender(){
 
-    $data["week_days"]  = $this->HrModel->get_week_days();
-    $this->load->view('hr-management/calender',$data);
-
-}
-
-
-public function get_calandar_details()
-{
-    $data = $this->HrModel->get_calandar_details();
-    echo json_encode(['data' => $data]);
-}
-
-
-
-
-
-
-
-function save_calender_details()
-{
-    $company_id_in_hr = $this->session->userdata('company_id_in_hr');
-    $flag_id = $_POST['flag_id'];
-    $row_id = $_POST['row_id'];
-
-    if ($flag_id === "0") 
-    {
-        $calender_master_data = array(
-            'company_id' => $company_id_in_hr,
-            'calendar_start_date' => $_POST['calendar_start_date'],
-            'calendar_end_date' => $_POST['calendar_end_date'],
-            'year_name' => $_POST['year_name'],
-            'effective_from' => $_POST['effective_from'],
-            'effective_to' => $_POST['effective_to'],
-            'created_by' => $_SESSION['user_id'],
-            'created_on' => date("Y-m-d H:i:s"),
-        );
-
-        $calendar_master_id = $this->HrModel->insert_calendar_master($calender_master_data);
-
-        if ($calendar_master_id) {
-
-            $week_day_id = $_POST['working_day_id'];
-            $start_times = $_POST['start_time']; 
-            $end_times = $_POST['end_time']; 
-            $start_time_formatted = [];
-            $end_time_formatted = [];
-            $selected_working_days = $_POST['working_day_id']; 
-
-            foreach ($start_times as $start_hour) {
-                $start_time_formatted[] = date('H:i:s', strtotime("$start_hour:00"));
-            }
-
-            foreach ($end_times as $end_hour) {
-                $end_time_formatted[] = date('H:i:s', strtotime("$end_hour:00"));
-            }
-
-            foreach ($week_day_id as $key => $value) {
-                $is_working_day = (in_array($value, $selected_working_days)) ? 'yes' : 'no'; 
-
-                $calender_details_data = array(
-                    'calendar_master_id' => $calendar_master_id,
-                    'week_day_id' => $value,
-                    'start_time' => $start_time_formatted[$key],
-                    'end_time' => $end_time_formatted[$key],
-                    'is_working_day' => $is_working_day, 
-                );
-
-                $insertedRowId = $this->HrModel->insert_calendar_details($calender_details_data);
-            }
-
-            $response = array(
-                'success' => true,
-                'message' => 'Saved successfully.',
-            );
-        } 
-        else {
-            $response = array(
-                'success' => false,
-                'message' => 'Error in saving master calendar data.',
-            );
-        }
-    } else {
-        // Handle other flag_id scenarios if needed
-        $response = array(
-            'success' => false,
-            'message' => 'Flag_id is not 0.',
-        );
-    }
-
-    echo json_encode($response);
-}
-
-
-
-public function get_calendar_details_by_id()
-{
-    $row_id = $this->input->get('row_id');
-   
-    $result = $this->HrModel->get_calendar_details_by_id($row_id);
-
-    if ($result) {
-        $response = [
-            'success' => true,
-            'data' => $result
-        ];
-    } else {
-        $response = [
-            'success' => false,
-            'message' => 'Not found'
-        ];
-    }
-
-    echo json_encode($response);
-}
 
 public function get_menu_list($role="")
 {
@@ -4033,73 +3918,1482 @@ public function get_menu_list($role="")
    
    
    
-   public function user_rights()
+public function user_rights()
    {
        
         // $this->load->model('hr-management/User_rights_model');
         $res                = $this->HrMenuModel->get_user_role();
+        $user_role_id                    = $_SESSION['USER_ROLE_ID'];
+
+        $data                          =$this->get_menu_list($user_role_id);
+        $data2["tab"]                  =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
       
         $data['userRole']   = $res;
-        $data['li_token']		=$_SESSION['li_token'];
-       
+        $data['li_token']	=$_SESSION['li_token'];
+        $data 			    = (object) array_merge((array) $data,(array) $data2);
 		$this->load->view('hr-management/user_rights',$data);
    }
 
-public function  get_all_menu_list($role="")
-{
-    // $this->load->model('hr-management/User_rights_model');
-    
-        $result             = $this->HrMenuModel->get_all_main_menu_permission($role);
-        $data['mainMenu']   = $result;
-        // print_r($result);
-        // exit;
-        $data['sub_menus'] = array();
-    
-        foreach ($data['mainMenu'] as $main_item) {
-            $main_item->sub_menu = $this->HrMenuModel->get_all_sub_menu_permission($main_item->id,$role);
-            $data['sub_menus'][$main_item->id] = $main_item->sub_menu;
-        }
+
+   public function  get_all_menu_list($role="")
+   {
+       // $this->load->model('hr-management/User_rights_model');
        
-            echo json_encode($data);
+           $result             = $this->HrMenuModel->get_all_main_menu_permission($role);
+           $data['mainMenu']   = $result;
+           
+           $data['sub_menus'] = array();
+       
+           foreach ($data['mainMenu'] as $main_item) {
+               $main_item->sub_menu = $this->HrMenuModel->get_all_sub_menu_permission($main_item->id,$role);
+               $data['sub_menus'][$main_item->id] = $main_item->sub_menu;
+                foreach($data['sub_menus'][$main_item->id] as $sub_menu)
+                   {
+                       
+                       $sub_menu->sub_menu_tab =   $this->HrMenuModel -> get_all_sub_menu_tab_permission($sub_menu->id,$role);
+                       
+                       $data['sub_menu_tab'][$sub_menu->id]   =   $sub_menu->sub_menu_tab;
+                      
+                   }
+                   
+           }
+           
+        
+               echo json_encode($data);
+   }
+
+
+   public function save_menu_permission()
+   {
+      
+       // $userId                 = $this->input->post('user_id');
+      $role                    = $this->input->post('user_role');
+      $selectedMainMenuItems   = $this->input->post('main_Menu');
+      $selectedSubMenus        = $this->input->post('submenu');
+      $selectedSubMenuTab      = $this->input->post('submenutab');
+      $selectedSubMenuTabadd      = $this->input->post('submenutabadd');
+      $selectedSubMenuTabedit      = $this->input->post('submenutabedit');
+      $selectedSubMenuTabview      = $this->input->post('submenutabview');
+      $selectedSubMenuTabdelete      = $this->input->post('submenutabdelete');
+      $token                   = $this->input->post('li_token');
+       $allSubMenuIds          = array();
+        $allMenuIds            	  =$this->HrMenuModel->get_all_main_menu_permission($role);
+        
+  foreach ($allMenuIds as $menu) {
+       $menuId=$menu->id;
+       $data = array(
+           
+           'is_granted'   => in_array($menuId, $selectedMainMenuItems) ? 'yes' : 'no',
+       );
+       $where  = "main_menu_id='{$menuId}' AND role_id='{$role}'";
+       $result= $this->HrMenuModel->update_main_menu_permission($data,$where);
+       $allSubMenuIds=$this->HrMenuModel->get_all_sub_menu_permission($menu->id,$role);
+       
+       foreach ($allSubMenuIds as $subMenu) {
+           $subMenuId=$subMenu->id;
+           $data = array(
+               
+               'is_granted'   => in_array($subMenuId, $selectedSubMenus) ? 'yes' : 'no',
+           );
+           $where  = "sub_menu_id='{$subMenuId}' AND role_id='{$role}'";
+           $sub_menu_result= $this->HrMenuModel->update_sub_menu_permission($data,$where);
+           $allSubMenuTabIds=$this->HrMenuModel->get_all_sub_menu_tab_permission($subMenuId,$role);
+
+               foreach ($allSubMenuTabIds as $subMenuTab) {
+                   $subMenuTabId=$subMenuTab->id;
+                   $data = array(
+                       
+                       'is_granted'   => in_array($subMenuTabId, $selectedSubMenuTab) ? 'yes' : 'no',
+                       'is_add'       => in_array($subMenuTabId, $selectedSubMenuTabadd) ? 'yes' : 'no',
+                       'is_edit'      => in_array($subMenuTabId, $selectedSubMenuTabedit) ? 'yes' : 'no',
+                       'is_view'      => in_array($subMenuTabId, $selectedSubMenuTabview) ? 'yes' : 'no',
+                       'is_delete'      => in_array($subMenuTabId, $selectedSubMenuTabdelete) ? 'yes' : 'no',
+                       
+                   );
+                   $where  = "sub_menu_tab_id='{$subMenuTabId}' AND role_id='{$role}'";
+                   $sub_menu_tab_result= $this->HrMenuModel->update_sub_menu_tab_permission($data,$where);
+               }
+       
+       }
+   }
+      $_SESSION['ROLE_ID']=$role;
+       if($result||$sub_menu_result||$sub_menu_tab_result)
+       {
+           $data= array();
+           
+            $res                = $this->HrMenuModel->get_user_role();
+            $user_role_id                    = $_SESSION['USER_ROLE_ID'];
+   
+           $data                          =$this->get_menu_list($user_role_id);
+           $data2["tab"]                  =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+           // $data['role']       =$role;
+           $data['Success']    ="Permission is updated Successfully..";
+           $data['userRole']   = $res;
+           $data['li_token']	=$_SESSION['li_token'];
+           
+           $data 			    = (object) array_merge((array) $data,(array) $data2);
+           
+           // $this->user_rights($data);
+           return $this->load->view('hr-management/user_rights', $data);
+       }
+           // $this->user_rights();
+       else
+       {
+           $data= array();
+           $res                = $this->HrMenuModel->get_user_role();
+            $user_role_id                    = $_SESSION['USER_ROLE_ID'];
+   
+           $data                          =$this->get_menu_list($user_role_id);
+           $data2["tab"]                  =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+           $data['role']       =$role;
+           $data['Success']    ="Some issues in updation ... ";
+            $data['userRole']   = $res;
+           $data['li_token']	=$_SESSION['li_token'];
+           
+           $data 			    = (object) array_merge((array) $data,(array) $data2);
+           return $this->load->view('hr-management/user_rights', $data);
+       }
+   }
+
+
+    //LIST OF FUNCTIONS AFTER UPDATION///////////
+
+
+    public function calender($sub_menu_id=""){
+
+        $data = array();
+        $user_role_id                    = $_SESSION['USER_ROLE_ID'];
+        $data                          =$this->get_menu_list($user_role_id);
+        $data2["tab"]                  =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+
+        $data["week_days"]  = $this->HrModel->get_week_days();
+
+        $data 			   = (object) array_merge((array) $data,(array) $data2);
+      
+        $this->load->view('hr-management/calender',$data);
+    
+    }
+
+
+    function save_calender_details()
+{
+    $company_id_in_hr = $this->session->userdata('company_id_in_hr');
+    $calender_master_data = array(
+        'company_id' => $company_id_in_hr,
+        'calendar_start_date' => $_POST['calendar_start_date'],
+        'calendar_end_date' => $_POST['calendar_end_date'],
+        'year_name' => $_POST['year_name'],
+        'effective_from' => $_POST['effective_from'],
+        'effective_to' => $_POST['effective_to'],
+        'created_by' => $_SESSION['user_id'],
+        'created_on' => date("Y-m-d H:i:s"),
+    );
+
+    $calendar_master_id = $this->HrModel->insert_calendar_master($calender_master_data);
+
+    if ($calendar_master_id) {
+        $start_times = $_POST['start_time']; 
+       
+        $end_times = $_POST['end_time'];
+      
+        $start_time_formatted = [];
+        $end_time_formatted = [];
+        $all_days = [1, 2, 3, 4, 5, 6, 7]; // Array of all possible days
+        
+        foreach ($start_times as $start_hour) {
+            $start_time_formatted[] = date('H:i:s', strtotime("$start_hour:00"));
+        }
+
+        foreach ($end_times as $end_hour) {
+            $end_time_formatted[] = date('H:i:s', strtotime("$end_hour:00"));
+        }
+
+        foreach ($all_days as $value) {
+            $is_working_day = (in_array($value, $_POST['working_day_id'])) ? 'yes' : 'no'; 
+            
+            $calender_details_data = array(
+                'calendar_master_id' => $calendar_master_id,
+                'week_day_id' => $value,
+                'start_time' => $start_time_formatted[$value - 1], // Adjust index for start time
+                'end_time' => $end_time_formatted[$value - 1], // Adjust index for end time
+                'is_working_day' => $is_working_day, 
+            );
+
+         
+
+            $insertedRowId = $this->HrModel->insert_calendar_details($calender_details_data);
+        }
+
+        $this->populate_hr_calendar_year(
+            $calendar_master_id,
+            $_POST['calendar_start_date'],
+            $_POST['calendar_end_date'],
+            $start_time_formatted, 
+            $end_time_formatted,
+            $_POST['working_day_id'],
+          
+        );
+    
+
+        $response = array(
+            'success' => true,
+            'message' => 'Saved successfully.',
+            'calendar_master_id' => $calendar_master_id // Send inserted ID in the response
+        );
+    } 
+    else {
+        $response = array(
+            'success' => false,
+            'message' => 'Error in saving master calendar data.',
+        );
+    }
+
+    echo json_encode($response);
+}
+
+public function get_calender_details_by_id() {
+    $calender_master_id = $this->input->post('row_id');
+    $weekDaysData = $this->HrModel->get_calender_details_by_id($calender_master_id);
+    $calendarMasterData = $this->HrModel->fetch_calendar_master_data();
+    
+    $data = array(
+        'weekDaysData' => $weekDaysData,
+        'calendarMasterData' => $calendarMasterData
+    );
+
+    header('Content-Type: application/json'); 
+    echo json_encode($data); // Encode the combined data
+}
+
+public function delete_calender_master() {
+    $row_id = $this->input->post('row_id');
+    $result_master = $this->HrModel->delete_calendar_master($row_id);
+
+    if ($result_master) {
+        
+        $response = array('success' => true, 'message' => 'Calendar details deleted successfully.');
+    } else {
+        $response = array('success' => false, 'message' => 'Failed to delete calendar details.');
+    }
+    echo json_encode($response);
+}
+
+function edit_calender_details()
+{
+    $row_id = $_POST['row_id'];
+  
+    $dynamic_calendar_detail_id = $_POST['calendar_detail_ids_edit'];
+    $id_array = explode(',', $dynamic_calendar_detail_id);
+
+    $calender_master_data = array(
+        'calendar_start_date' => $_POST['calendar_start_date_edit'],
+        'calendar_end_date' => $_POST['calendar_end_date_edit'],
+        'year_name' => $_POST['year_name_edit'],
+        'effective_from' => $_POST['effective_from_edit'],
+        'effective_to' => $_POST['effective_to_edit'],
+        'modified_by' => $_SESSION['user_id'],
+        'modified_on' => date("Y-m-d H:i:s"),
+    );
+
+    $this->HrModel->update_calendar_master($calender_master_data, $row_id);
+
+    // Generating arrays for start and end times
+    $start_times = $_POST['start_time_edit']; 
+    $end_times = $_POST['end_time_edit']; 
+    $start_time_formatted = [];
+    $end_time_formatted = [];
+    $all_days = [1, 2, 3, 4, 5, 6, 7]; // Array of all possible days
+            
+     // Formatting start and end times
+    foreach ($start_times as $start_hour) {
+        $start_time_formatted[] = date('H:i:s', strtotime("$start_hour:00"));
+    }
+
+    foreach ($end_times as $end_hour) {
+        $end_time_formatted[] = date('H:i:s', strtotime("$end_hour:00"));
+    }
+
+     // Iterating through each day and updating calendar details
+    foreach ($id_array as $index => $dynamic_calendar_detail_id) {
+          // Checking if the index exists in the array of all possible days
+        if (isset($all_days[$index])) {
+               // Retrieving the day number from the array
+            $value = $all_days[$index];
+
+            // Determining if it's a working day based on the POST data
+            if (in_array($value, $_POST['working_day_id_edit'])) {
+                $is_working_day = 'yes';
+            } else {
+                $is_working_day = 'no';
+            }
+                
+             // Building array for calendar details data
+            $calender_details_data = array(
+                'start_time' => $start_time_formatted[$index], 
+                'end_time' => $end_time_formatted[$index],
+                'is_working_day' => $is_working_day, 
+            );
+                
+             
+            $this->HrModel->update_calendar_details($calender_details_data, $dynamic_calendar_detail_id);
+        }
+    }
+
+    $this->update_hr_calendar_year(
+        $row_id,
+        $_POST['calendar_start_date_edit'],
+        $_POST['calendar_end_date_edit'],
+        $start_time_formatted,
+        $end_time_formatted,
+        $_POST['working_day_id_edit']
+    );
+
+
+    $response = array(
+        'success' => true,
+        'message' => 'Updated Successfully.',
+    );
+
+    echo json_encode($response);
+}
+
+function update_hr_calendar_year($calendar_master_id, $calendar_start_date, $calendar_end_date, $start_times, $end_times, $working_days)
+{
+    $current_date = new DateTime($calendar_start_date);
+    $end_date = new DateTime($calendar_end_date);
+
+    while ($current_date <= $end_date) {
+        $day_of_week = $current_date->format('N'); // Get day of the week (1 = Monday, 2 = Tuesday, ..., 7 = Sunday)
+        $is_working_day = (in_array($day_of_week, $working_days)) ? 'yes' : 'no';
+
+     
+        $calendar_year_data = array(
+            'calendar_master_id' => $calendar_master_id,
+            'date_of_the_day' => $current_date->format('Y-m-d'),
+            'start_time' => $start_times[$day_of_week - 1], // Adjust index for start time
+            'end_time' => $end_times[$day_of_week - 1], // Adjust index for end time
+            'is_working_day' => $is_working_day,
+        );
+
+        
+        $this->HrModel->update_calendar_year($calendar_year_data);
+
+        
+        $current_date->modify('+1 day');
+    }
 }
 
 
- public function save_menu_permission()
-    {
-       
-        // $userId                 = $this->input->post('user_id');
-       $role                    = $this->input->post('user_role');
-       $selectedMainMenuItems   = $this->input->post('main_Menu');
-       $selectedSubMenus        = $this->input->post('submenu');
-       $token                   = $this->input->post('li_token');
-        $allSubMenuIds          = array();
-         $allMenuIds            	  =$this->HrMenuModel->get_all_main_menu_permission($role);
-         
-   foreach ($allMenuIds as $menu) {
-		$menuId=$menu->id;
-		$data = array(
-			
-			'is_granted'   => in_array($menuId, $selectedMainMenuItems) ? 'yes' : 'no',
-		);
-		$where  = "main_menu_id='{$menuId}' AND role_id='{$role}'";
-		$result= $this->HrMenuModel->update_main_menu_permission($data,$where);
-		$allSubMenuIds=$this->HrMenuModel->get_all_sub_menu_permission($menu->id,$role);
-		
-		foreach ($allSubMenuIds as $subMenu) {
-		$subMenuId=$subMenu->id;
-		$data = array(
-			
-			'is_granted'   => in_array($subMenuId, $selectedSubMenus) ? 'yes' : 'no',
-		);
-		$where  = "sub_menu_id='{$subMenuId}' AND role_id='{$role}'";
-		$result= $this->HrMenuModel->update_sub_menu_permission($data,$where);
-	}
-	}
-       
-    
-        if($result)
-            echo "Success";
+public function populate_hr_calendar_year($calendar_master_id, $calendar_start_date, $calendar_end_date, $start_times, $end_times, $working_days) {
+    $current_date = new DateTime($calendar_start_date);
+    $end_date = new DateTime($calendar_end_date);
+
+    while ($current_date <= $end_date) {
+        $day_of_week = $current_date->format('N'); // Get day of the week (1 = Monday, 2 = Tuesday, ..., 7 = Sunday)
+        $is_working_day = (in_array($day_of_week, $working_days)) ? 'yes' : 'no';
+
+        // Create a record for each day in the date range
+        $calendar_year_data = array(
+            'calendar_master_id' => $calendar_master_id,
+            'date_of_the_day' => $current_date->format('Y-m-d'),
+            'start_time' => $start_times[$day_of_week - 1], // Adjust index for start time
+            'end_time' => $end_times[$day_of_week - 1], // Adjust index for end time
+            'is_working_day' => $is_working_day,
+        );
+
+         $this->HrModel->insert_calendar_year($calendar_year_data);
+
+        // Move to the next day
+        $current_date->modify('+1 day');
     }
+
+  
+}
+
+public function get_calandar_details()
+{
+    $data = $this->HrModel->get_calandar_details();
+    echo json_encode(['data' => $data]);
+}
+
+public function get_calendar_holidays_details(){
+    $data = $this->HrModel->get_calendar_holidays_details();
+    echo json_encode(['data' => $data]);
+}
+
+
+public function get_calender_master_details() {
+
+    $calendar_master_details = $this->HrModel->getCalendarMasterDetails();
+
+    header('Content-Type: application/json');
+    echo json_encode($calendar_master_details);
+}
+
+public function get_calender_master_dates(){
+
+    $selectedCalendarMasterId = $this->input->post('calendar_master_id');
+    // echo $selectedCalendarMasterId;
+    $calendarDates = $this->HrModel->get_calender_master_dates($selectedCalendarMasterId);
+    header('Content-Type: application/json');
+    echo json_encode($calendarDates);
+
+}
+
+public function save_calendar_holidays_details() {
+    $data = array(
+        'calendar_master_id' => $this->input->post('holidays_calendar_master_id'),
+        'holiday_date' => $this->input->post('holiday_date'),
+        'holiday_description' => $this->input->post('holiday_description'),
+        'created_by' => $this->session->userdata('user_id'),
+        'created_on' => date("Y-m-d H:i:s"),
+    );
+
+    $flag_id = $_POST['flag_id'];
+    $row_id = $_POST['row_id'];
+
+    $result = false;
+
+    if ($flag_id === "0") {
+        $result = $this->HrModel->save_calendar_holidays_details($data);
+    }
+    elseif ($flag_id === "1") {
+        $data['modified_by'] = $_SESSION['user_id'];
+        $data['modified_on'] = date('Y-m-d H:i:s');
+          $result = $this->HrModel->update_calendar_holidays_details($data,$row_id);
+    }
+
+    if ($result) {
+        $response = array('success' => true, 'message' => 'Holiday details saved successfully.');
+    } else {
+        $response = array('success' => false, 'message' => 'Failed to save holiday details.');
+    }
+
+    $this->output->set_content_type('application/json')->set_output(json_encode($response));
+}
+
+public function get_calendar_holidays_details_by_id()
+{
+    $row_id = $this->input->get('row_id');
+
+    $result = $this->HrModel->get_calendar_holidays_details_by_id($row_id);
+
+    if ($result) {
+        $response = [
+            'success' => true,
+            'data' => $result
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => 'Not found'
+        ];
+    }
+
+    echo json_encode($response);
+}
+
+public function delete_calendar_holidays_by_id() {
+    $row_id = $this->input->post('row_id');
+    $result_master = $this->HrModel->delete_calendar_holidays_by_id($row_id);
+
+    if ($result_master) {
+        
+        $response = array('success' => true, 'message' => 'Deleted successfully.');
+    } else {
+        $response = array('success' => false, 'message' => 'Failed to delete calendar details.');
+    }
+    echo json_encode($response);
+}
+
+public function get_calendar_event_details(){
+    $data = $this->HrModel->get_calendar_event_details();
+    echo json_encode(['data' => $data]);
+}
+
+
+public function save_calendar_events_details() {
+    $data = array(
+        'calendar_master_id' => $this->input->post('events_calendar_master_id'),
+        'event_start_date' => $this->input->post('event_start_date'),
+        'event_end_date' => $this->input->post('event_end_date'),
+        'event_start_time' => $this->input->post('event_start_time'), 
+        'event_end_time' => $this->input->post('event_end_time'), 
+        'event_name' => $this->input->post('event_name'),
+        'event_description' => $this->input->post('event_description'),
+        'created_by' => $this->session->userdata('user_id'),
+        'created_on' => date("Y-m-d H:i:s"),
+    );
+  
+    
+
+    $flag_id = $_POST['flag_id'];
+    $row_id = $_POST['row_id'];
+
+    $result = false;
+
+    if ($flag_id === "0") {
+        $result = $this->HrModel->save_calendar_events_details($data);
+    }
+    elseif ($flag_id === "1") {
+        $data['modified_by'] = $_SESSION['user_id'];
+        $data['modified_on'] = date('Y-m-d H:i:s');
+          $result = $this->HrModel->update_calendar_events_details($data,$row_id);
+    }
+
+    if ($result) {
+        $response = array('success' => true, 'message' => 'Saved successfully.');
+    } else {
+        $response = array('success' => false, 'message' => 'Failed to Save .');
+    }
+
+    $this->output->set_content_type('application/json')->set_output(json_encode($response));
+}
+
+
+public function get_calendar_events_details_by_id()
+{
+    $row_id = $this->input->get('row_id');
+    $result = $this->HrModel->get_calendar_events_details_by_id($row_id);
+
+    if ($result) {
+        $response = [
+            'success' => true,
+            'data' => $result
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => 'Not found'
+        ];
+    }
+
+    echo json_encode($response);
+}
+
+
+public function  employee_overtime($sub_menu_id=""){
+
+    $company_id_in_hr = $this->session->userdata('company_id_in_hr');
+    $data = array();
+    $user_role_id                  = $_SESSION['USER_ROLE_ID'];
+    $data                          =$this->get_menu_list($user_role_id);
+    $data2["tab"]                  =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+                    
+  
+    $data["employee_names"]  = $this->HrModel->get_employee_name_options();
+    // var_dump($employee_names);
+    // die;
+    $data["overtime_category"]  = $this->HrModel->get_overtime_category_option();
+    $data["ovetime_status"]  = $this->HrModel->get_overtime_new_request_status();
+    $data 			         = (object) array_merge((array) $data,(array) $data2);
+    $this->load->view('hr-management/employee_overtime',$data);
+
+}
+
+public function get_overtime_details()
+{
+    $data = $this->HrModel->get_overtime_details();
+    
+    echo json_encode(['data' => $data]);
+}
+
+public function get_overtime_rate() {
+   
+    $category_id = $this->input->post('category_id');
+    $overtime_rate = $this->HrModel->get_overtime_rate($category_id);
+
+    $response = array('overtime_rate' => $overtime_rate);
+    header('Content-Type: application/json');
+    echo json_encode($response);
+}
+
+
+public function save_overtime_details()
+{
+    $company_id_in_hr = $this->session->userdata('company_id_in_hr');
+    $data = array(
+        
+        'company_id' => $company_id_in_hr,
+        'employee_id' => $this->input->post('employee_id'),
+        'date_of_request' => $this->input->post('date_of_request'),
+        'overtime_category_id' => $this->input->post('overtime_category_id'),
+        'overtime_date' => $this->input->post('overtime_date'),
+        'overtime_time_from' => $this->input->post('overtime_time_from'),
+        'overtime_rate_per_hour' => $this->input->post('overtime_rate_per_hour'),
+       
+        'overtime_time_to' => $this->input->post('overtime_time_to'),
+        'hours_worked' => $this->input->post('hours_worked'),
+        'overtime_rate' => $this->input->post('overtime_rate'),
+        'overtime_amount' => $this->input->post('overtime_amount'),
+        'remarks' => $this->input->post('remarks'),
+        'overtime_request_status_id' => '1',
+        'created_by' => $_SESSION['user_id'],
+        'created_on' => date('Y-m-d H:i:s'),
+    );
+
+    $flag_id=$_POST['flag_id'];
+    if ($flag_id === "0") {
+        $this->db->insert('hr_overtime_register', $data);
+    } 
+    elseif ($flag_id === "1") {
+        $data['modified_by'] = $_SESSION['user_id'];
+        $data['modified_on'] = date('Y-m-d H:i:s');       
+        $row_id = $this->input->post('row_id'); 
+        $res = $this->HrModel->update_overtime_requests_details($row_id,  $data);
+    }  
+    $response = array(
+        'success' => true,
+        'message' => 'Saved successfully.'
+    );
+    // Send the JSON response
+    echo json_encode($response);
+}
+
+public function get_overtime_request_by_id()
+{
+  
+    $row_id = $this->input->get('row_id'); 
+   
+//    echo "row id is".$row_id 
+    $result = $this->HrModel->get_overtime_request_by_id($row_id);
+
+    if ($result) {
+        $response = [
+
+            'success' => true,
+            'data' => $result
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => 'Not found'
+        ];
+    }
+
+    echo json_encode($response);
+}
+
+public function get_new_overtime_details()
+{
+    $data = $this->HrModel->get_new_overtime_details();
+    
+    echo json_encode(['data' => $data]);
+}
+
+public function get_new_overtime_request_by_id(){
+
+    $row_id = $this->input->get('row_id');
+    // $flag_id = $this->input->get('row_id');
+    $result = $this->HrModel->get_new_overtime_request_by_id($row_id);
+    if ($result) {
+        $response = [
+            'success' => true,
+            'data' => $result
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => 'item  is  not found'
+        ];
+    }
+    echo json_encode($response);
+
+}
+
+
+public function save_new_overtime_request() {
+    $flag_id = (int)$this->input->post('flag_id');
+    $new_overtime_request_status_id = $this->input->post('new_overtime_request_status_id');
+
+    if ($new_overtime_request_status_id == '2') {
+        $data = array(
+            'overtime_request_status_id' => $this->input->post('new_overtime_request_status_id'),  
+            'is_verified' => 'yes',  
+            'verified_by' => $_SESSION['user_id'], 
+            'verified_on' => date('Y-m-d H:i:s'), 
+        );  
+    } else if ($new_overtime_request_status_id == '3') {
+        $data = array(
+            'overtime_request_status_id' => $this->input->post('new_overtime_request_status_id'),  
+            'is_approved' => 'yes',  
+            'approved_by' => $_SESSION['user_id'], 
+            'approved_on' => date('Y-m-d H:i:s'), 
+        );  
+    } else if ($new_overtime_request_status_id == '4') {
+        $data = array(
+            'overtime_request_status_id' => $this->input->post('new_overtime_request_status_id'),  
+            'rejected_on' => date('Y-m-d H:i:s'),
+            'rejected_by' => $_SESSION['user_id'], 
+            'rejection_reason' => $this->input->post('rejection_reason'), 
+        );  
+    }
+
+    if ($flag_id == "1") { // in edit 
+        $row_id = $this->input->post('row_id'); 
+        $res = $this->HrModel->save_new_overtime_request($data, $row_id);
+    }
+
+    if ($res) {
+        $response = array(
+            'success' => true,
+            'message' => 'Saved successfully.',
+        );
+    } else {
+        $response = array(
+            'success' => false,
+            'message' => 'Error saving item. Please try again.',
+        );
+    }
+
+    echo json_encode($response);
+}
+
+public function get_overtime_verified_details()
+{
+    $data = $this->HrModel->get_overtime_verified_details();
+    echo json_encode(['data' => $data]);
+}
+public function get_overtime_verified_by_id() {
+    $row_id = $this->input->post('row_id');
+    $result = $this->HrModel->fetch_overtime_by_id($row_id);
+
+    if ($result) {
+        $response = [
+            'success' => true,
+            'data' => $result
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => 'Item not found'
+        ];
+    }
+
+    echo json_encode($response);
+}
+
+public function save_overtime_verified(){
+    $flag_id=(int)$this->input->post('flag_id');
+    $overtime_verified=$this->input->post('verified_overtime_request_status_id');
+
+  if( $overtime_verified =='3')
+    {  
+        $data = array(
+             'overtime_request_status_id' => $overtime_verified,  
+             'is_approved' =>'yes',  
+             'approved_by' =>$_SESSION['user_id'],
+             'approved_on' => date('Y-m-d H:i:s'),
+           
+        );  
+    }
+    else if( $overtime_verified =='4')
+    {
+        $data = array(
+
+            'overtime_request_status_id' => $overtime_verified,  
+            'rejected_on' => date('Y-m-d H:i:s'),
+            'rejected_by' =>$_SESSION['user_id'], 
+            'rejection_reason' =>$this->input->post('verified_overtime_rejection_reason'), 
+        );  
+    }
+
+   
+
+    if ($flag_id == "1") 
+    {// in edit 
+        $row_id = $this->input->post('row_id'); 
+        $res = $this->HrModel->save_overtime_verified($data,$row_id);
+    }
+    if($res)
+        {
+            $response = array(
+                'success' => true,
+                'message' => 'saved successfully .'
+            );
+        }
+        else
+        {
+            $response = array(
+            'success' => false,
+            'message' => 'Error saving item. Please try again.'
+            );
+        }
+    
+        echo json_encode($response);
+
+}
+
+public function get_overtime_approved_details()
+{
+    $data = $this->HrModel->get_overtime_approved_details();
+    echo json_encode(['data' => $data]);
+}
+
+public function get_overtime_approved_by_id() {
+    $row_id = $this->input->post('row_id');
+    $result = $this->HrModel->get_overtime_approved_by_id($row_id);
+
+    if ($result) {
+        $response = [
+            'success' => true,
+            'data' => $result
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => 'Item not found'
+        ];
+    }
+
+    echo json_encode($response);
+}
+
+public function save_overtime_approved(){
+    $flag_id=(int)$this->input->post('flag_id');
+    $overtime_approved=$this->input->post('approved_overtime_request_status_id');
+
+ if( $travel_approved =='4')
+    {
+        $data = array(
+
+            'overtime_request_status_id' => $overtime_approved,  
+            'rejected_on' => date('Y-m-d H:i:s'),
+            'rejected_by' =>$_SESSION['user_id'], 
+            'rejection_reason' =>$this->input->post('approved_overtime_rejection_reason'), 
+        );  
+    }
+
+   
+
+    if ($flag_id == "1") 
+    {// in edit 
+        $row_id = $this->input->post('row_id'); 
+        $res = $this->HrModel->save_overtime_approved($data,$row_id);
+    }
+    if($res)
+        {
+            $response = array(
+                'success' => true,
+                'message' => 'saved successfully .'
+            );
+        }
+        else
+        {
+            $response = array(
+            'success' => false,
+            'message' => 'Error saving item. Please try again.'
+            );
+        }
+    
+        echo json_encode($response);
+
+}
+
+// code by mufee
+public function leave()
+{
+    $data = array();
+    $user_role_id                  = $_SESSION['USER_ROLE_ID'];
+    $data                          =$this->get_menu_list($user_role_id);
+    $data2["tab"]                  =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+    $data["leave"]  = $this->HrModel->get_leave_days();
+    $data["calendar_master_details"]  = $this->HrModel->get_calendar_master_id();
+    $data["leave_category_details"]  = $this->HrModel->get_leave_category_id();
+    $data 			            = (object) array_merge((array) $data,(array) $data2);
+    $this->load->view('hr-management/leave',$data);
+
+}
+public function get_leave_master()
+{
+    $data = $this->HrModel->get_leave_master();
+    echo json_encode(['data' => $data]);
+}
+
+public function save_leave_master_details()
+{
+    $company_id_in_hr = $this->session->userdata('company_id_in_hr');
+    $flag_id = $_POST['flag_id'];
+   
+    $data = array(
+
+        'company_id' => $company_id_in_hr,
+        'calendar_master_id' => $this->input->post('calendar_master_id'),
+        'leave_category_id' => $this->input->post('leave_category_id'),
+        'number_of_leaves_per_year' => $this->input->post('number_of_leaves_per_year'),
+        'maximum_can_be_taken_in_a_month' => $this->input->post('maximum_can_be_taken_in_a_month'),
+    
+    );
+
+
+    $flag_id=$_POST['flag_id'];
+    if ($flag_id === "0") {
+        $data['created_by'] = $_SESSION['user_id'];
+        $data['created_on'] = date('Y-m-d H:i:s');
+        $this->db->insert('hr_leave_master', $data);
+
+    } 
+    elseif ($flag_id === "1") {
+          
+        $row_id = $this->input->post('row_id'); 
+        $data['modified_by'] = $_SESSION['user_id'];
+        $data['modified_on'] = date('Y-m-d H:i:s');
+        $res = $this->HrModel->update_leave_master($row_id,  $data);
+    
+    }  
+    $response = array(
+        'success' => true,
+        'message' => 'Saved successfully.'
+    );
+    
+    echo json_encode($response);
+}
+
+public function get_leave_master_by_id()
+{            
+    $row_id = $this->input->get('row_id'); 
+                                   
+    $result = $this->HrModel->get_leave_master_by_id($row_id);
+
+    if ($result) {
+        $response = [
+
+            'success' => true,
+            'data' => $result
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => 'Not found'
+        ];
+    }
+
+    echo json_encode($response);
+}
+
+public function delete_leave_master_by_id()
+{
+    $row_id = $this->input->post('row_id');
+    $result = $this->HrModel->delete_leave_master_by_id($row_id);
+
+    if ($result) {
+        $response = ['success' => true, 'message' => 'Deleted successfully'];
+    } else {
+        $response = ['success' => false, 'message' => 'Failed to mark item as deleted'];
+    }
+
+    echo json_encode($response);
+}
+
+
+public function get_leave_category_option()
+{
+    $calendar_master_val = $this->input->post('calendar_master_val');
+    $result = $this->HrModel->get_leave_category_option($calendar_master_val);
+   
+    echo json_encode($result);   
+}
+
+public function get_setupdata_overtime_details ()
+{
+    $data = $this->HrModel->get_setupdata_overtime_details();
+    echo json_encode(['data' => $data]);
+}
+
+
+public function save_setupdata_overtime_details()
+{
+    $data = array(
+        'overtime_category'=> $this->input->post('overtime_category'),
+        'overtime_rate'=> $this->input->post('overtime_rate'),
+        'overtime_description'=> $this->input->post('overtime_description'),
+        
+        
+        
+    );
+
+    $flag_id=$_POST['flag_id'];
+    if ($flag_id === "0") {
+        $data['created_by'] = $_SESSION['user_id'];
+        $data['created_on'] = date('Y-m-d H:i:s');
+        $this->db->insert('hr_overtime_categories', $data);
+
+    } 
+    elseif ($flag_id === "1") {
+        $data['modified_by'] = $_SESSION['user_id'];
+        $data['modified_on'] = date('Y-m-d H:i:s');
+        $row_id = $this->input->post('row_id'); 
+        $res = $this->HrModel->update_setupdata_overtime_details($row_id,  $data);
+    
+    }  
+
+    
+    $response = array(
+        'success' => true,
+        'message' => 'Saved successfully.'
+    );
+
+    // Send the JSON response
+    echo json_encode($response);
+}
+
+public function get_setupdata_overtime_by_id()
+{
+    
+    $row_id = $this->input->get('row_id'); 
+    
+    $result = $this->HrModel->get_setupdata_overtime_by_id($row_id);
+
+    if ($result) {
+        $response = [
+
+            'success' => true,
+            'data' => $result
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => 'Not found'
+        ];
+    }
+
+    echo json_encode($response);
+}
+
+public function delete_setupdata_overtime_by_id()
+{
+
+    $row_id = $this->input->post('row_id');
+   
+    $result = $this->HrModel->delete_setupdata_overtime_by_id($row_id);
+
+    if ($result) {
+        $response = ['success' => true, 'message' => 'Deleted successfully'];
+    } else {
+        $response = ['success' => false, 'message' => 'Failed to mark item as deleted'];
+    }
+
+    echo json_encode($response);
+}
+
+public function get_recordstatus_overtime_details ()
+{
+    $data = $this->HrModel->get_recordstatus_overtime_details();
+    echo json_encode(['data' => $data]);
+}
+
+// code by mashu
+
+public function employee_profile(){
+                        
+    $individual_employee_id = $this->input->post('individual_employee_id');
+    $empdetails = $this->HrModel->get_individual_employee_personal_data($individual_employee_id);
+    $empEmergencyContacts = $this->HrModel->get_individual_employee_emergency_contacts($individual_employee_id);
+    $work_history_table_data = $this->HrModel->get_individual_employee_work_history_table_data($individual_employee_id);
+    $education_table_data = $this->HrModel->get_individual_employee_education_table_data($individual_employee_id);
+    $certification_table_data = $this->HrModel->get_individual_employee_certification_table_data($individual_employee_id);
+    $language_table_data = $this->HrModel->get_individual_employee_language_table_data($individual_employee_id);
+    $dependents_table_data = $this->HrModel->get_individual_employee_dependents_table_data($individual_employee_id);
+    $individual_employee_skill = $this->HrModel->get_individual_employee_skills_data($individual_employee_id);
+    if ($empdetails) {
+        $response = [
+            'success' => true,
+            'empdetails' => $empdetails,
+            'work_history_table_data' => $work_history_table_data,
+            'education_table_data' => $education_table_data,
+            'certification_table_data' => $certification_table_data,
+            'education_table_data' => $education_table_data,
+            'language_table_data' => $language_table_data,
+            'dependents_table_data' => $dependents_table_data,
+            'individual_employee_skill' => $individual_employee_skill,
+            'empEmergencyContacts' => $empEmergencyContacts
+            
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => 'item  is  not found'
+        ];
+    }
+    echo json_encode($response);
+}
+
+
+public function employee_profile_print($empHidId)
+{
+    $data = array();
+    $data['profile_person_data'] = $this->HrModel->get_individual_employee_personal_data($empHidId);
+    $data['work_history'] = $this->HrModel->get_individual_employee_work_history_table_data($empHidId);
+    $data['education'] = $this->HrModel->get_individual_employee_education_table_data($empHidId);
+    $data['certification'] = $this->HrModel->get_individual_employee_certification_table_data($empHidId);
+    $data['language'] = $this->HrModel->get_individual_employee_language_table_data($empHidId);
+    $data['dependents'] = $this->HrModel->get_individual_employee_dependents_table_data($empHidId);
+    $data['skills'] = $this->HrModel->get_individual_employee_skills_data($empHidId);
+    $data['emergency_contact'] = $this->HrModel->get_individual_employee_emergency_contacts($empHidId);
+    $this->load->view('hr-management/employee_profile_print',$data);
+
+}
+
+
+
+public function employee_leave($sub_menu_id="")
+{
+    $data = array();
+    $user_role_id                  = $_SESSION['USER_ROLE_ID'];
+    $data                          =$this->get_menu_list($user_role_id);
+    $data2["tab"]                  =$this->HrMenuModel->get_sub_menu_tab_permission($sub_menu_id,$user_role_id);
+     $data["leave_employee"]  = $this->HrModel->get_team_employee_name_options();
+     $data["leave_category"]  = $this->HrModel->get_leave_category_options();
+     $data["new_leave_request"]  = $this->HrModel->new_leave_request_option();
+     $data["verified_leave"]  = $this->HrModel->verified_leave_request_option();
+     $data["approved_leave"]  = $this->HrModel->approved_leave_request_option();
+
+     $data 			   = (object) array_merge((array) $data,(array) $data2);
+    $this->load->view('hr-management/employee_leave',$data);
+}
+
+public function forget_leave_from_time_option(){
+    $leaveFromDate = $this->input->post('leave_from_date');
+    $company_id_in_hr = $this->session->userdata('company_id_in_hr');
+    $res = $this->HrModel->forget_leave_from_time_option($leaveFromDate, $company_id_in_hr);
+    echo json_encode(['data' => $res]);
+  
+}
+public function forget_leave_to_time_option(){
+    $leaveToDate = $this->input->post('leave_to_date');
+    $company_id_in_hr = $this->session->userdata('company_id_in_hr');
+    $res = $this->HrModel->forget_leave_to_time_option($leaveToDate, $company_id_in_hr);
+    echo json_encode(['data' => $res]);
+  
+}
+
+public function save_emp_new_leave_register_details(){
+
+    $flag_id=(int)$this->input->post('flag_id');
+    $data = array(
+     
+        // 'employee_id' => $this->input->post('leave_register_employee_id'),
+        'employee_id' => $this->input->post('leave_register_employee_id'),
+        'requested_date' => $this->input->post('leave_requested_date'),
+        'leave_category_id' => $this->input->post('leave_category_id'),   
+        'leave_from_date' => $this->input->post('leave_from_date'),   
+        'leave_from_time' => $this->input->post('leave_from_time'),   
+        'leave_to_date' => $this->input->post('leave_to_date'),   
+        'leave_to_time' => $this->input->post('leave_to_time'),   
+        'reason_for_leave' => $this->input->post('reason_for_leave'),   
+        'reason_for_leave' => $this->input->post('reason_for_leave'), 
+        'leave_request_status_id' => '1',  
+         'company_id' => $this->session->userdata('company_id_in_hr'),   
+    );
+    if ($flag_id == "0") {
+        $data['created_by'] = $_SESSION['user_id'];
+        $data['created_on'] = date('Y-m-d H:i:s');
+        $res = $this->HrModel->insert_employee_leave_register($data);
+    }
+
+    elseif ($flag_id == "1") {// in edit 
+     $row_id = $this->input->post('row_id'); 
+    $data['modified_by'] = $_SESSION['user_id'];
+    $data['modified_on'] = date('Y-m-d H:i:s');
+   
+    $res = $this->HrModel->update_employee_leave_register($data,$row_id);
+    }
+    if($res)
+        {
+            $response = array(
+                'success' => true,
+                'message' => 'saved successfully .'
+            );
+        }
+        else
+        {
+            $response = array(
+            'success' => false,
+            'message' => 'Error saving item. Please try again.'
+            );
+        }
+    
+        echo json_encode($response);
+}
+
+
+public function get_leave_register_details()
+    {
+    $data = $this->HrModel->get_leave_register_details();
+    echo json_encode(['data' => $data]);
+    }
+
+    public function get_employee_leave_register_by_id(){
+
+        $row_id = $this->input->post('row_id');
+        $result = $this->HrModel->get_employee_leave_register_by_id($row_id);   
+        if ($result) {
+            $response = [
+                'success' => true,
+                'data' => $result
+            ];
+        } else {
+            $response = [
+                'success' => false,
+                'message' => 'item  is  not found'
+            ];
+        }
+        echo json_encode($response);
+    
+    }
+    
+    public function delete_employee_leave_register_by_id(){
+
+        $row_id = $this->input->post('row_id');
+        $result = $this->HrModel->delete_employee_leave_register_by_id($row_id);
+        if ($result) {
+            $response = [
+                'success' => true,
+                'data' => $result
+            ];
+        } else {
+            $response = [
+                'success' => false,
+                'message' => 'item  is  not found'
+            ];
+        }
+        echo json_encode($response);
+    
+    }
+    
+    public function get_new_leave_register_request()
+    {
+    $data = $this->HrModel->get_new_leave_register_request();
+    echo json_encode(['data' => $data]);
+    }
+
+    public function get_leave_new_request_by_id(){
+
+        $row_id = $this->input->post('row_id');
+        $result = $this->HrModel->get_leave_new_request_by_id($row_id);
+        if ($result) {
+            $response = [
+                'success' => true,
+                'data' => $result
+            ];
+        } else {
+            $response = [
+                'success' => false,
+                'message' => 'item  is  not found'
+            ];
+        }
+        echo json_encode($response);
+    
+    }
+
+    public function save_new_leave_request(){
+        $flag_id=(int)$this->input->post('flag_id');
+        $new_leave_status=$this->input->post('new_leave_request_status_id');
+        if( $new_leave_status =='2')
+            {
+                $data = array(
+        
+                    'leave_request_status_id' => $this->input->post('new_leave_request_status_id'),  
+                    'is_verified' =>'yes',  
+                    'verified_by' =>$_SESSION['user_id'], 
+                    'verified_on' => date('Y-m-d H:i:s'), 
+                
+                );  
+            }
+        else if( $new_leave_status =='3')
+            {
+                $data = array(
+        
+                    'leave_request_status_id' => $this->input->post('new_leave_request_status_id'),  
+                    'is_approved' =>'yes',  
+                    'approved_by' =>$_SESSION['user_id'], 
+                    'approved_on' => date('Y-m-d H:i:s'),
+                
+                );  
+            }
+        else if( $new_leave_status =='4')
+            {
+                $data = array(
+        
+                    'leave_request_status_id' => $this->input->post('new_leave_request_status_id'),  
+                    'rejected_on' => date('Y-m-d H:i:s'),
+                    'rejected_by' =>$_SESSION['user_id'], 
+                    'rejection_reason' =>$this->input->post('new_leave_request_rejection_reason'), 
+                
+                );  
+            }
+    
+    
+        if ($flag_id == "1") {// in edit 
+        $row_id = $this->input->post('row_id'); 
+        $res = $this->HrModel->save_new_leave_request($data,$row_id);
+        }
+        if($res)
+            {
+                $response = array(
+                    'success' => true,
+                    'message' => 'saved successfully .'
+                );
+            }
+            else
+            {
+                $response = array(
+                'success' => false,
+                'message' => 'Error saving item. Please try again.'
+                );
+            }
+        
+            echo json_encode($response);
+    
+    }
+
+    public function get_approved_leave_details()
+        {
+        $data = $this->HrModel->get_approved_leave_details();
+        echo json_encode(['data' => $data]);
+        }
+
+        // public function get_leave_verified_by_id(){
+
+        //     $row_id = $this->input->post('row_id');
+        //     $result = $this->HrModel->get_leave_verified_by_id($row_id);
+        //     if ($result) {
+        //         $response = [
+        //             'success' => true,
+        //             'data' => $result
+        //         ];
+        //     } else {
+        //         $response = [
+        //             'success' => false,
+        //             'message' => 'item  is  not found'
+        //         ];
+        //     }
+        //     echo json_encode($response);
+        
+        // }
+
+        
+public function save_approved_leave(){
+    $flag_id=(int)$this->input->post('flag_id');
+    $travel_approved=$this->input->post('approved_leave_status_id');
+
+ if( $travel_approved =='4')
+    {
+        $data = array(
+
+            'leave_request_status_id' => $travel_approved,  
+            'rejected_on' => date('Y-m-d H:i:s'),
+            'rejected_by' =>$_SESSION['user_id'], 
+            'rejection_reason' =>$this->input->post('approved_leave_rejection_reason'), 
+        );  
+    }
+
+   
+
+    if ($flag_id == "1") 
+    {// in edit 
+        $row_id = $this->input->post('row_id'); 
+        $res = $this->HrModel->save_leave_approved($data,$row_id);
+    }
+    if($res)
+        {
+            $response = array(
+                'success' => true,
+                'message' => 'saved successfully .'
+            );
+        }
+        else
+        {
+            $response = array(
+            'success' => false,
+            'message' => 'Error saving item. Please try again.'
+            );
+        }
+    
+        echo json_encode($response);
+
+}
+
+public function get_verified_leave_details()
+{
+$data = $this->HrModel->get_verified_leave_details();
+echo json_encode(['data' => $data]);
+}
+
+public function get_leave_verified_by_id(){
+
+    $row_id = $this->input->post('row_id');
+    $result = $this->HrModel->get_leave_verified_by_id($row_id);
+    if ($result) {
+        $response = [
+            'success' => true,
+            'data' => $result
+        ];
+    } else {
+        $response = [
+            'success' => false,
+            'message' => 'item  is  not found'
+        ];
+    }
+    echo json_encode($response);
+
+}
+
+public function save_verified_leave(){
+    $flag_id=(int)$this->input->post('flag_id');
+    $travel_verified=$this->input->post('verified_leave_status_id');
+
+  if( $travel_verified =='3')
+    {  
+        $data = array(
+             'leave_request_status_id' => $travel_verified,  
+             'is_approved' =>'yes',  
+             'approved_by' =>$_SESSION['user_id'],
+             'approved_on' => date('Y-m-d H:i:s'),
+           
+        );  
+    }
+    else if( $travel_verified =='4')
+    {
+        $data = array(
+
+            'leave_request_status_id' => $travel_verified,  
+            'rejected_on' => date('Y-m-d H:i:s'),
+            'rejected_by' =>$_SESSION['user_id'], 
+            'rejection_reason' =>$this->input->post('verified_leave_rejection_reason'), 
+        );  
+    }
+
+   
+
+    if ($flag_id == "1") 
+    {// in edit 
+        $row_id = $this->input->post('row_id'); 
+        $res = $this->HrModel->save_leave_verified($data,$row_id);
+    }
+    if($res)
+        {
+            $response = array(
+                'success' => true,
+                'message' => 'saved successfully .'
+            );
+        }
+        else
+        {
+            $response = array(
+            'success' => false,
+            'message' => 'Error saving item. Please try again.'
+            );
+        }
+    
+        echo json_encode($response);
+
+}
+    
+
+
+
+
 }
 
 

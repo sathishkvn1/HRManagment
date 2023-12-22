@@ -12,64 +12,119 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <style>
        label:not(.form-check-label):not(.custom-file-label) {
     color: black!important;
-}
-.custom-list {
-    list-style: none;
-   
-   
-}
+    }
+    .custom-list {
+        list-style: none;
+       
+       
+    }
+ /*table {*/
+ /*           border-collapse: collapse;*/
+ /*           width: 100%;*/
+ /*       }*/
+
+ /*       table, th, td {*/
+ /*           border: 1px solid black;*/
+ /*       }*/
+
+ /*       th, td {*/
+ /*           padding: 8px;*/
+ /*           text-align: left;*/
+ /*       }*/
 
 </style>
      <?php include("top-css.php"); ?> 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed brq-payroll">
-<div class="wrapper"
-<!--<?php //include("top-nav.php"); ?> -->
+<div class="wrapper">
+<?php include("top-nav.php"); ?> 
 
   <!-- Main Sidebar Container -->
-  <!--<?php //include("left-sidebar.php"); ?> -->
-<div id="container" style="background-color: #cff4fc;">
-	<h1>User Rights</h1>
-	
-	<div id="body">
-
-	<form action="<?php echo base_url('hr-management/HrMaster/save_menu_permission')?>" method="POST" >
-		
-		
- 	<label for="user_role"><b>Select User Role</b></label>
-   
-    <select id='user_role' name='user_role' onchange="getMenuItem();" >
-    <option value=''>Choose Role</option>
-    <?php 
-    
-    foreach($userRole as $row):
-        $role   =$row->user_role;
-        $role_id=$row->role_id;
-    ?>
-        <option value='<?php echo $row->role_id;?>'><?php echo $row->user_role;?></option>
-        <?php endforeach;?>
-    </select>
-   
-     <br>  
-     <br>
-     <div id="menu_list" style="display: none;"> 
-   
-        <ul id="menu_list_ul" class="custom-list">
-            <div id="menu_list_div">
-
-            </div>
-        </ul>
-    <!-- <input type="hidden" id="hidId" name="user_id" value="<?php echo $userId ;?>"> -->
-    	<input type="hidden" id="hidId" name="li_token" value="<?php echo $li_token ;?>"> 
-    <button type="submit" class="registerbtn">Save</button>
+  <?php include("left-sidebar.php"); ?> 
+   <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+          <div class="content-header py-2 px-4">
+               <div class="combination_datatable" id="company_strucure">
+              <!-- tab start here -->
+                      <ul class="nav nav-tabs">
+                                                     <?php 
+                                  
+                                        $is_first='yes';
+                                      foreach($tab as $tab_item):
+                                        if($is_first=='yes')
+                                            $class='active';
+                                        else
+                                            $class='';
+        
+                                      
+                                      ?>
+                                    <li class="nav-item">
+                                    <a class="nav-link <?php echo $class;?>" id="<?php echo $tab_id;?>" data-toggle="tab" href="<?php echo $tab_item->page_link ;?>" role="tab" aria-selected="false"><?php echo $tab_item->sub_menu_tab ;?></a>
+                                    </li>
+                                    
+                                     <?php 
+                                        $is_first='no';
+                                        endforeach;
+                                        ?> 
+                                      <li class="nav-item">
+                                          <a class="nav-link active" id="li_user_permission_tab"data-toggle="tab" href="#user_permission_tab" role="tab"  aria-selected="true">User Rights</a>
+                                        </li>
+                     </ul>
+                     <div class="tab-content">
+                           <!--tab 1  ------ -->
+                            <div class="tab-pane fade show active" id="user_permission_tab" role="tabpanel" aria-labelledby="home-tab">
+                                <!-- --- discription ---- -->
+                                  <div id="user_permission_table_top" class="reviewBlock">
+                                    <div class="combined_buttons">
+                                        <div><h2><?php echo $Success?></h2></div>
+                                     </div>
+                                  </div>
+        
+        
+                                	<form action="<?php echo base_url('hr-management/HrMaster/save_menu_permission')?>" method="POST" >
+                                		
+                                		
+                                 	<label for="user_role"><b>Select User Role</b></label>
+                                   
+                                    <select id='user_role' name='user_role' onchange="getMenuItem();" >
+                                    <option value=''>Choose Role</option>
+                                    <?php 
+                                    
+                                    foreach($userRole as $row):
+                                        $role   =$row->user_role;
+                                        $role_id=$row->role_id;
+                                    ?>
+                                        <option value='<?php echo $row->role_id;?>'><?php echo $row->user_role;?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                   
+                                     <br>  
+                                     <br>
+                                     <div id="menu_list" style="display: none;"> 
+                                   
+                                        <!--<ul id="menu_list_ul" class="custom-list">-->
+                                        <!--    <div id="menu_list_div">-->
+                                
+                                        <!--    </div>-->
+                                        <!--</ul>-->
+                                        <table id="menu_list_ul" border="1">
+                                           <tbody id="menu_list_tbody">
+                                
+                                            </tbody>
+                                        </table>
+                                    <!-- <input type="hidden" id="hidId" name="user_id" value="<?php echo $userId ;?>"> -->
+                                    	<input type="hidden" id="hidId" name="li_token" value="<?php echo $li_token ;?>"> 
+                                    <button type="submit" class="registerbtn">Save</button>
+                                    </div>
+                                   
+                                	</form>
+                                	
+                            </div> 
+                    </div>
+                </div>
+          </div>
     </div>
-   
-	</form>
-	
-</div> 
-   
-</div> 
- 
+    <?php include("footer.php"); ?> 
     <?php include "bottom-js.php"; ?>
 </body>
 <script>
@@ -78,6 +133,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     var hrController = "<?php echo CONTROLLER_HR; ?>";
 
     var token = "<?php echo $_SESSION['li_token']; ?>";
+   $(document).ready(function() {
+       
+     var role_id=  "<?php echo $_SESSION['ROLE_ID'];?>";
+     
+     $('#user_role').val(role_id).trigger('change');
+    
+    
+    });
 
     function getMenuItem()
     {
@@ -90,58 +153,140 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                var $list = $("#menu_list_ul ");
-                $list.empty();
-               
-                // Handle the response from the server
+                var tableBody = $("#menu_list_tbody");
+
+                tableBody.empty();
+
                 console.log(data);
                 
                 var myDiv = document.getElementById("menu_list");
                 myDiv.style.display="block";
                 var mainMenu = data.mainMenu;
-               
-                
-        // Iterate through the mainMenu array
-        mainMenu.forEach(function(item) {
-            var id = item.id;
-            
-            var isGranted = item.is_granted;
-            if(isGranted=='no')
-            
-                var list=  '<li><input type="checkbox" id= "main_Menu" name="main_Menu[]" value="'+id+'">';
-            else
-                var list=  '<li><input type="checkbox" id= "main_Menu_'+id+'" name="main_Menu[]" value="'+id+'" checked>';
-            list +=   '<label for="'+item.id+'">'+ item.main_menu +'</label>';
-            list+=  ' </li><ul class="custom-list"> ';
-            // $filteredMainMenuId=item.id;
-            // alert(data.sub_menus[item.id]);
-            var subMenus = data.sub_menus[item.id]; // Assuming id corresponds to the index
-            // $filteredSubMenus = array_filter($subMenus, function ($subMenu) use ($filteredMainMenuId){
-            //     return in_array($filteredMainMenuId, array_column($subMenu, 'main_menu_id'));
-            // });
-            if (subMenus) {
-                subMenus.forEach(function(subItem) {
-                    if(subItem.main_menu_id==item.id){
-                    // Access sub-menu data
-                    var isGranted = subItem.is_granted;
-                   if(isGranted==''||isGranted=='no')
-                    list +='<li ><input type="checkbox" id="submenu" name ="submenu[]" value="'+subItem.id +'">';
-                   else
-                    list +='<li ><input type="checkbox" id="submenu" name ="submenu[]" value="'+subItem.id +'" checked>';
-                    list   +=  '<label>'+ subItem.sub_menu +'</label></li> ';
-                    } 
-                });
-                list +='</ul><ul>';
-            }
+                mainMenu.forEach(function (item) {
+    var id = item.id;
+    var isMainGranted = item.is_granted;
 
-            $list.append(list);
+    var mainCheckboxId = 'main_Menu_' + id;
+   var table = '<tr>';
+    if(item.id==previousMenuId)
+      var mainMenuItem    = "";
+    else
+      var mainMenuItem    = item.main_menu;  
+    
+    if (isMainGranted == 'no')
+        table += '<td><input type="checkbox" id="main_Menu_'+ id +'" name="main_Menu[]" value="' + id + '">' + mainMenuItem + '</td>';
+    else
+        table += '<td><input type="checkbox" id="main_Menu_' + id + '" name="main_Menu[]" value="' + id + '" checked>' + mainMenuItem + '</td>';
+      var  previousMenuId =item.id;
+    var subMenus = data.sub_menus[item.id];
+
+    if (subMenus) {
+        subMenus.forEach(function (subItem) {
+            var sub_id=subItem.id;
+            var subCheckboxId    = 'submenu_' +subItem.id;
+            if (subItem.main_menu_id == item.id) {
+                var isSubMenuGranted = subItem.is_granted;
+                var submenuCheckboxId = 'submenu_' + subItem.id;
+                
+                if (isSubMenuGranted == '' || isSubMenuGranted == 'no')
+                    table += '<td><input type="checkbox" id="submenu_' + id + '" name="submenu[]" value="' + subItem.id + '" disabled onchange="submenu_tab_disable('+subItem.id+' );">' + subItem.sub_menu + '</td>';
+                else
+                    table += '<td><input type="checkbox" id="submenu_' + id + '" name="submenu[]" value="' + subItem.id + '" checked>' + subItem.sub_menu + '</td>';
+                
+                var subMenusTab = data.sub_menu_tab[subItem.id];
+
+                if (subMenusTab) {
+                    subMenusTab.forEach(function (subTabItem) {
+                        if (subTabItem.sub_menu_id == subItem.id) {
+                            var isTabGranted = subTabItem.is_granted;
+                            var submenutabCheckboxId = 'submenutab_' + subTabItem.id;
+                            
+                            if (isTabGranted == '' || isTabGranted == 'no')
+                                table += '<td><input type="checkbox" id="submenutab_' + subItem.id + '" name="submenutab[]" value="' + subTabItem.id + '" disabled>' + subTabItem.sub_menu_tab + '<br>';
+                            else
+                                table += '<td><input type="checkbox" id="submenutab_' +subItem.id + '" name="submenutab[]" value="' + subTabItem.id + '" checked>' + subTabItem.sub_menu_tab + '<br><div>';
+                            // table += '<td>' + subTabItem.sub_menu_tab + '</td>';
+                            var isAdd = subTabItem.is_add_new;
+                            if(isAdd=='yes')
+                                table += '<input type="checkbox" id="submenutabadd" name="submenutabadd[]" value="' + subTabItem.id + '" checked> Add ';
+                            else
+                                table += '<input type="checkbox" id="submenutabadd" name="submenutabadd[]" value="' + subTabItem.id + '" > Add ';
+                            var isEdit = subTabItem.is_edit;
+                            if(isEdit=='yes')
+                                table += '<input type="checkbox" id="submenutabedit" name="submenutabedit[]" value="' + subTabItem.id + '" checked> Edit ';
+                            else
+                                table += '<input type="checkbox" id="submenutabedit" name="submenutabedit[]" value="' + subTabItem.id + '" > Edit ';
+                            var isView = subTabItem.is_view;
+                            if(isView=='yes')
+                                table += '<input type="checkbox" id="submenutabview" name="submenutabview[]" value="' + subTabItem.id + '" checked> View ';
+                            else
+                                table += '<input type="checkbox" id="submenutabview" name="submenutabview[]" value="' + subTabItem.id + '" > View ';
+                            var isDelete = subTabItem.is_delete;
+                            if(isDelete=='yes')
+                                table += '<input type="checkbox" id="submenutabdelete" name="submenutabdelete[]" value="' + subTabItem.id + '" checked> Delete ';
+                            else
+                                table += '<input type="checkbox" id="submenutabdelete" name="submenutabdelete[]" value="' + subTabItem.id + '" > Delete ';
+                                
+                            table += '</div>';    
+
+                        }
+                        
+                        table += '<tr><td></td><td></td>';
+                    });
+                    
+                }
+                
+            }
+            table += '<tr><td></td>';
+
+            
         });
+                    
+         table += '<tr>';
+    }
+    
+    table += '</tr>';
+     tableBody.append(table);
+     
+       $('#' + mainCheckboxId).change(function() {
+           
+        // var isChecked = $(this).prop('checked');
+        // if(isChecked)
+        // $('input[name="submenu[]"]').prop('disabled', false);
+         var isChecked = $(this).prop('checked');
+        //  alert(submenutabCheckboxId);
+
+        $('input[name="submenu[]"][id^="submenu_' + id + '"]').prop('disabled', !isChecked).prop('checked', false);
+
+        // $('input[name="submenutab[]"][id^="submenutab_' + id + '"]').prop('disabled', !isChecked);
+        
+    });
+    // $("#"+submenuCheckboxId ).change(function() {
+    //           alert("subCheckboxId");
+    //         var isSubChecked = $(this).prop('checked');
+    //         if(isSubChecked)
+    //         $('input[name="submenutab[]"]').prop('disabled', false);
+    //     });
+        
+});
+                               
+      
 
             },
             error: function () {
                 console.log('Error: Unable to make the request.');
             }
         });
+    }
+ function submenu_tab_disable(id)
+    {
+        
+          var isChecked = $('#submenu_'+id).prop('checked');
+         
+          if(isChecked)
+            $('input[name="submenutab[]"][id^="submenutab_' + id + '"]').prop('disabled',false).prop('checked', false);
+        //  alert(submenutabCheckboxId);
+        // $('input[name="submenutab[]"][id^="submenutab_' + id + '"]').prop('disabled', !isChecked);
     }
 </script>
 </html>

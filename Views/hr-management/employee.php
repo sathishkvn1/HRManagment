@@ -44,7 +44,7 @@
                                     $class='active';
                                 else
                                     $class='';
-                                if($tab_item->sub_menu_tab=='Employees')
+                                if($tab_item->sub_menu_tab=='Employee')
                                 {
                                     $employee_add= $tab_item->is_add_new;
                                      $employee_edit= $tab_item->is_edit;
@@ -1143,6 +1143,608 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+   <!-- ./filter modal-->
+   <div class="modal fade data-table-modal" id="employee_profile_pdf_modal" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+             
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="wrapper">
+                <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <!-- <div class="callout callout-info">
+              <h5><i class="fas fa-info"></i> Note:</h5>
+              This page has been enhanced for printing. Click the print button at the bottom of the invoice to test.
+            </div> -->
+
+
+            <!-- Main content -->
+            <div class="invoice employee_profile_content  mb-3" id="print_content">
+              <!-- title row -->
+              <div class="row company_header" >
+                 <div class="col-12">
+                       <div class="company_details">
+                            <div class="company_logo_and_address">
+                                <div class="company_logo">
+                                    <img src="<?php echo base_url();?>hrmanagement/dist/img/logo.png" alt="" >
+                                </div>
+                                <div class="company_address">
+                                    <strong class="company_name">BrqGlobTechPvtLtd</strong>
+                                    <address>
+                                        795 Folsom Ave, Suite 600<br>
+                                        San Francisco, CA 94107<br>
+                                        Phone: (804) 123-5432<br>
+                                        Email: info@almasaeedstudio.com
+                                    </address>
+                                </div>
+                            </div>
+                            
+                            <div class="reporting_date">
+                                 <small class="float-right"><span style="padding-right: 5px;">Reporting Date:</span> <?php echo(date('d/m/Y'));?></small>
+                            </div>
+
+                       </div>      
+                 </div>
+                <!-- /.col -->
+              </div>
+              <!-- info row -->
+             <!-- Employee profile Headding  -->
+                  <div class="row">
+                    <div class="col-12">
+                        <div class="name-container">
+                            <p class="name-text">Employee Profile</p>
+                            <div class="line"></div>
+                        </div>
+                    </div>
+                  </div>              
+
+             <!-- ./Employee profile Headding  -->
+
+
+
+
+
+              <div class="row profile-main-content invoice-info" >
+                <div class="col-sm-3 invoice-col">
+                  <div class="profile_photo">
+                     <img src="<?php echo base_url();?>uploads/hr-management/employee/photos/prof-1.jpg" alt="">
+                  </div>
+
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-9 invoice-col profile_header_right">
+                    
+                    <div class="employee_name_and_employement">
+                      <h3></h3>
+                       <P></P>          
+                    </div>
+                    <div class="row profile_adress">
+                        <div class="col-sm-12 invoice-col">
+                           <div class="row">
+                                <div class="col-4">
+                                    Employee No <span>:</span>
+                                </div>
+                                <div class="col-8" id="employee_number">
+                                     <!-- AC000121 -->
+                                </div>
+
+                           </div>     
+                           <div class="row">
+                                <div class="col-4">
+                                     Gender <span>:</span>
+                                </div>
+                                <div class="col-8" id="employee_gender">
+
+                                </div>
+
+                           </div>     
+                           <div class="row">
+                                <div class="col-4">
+                                Marital Status<span>:</span>
+                                </div>
+                                <div class="col-8" id="employee_marital_status">
+                                   Single
+                                </div>
+
+                           </div>     
+                           <div class="row">
+                                <div class="col-4">
+                                    Date of Birth <span>:</span>
+                                </div>
+                                <div class="col-8" id="employee_date_of_birth">
+                                    
+                                </div>
+                           </div>     
+                           <div class="row">
+                                <div class="col-4">
+                                    Branch <span>:</span>
+                                </div>
+                                <div class="col-8" id="employee_branch">
+                                   
+                                </div>
+
+                           </div>     
+                           <div class="row">
+                                <div class="col-4">
+                                    Department <span>:</span>
+                                </div>
+                                <div class="col-8" id="employee_department">
+                                   
+                                </div>
+
+                           </div>     
+                           <div class="row">
+                                <div class="col-4" >
+                                    Join Start Date <span>:</span>
+                                </div>
+                                <div class="col-8" id="employee_join_date">
+                                  
+                                </div>
+
+                           </div>     
+                           <div class="row">
+                                <div class="col-4" >
+                                    Work E-mail <span>:</span>
+                                </div>
+                                <div class="col-8" id="employee_work_email">
+                                 
+                                </div>
+
+                           </div>     
+                           <div class="row">
+                                <div class="col-4">
+                                    Work Phone <span>:</span>
+                                </div>
+                                <div class="col-8" id="employee_work_phone">
+                                    
+                                </div>
+                           </div>        
+                        </div>
+                                <!-- <div class="col-sm-6 invoice-col present_address" >
+                                    <div>
+                                    <i class="fas fa-street-view"></i>
+                                        <strong>Present Address</strong>    
+                                    </div>
+                                   
+                                    <address class="employee_present_address" id="employee_present_address">
+                                     </adress>      
+                               </div> -->
+                            <!-- /.col -->
+                                <!-- <div class="col-sm-6 invoice-col permenant_address">
+                                    <i class="fas fa-street-view"></i>
+                                    <strong>Present Address</strong>    
+                                        <address class="employee_permenent_address" id="employee_permenent_address">
+                                        </adress>
+                                </div> -->
+                          <!-- /.col -->             
+                    </div>
+                </div>   
+                
+              </div>
+              <!-- /.row -->
+
+              <div class="addresss p-3">   
+                    <div class="row first-line">
+                        <div class="email col-sm-6">
+                                <i class="fas fa-envelope"></i>
+                                <span  id="employee_email"></span>
+                        </div>
+                        <div class="phone_no col-sm-6">
+                                <i class="fas fa-phone"></i>
+                                <span id="employee_phone_number"></span> 
+                        </div>
+                    </div>
+                    <div class="row present_permenent_address">
+                        <div class="col-6">                
+                            <p><i class="fa fa-map-marker" aria-hidden="true"></i>Present Address</p>
+                                   <div  class="employee_present_address" id="employee_present_address">
+                                    </div>
+                        </div>
+                        <div class="col-6">      
+                            <p><i class="fa fa-map-marker" aria-hidden="true"></i>Permenant Address</p>
+                            <div  class="employee_permenent_address" id="employee_permenent_address">           
+                            </div>
+                        </div>            
+                    </div>   
+              </div>
+              <div class="citizen_ship_and_other_info row box-shadow p-3">
+                <div class="col-6 citizen_ship">
+                    <p>Citizenship & Other Info</p>
+                    <div class="row">
+                        <div class="col-5" >
+                            <label>Nationality <span>:</span></label>
+                        </div>
+                        <div class="col-7" id="emp_nationality">
+                           
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <label>Adhar No <span>:</span></label>
+                        </div>
+                        <div class="col-7"  id="emp_adhar_no">
+                           
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <label>Passport No <span>:</span></label>
+                        </div>
+                        <div class="col-7" id="emp_passport_no">
+                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <label>Pan No <span>:</span></label>
+                        </div>
+                        <div class="col-7" id="emp_pan_no">
+                           
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <label>Driving Licence No <span>:</span></label>
+                        </div>
+                        <div class="col-7" id="emp_licence_no">
+                           
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <label>Other Id <span>:</span></label>
+                        </div>
+                        <div class="col-7" id="emp_other_id">
+                           
+                        </div>
+                    </div>
+                </div>
+              </div>                      
+                                
+
+              <!-- Table row -->
+              <div class="row box-shadow p-3">
+                <div class="col-12 table-responsive">
+                    <p class="shadow-headding">Work History</p>
+                  <table class="table table-striped" id="employee_profile_work_history_table">
+                    <thead>
+                    <tr>
+                      <th>Branch</th>
+                      <th>Department</th>
+                      <th>Job Title</th>
+                      <th>Pay Scale</th>
+                      <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- <tr>
+                      <td>Udma</td>
+                      <td>Hr</td>
+                      <td>Software Developer</td>
+                      <td>Senior Developer</td>
+                      <td>Partime</td>
+                    </tr>
+                    <tr>
+                      <td>Udma</td>
+                      <td>Hr</td>
+                      <td>Software Developer</td>
+                      <td>Senior Developer</td>
+                      <td>Partime</td>
+                    </tr>
+                    <tr>
+                      <td>Udma</td>
+                      <td>Hr</td>
+                      <td>Software Developer</td>
+                      <td>Senior Developer</td>
+                      <td>Partime</td>
+                    </tr> -->
+                    
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+
+              <!-- Table row -->
+              <div class="row box-shadow p-3">
+                <div class="col-12 table-responsive">
+                    <p class="shadow-headding">Education</p>
+                  <table class="table table-striped" id="employee_education_table">
+                  <thead>
+                    <tr>
+                    <th>Education Name</th>
+                      <th>Institute Name</th>
+                      <th>Start Date</th>
+                      <th>Completed Date</th>
+                      <th>Score Grade</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- <tr>
+                      <td>MCA</td>
+                      <td>Srinivas University</td>
+                      <td>12/10/20</td>
+                      <td>10/11/21</td>
+                      <td>A+</td>
+                    </tr>
+                    <tr>
+                      <td>BCA</td>
+                      <td>Srinivas University</td>
+                      <td>12/10/20</td>
+                      <td>10/11/21</td>
+                      <td>A+</td>
+                    </tr>
+                    <tr>
+                      <td>Plus Two </td>
+                      <td>Srinivas University</td>
+                      <td>12/10/20</td>
+                      <td>10/11/21</td>
+                      <td>A+</td>
+                    </tr>
+                    <tr>
+                      <td>SSLC </td>
+                      <td>Srinivas University</td>
+                      <td>12/10/20</td>
+                      <td>10/11/21</td>
+                      <td>A+</td>
+                    </tr> -->
+                    
+                    
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+
+              <!-- Table row -->
+              <div class="row box-shadow p-3">
+                <div class="col-12 table-responsive">
+                    <p class="shadow-headding">Certificate</p>
+                  <table class="table table-striped" id="employee_certificate_table">
+                  <thead>
+                    <tr>
+                        <th>Certificate Name</th>
+                        <th>Institute Name</th>
+                        <th>Date Issued</th>
+                        <th>Date Valid Till</th>
+                        <th>Score Grade</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                   
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+              <!-- Table row -->
+              <div class="row box-shadow p-3">
+                <div class="col-12 table-responsive">
+                    <p class="shadow-headding">Language </p>
+                  <table class="table table-striped"  id="employee_language_table"> 
+                  <thead>
+                    <tr>
+                       <th>Language Known</th>
+                      <th>Reading Proficiency</th>
+                      <th>Speaking Proficiency</th>
+                      <th>Writing Proficiency</th>
+                      <th>ListiningProficiency</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+ 
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+              <!-- Table row -->
+              <div class="row box-shadow p-3">
+                <div class="col-12 table-responsive">
+                    <p class="shadow-headding">Dependents </p>
+                  <table class="table table-striped" id="employee_dependents_table">
+                  <thead>
+                    <tr>
+                    <th>Dependent Name</th>
+                      <th>Relation</th>
+                      <th>DoB</th>
+                      <th>Adhar No</th>
+                      <th>Passport No</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- <tr>
+                      <td>Vaishakh</td>
+                      <td>Friend</td>
+                      <td>04/06/199</td>
+                      <td>39309287389389</td>
+                      <td>U2712345</td>
+                      
+                    </tr>
+                    <tr>
+                      <td>Vaishakh</td>
+                      <td>Friend</td>
+                      <td>04/06/199</td>
+                      <td>39309287389389</td>
+                      <td>U2712345</td>
+                      
+                    </tr>
+                    <tr>
+                      <td>Vaishakh</td>
+                      <td>Friend</td>
+                      <td>04/06/199</td>
+                      <td>39309287389389</td>
+                      <td>U2712345</td>
+                      
+                    </tr> -->
+                   
+                    
+                    
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+              <div class="row box-shadow p-3">
+                <div class="col-12  skill_section">
+                    <p class="shadow-headding">Skills</p>
+                    <ul class="skills-list" id="employee_profile_skill_ul">
+                        <!-- <li>Communication skill</li>
+                         <li>Team Management</li>
+                         <li>Punctuate</li> -->
+                    </ul>            
+                </div>
+              </div>
+                
+
+            
+              <!-- /.row -->
+              <div class="row box-shadow p-3">
+                <div class="col-6  skill_section">
+                    <p class="shadow-headding">Emergency Contact</p>
+                    <div class="row">
+                        <div class="col-5">
+                            <label>Persone Name <span>:</span></label>
+                        </div>
+                        <div class="col-7" id="emergency_contact_person_name">
+                           
+                        </div>
+                    </div>       
+                    <div class="row">
+                        <div class="col-5" >
+                            <label>Relation<span>:</span></label>
+                        </div>
+                        <div class="col-7" id="emergency_contact_relation">
+                            Friend
+                        </div>
+                    </div>       
+                    <div class="row">
+                        <div class="col-5" >
+                            <label>Home No<span>:</span></label>
+                        </div>
+                        <div class="col-7" id="emergency_person_home_no">
+                           
+                        </div>
+                    </div>       
+                    <div class="row">
+                        <div class="col-5">
+                            <label>Work No<span>:</span></label>
+                        </div>
+                        <div class="col-7" id="emergency_person_work_no">
+                          
+                        </div>
+                    </div>       
+                    <div class="row">
+                        <div class="col-5">
+                            <label>Mobile No<span>:</span></label>
+                        </div>
+                        <div class="col-7"  id="emergency_person_mobile_no">
+                             
+                        </div>
+                    </div>       
+                </div>
+              </div>
+                
+
+            
+              <!-- /.row -->
+
+              <!-- /.row -->
+              <div class="row box-shadow p-3">
+                <div class="col-6  bank_section">
+                    <p class="shadow-headding">Bank Detais</p>
+                    <div class="row">
+                        <div class="col-5">
+                            <label>Acc No <span>:</span></label>
+                        </div>
+                        <div class="col-7" id="bank_acc_no">
+                           
+                        </div>
+                    </div> 
+
+                    <div class="row">
+                        <div class="col-5">
+                            <label>Bank Name <span>:</span></label>
+                        </div>
+                        <div class="col-7" id="bank_name">
+                           
+                        </div>
+                    </div>  
+                    
+                    
+                    <div class="row">
+                        <div class="col-5">
+                            <label>Branch Name <span>:</span></label>
+                        </div>
+                        <div class="col-7" id="bank_branch_name">
+                           
+                        </div>
+                    </div> 
+
+                    <div class="row">
+                        <div class="col-5">
+                            <label>IFSC Code <span>:</span></label>
+                        </div>
+                        <div class="col-7" id="bank_ifsc_code">
+                           
+                        </div>
+                    </div>       
+                </div>
+              </div>
+                
+
+            <input type="hidden" name="emp_hid_id" id="emp_hid_id" value="0">
+
+              <!-- /.row -->
+
+              <!-- this row will not appear when printing -->
+              <div class="row no-print">
+                <div class="col-12">
+                    <a href="#" id="printButton" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
+                  <!-- <button class="btn savebtn" id="generatePDFButton">Generate PDF</button> -->
+                </div>
+              </div>
+            </div>
+            <!-- /.invoice -->
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+</div>
+<!-- ./wrapper -->
+              
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+<!-- ./filter modal -->
+
+
 </body>
 </html>
 
@@ -1272,6 +1874,7 @@ function loadDataTableForEmployee() {
                             if($employee_delete=='yes'): ?>
               <a href="#" class="delete" onclick="deleteEmployee('${row.employee_id}','${row.employment_details_id}');"><i class="fas fa-trash"></i>Delete</a>
               <?php endif; ?>
+              <a href="#" class="print" onclick="printEmployee('${row.employee_id}');"><i class="fas fa-print"></i></a>
             </div>`;
         }
       }
@@ -1544,7 +2147,7 @@ function updateDepartmentDropdown() {
 
 
 function viewEmployee(row_id) {
-    alert(row_id)
+   
     $("#row_id").val(row_id);
  flag_id=$("#flag_id").val("1");
     $('#employee_data_table_modal').modal('show');
@@ -1636,7 +2239,7 @@ function viewEmployee(row_id) {
 }
 
 function editEmployee(row_id,employmentDetailsId) {
-    alert(row_id); //employee_id
+    //employee_id
     // alert("Employee Details_id"+employmentDetailsId);
     $("#employment_details_id").val(employmentDetailsId);
     $("#employee_data_table_modal").modal("show");
@@ -1768,8 +2371,7 @@ if($("#flag_id").val()=='0')
 
 
 function deleteEmployee(row_id, employmentDetailsId){
-    alert(row_id);
-    alert(employmentDetailsId);
+   
     if (confirm("Are you sure you want to delete this item?")) {
         $.ajax({
             url: BASE_URL + "index.php/" + hrController + "/delete_employee_by_id",
@@ -2007,6 +2609,294 @@ $("#employee_data_table_reset_filter").on("click", function() {
     $(this).hide();
 
 });
+
+function printEmployee(individual_employee_id) {
+    $("#emp_hid_id").val(individual_employee_id)
+    $.ajax({
+        url: BASE_URL + "index.php/" + hrController + "/employee_profile",
+        type: 'POST',
+        data: { individual_employee_id: individual_employee_id, li_token: token },
+        success: function(response) 
+        {
+      
+            console.log(response);
+            var empdetails = JSON.parse(response).empdetails;
+            var work_history_table_data = JSON.parse(response).work_history_table_data;
+           
+            
+
+            // Adress
+            var PresentAddressContent = `   
+                    ${empdetails.present_address_line_1}, ${empdetails.present_address_line_2}, ${empdetails.present_address_line_3}<br>
+                    ${empdetails.present_address_line_4}, ${empdetails.present_pin_code}
+                    <br>${empdetails.present_state_name}, ${empdetails.present_country_name}
+            `;
+            var PermenentAddressContent = `   
+                    ${empdetails.permenent_address_line_1}, ${empdetails.permenent_address_line_2}, ${empdetails.permenent_address_line_3}<br>
+                    ${empdetails.permenent_address_line_4}, ${empdetails.permenent_pin_code}
+                    <br>${empdetails.permenent_state_name}, ${empdetails.permenent_country_name}
+            `;
+               // Concatenate the names with spaces
+                var fullName = `${empdetails.first_name} ${empdetails.middle_name} ${empdetails.last_name}`;
+                fullName = fullName.toUpperCase();
+
+                var job_title =empdetails.job_title;
+                var employee_number =empdetails.employee_number;
+                var employee_gender =empdetails.gender;
+                var employee_branch =empdetails.branch_name;
+                var date_of_birth =empdetails.date_of_birth;
+                var department_name =empdetails.department_name;
+                var join_date =empdetails.date_joined;
+                var work_email =empdetails.work_email;
+                var work_phone =empdetails.work_phone;
+                var email =empdetails.private_email;
+                var phone_number =empdetails.mobile_phone;
+
+                var nationality =empdetails.nationality;
+                var adhar_no =empdetails.aadhar_number;
+                var passport_no =empdetails.passport_number;
+                var pan_no =empdetails.pan_number;
+                var d_licence =empdetails.driving_licence_number;
+                var other_id =empdetails.other_id_doc;
+               
+                // Update employee name
+                 $('#employee_profile_pdf_modal .employee_name_and_employement h3').text(fullName);
+                 $('#employee_profile_pdf_modal .employee_name_and_employement p').text(job_title);
+                 $('#employee_profile_pdf_modal .profile-main-content #employee_number').text(employee_number);
+                 $('#employee_profile_pdf_modal .profile-main-content #employee_gender').text(employee_gender);
+                 $('#employee_profile_pdf_modal .profile-main-content #employee_branch').text(employee_branch);
+                 $('#employee_profile_pdf_modal .profile-main-content #employee_date_of_birth').text(date_of_birth);
+                 $('#employee_profile_pdf_modal .profile-main-content #employee_department').text(department_name);
+                 $('#employee_profile_pdf_modal .profile-main-content #employee_join_date').text(join_date);
+                 $('#employee_profile_pdf_modal .profile-main-content #employee_work_email').text(work_email);
+                 $('#employee_profile_pdf_modal .profile-main-content #employee_work_phone').text(work_phone);
+
+
+                 $('#employee_profile_pdf_modal #employee_email').text(email);
+                 $('#employee_profile_pdf_modal  #employee_phone_number').text(phone_number);
+                 $('#employee_profile_pdf_modal  #emp_nationality').text(nationality);
+                 $('#employee_profile_pdf_modal  #emp_adhar_no').text(adhar_no);
+                 $('#employee_profile_pdf_modal  #emp_passport_no').text(passport_no);
+                 $('#employee_profile_pdf_modal  #emp_pan_no').text(pan_no);
+                 $('#employee_profile_pdf_modal  #emp_licence_no').text(d_licence);
+                 $('#employee_profile_pdf_modal  #emp_other_id').text(other_id);
+              //bank
+               // bank 
+               var acc_no =empdetails.account_number;
+                var bank_name =empdetails.bank_name;
+                var bank_branch_name =empdetails.bank_branch_name;
+                var ifsc_code =empdetails.ifsc_code;
+
+                 $('#employee_profile_pdf_modal  #bank_acc_no').text(acc_no);
+                 $('#employee_profile_pdf_modal  #bank_name').text(bank_name);
+                 $('#employee_profile_pdf_modal  #bank_branch_name').text(bank_branch_name);
+                 $('#employee_profile_pdf_modal  #bank_ifsc_code').text(ifsc_code);
+
+                
+                //emergency contacts
+
+                var empEmergencyContacts = JSON.parse(response).empEmergencyContacts[0];
+                    var employeeEmergencyContact = {
+                        contact_person_name: empEmergencyContacts.contact_person_name,
+                        relation_with_employee: empEmergencyContacts.relation_with_employee,
+                        home_phone: empEmergencyContacts.home_phone,
+                        work_phone: empEmergencyContacts.work_phone,
+                        mobile_phone: empEmergencyContacts.mobile_phone
+                    };
+
+                    
+
+                    $('#employee_profile_pdf_modal #emergency_contact_person_name').text(employeeEmergencyContact.contact_person_name);
+                    $('#employee_profile_pdf_modal #emergency_contact_relation').text(employeeEmergencyContact.relation_with_employee);
+                    $('#employee_profile_pdf_modal #emergency_person_home_no').text(employeeEmergencyContact.home_phone);
+                    $('#employee_profile_pdf_modal #emergency_person_work_no').text(employeeEmergencyContact.work_phone);
+                    $('#employee_profile_pdf_modal #emergency_person_mobile_no').text(employeeEmergencyContact.mobile_phone);
+
+                
+            
+            
+
+            // Update the content inside the div
+            $('#employee_profile_pdf_modal #employee_present_address').html(PresentAddressContent);
+            $('#employee_profile_pdf_modal #employee_permenent_address').html(PermenentAddressContent);
+                // work history data table
+                var work_history_table_data = JSON.parse(response).work_history_table_data;
+                function populateTableWorkHistory(data) 
+                {
+                   
+                    let tableBody = $('#employee_profile_work_history_table tbody');
+
+                    // Clear existing rows
+                    tableBody.empty();
+
+                    // Iterate over the data and create rows dynamically
+                    data.forEach(item => {
+                        let row = $('<tr>');
+                        row.append($('<td>').text(item.branch_name));
+                        row.append($('<td>').text(item.department_name));
+                        row.append($('<td>').text(item.job_title));
+                        row.append($('<td>').text(item.pay_scale_name));
+                        row.append($('<td>').text(item.employment_status));
+                        tableBody.append(row);
+                    });
+                }
+
+
+                    // Call the populateTable function with your data
+                    populateTableWorkHistory(work_history_table_data);
+
+
+
+                var education_table_data = JSON.parse(response).education_table_data;
+                function populateTableEducation(data) {
+                        console.log("education", work_history_table_data);
+
+                        let tableBody = $('#employee_education_table tbody');
+
+                        // Clear existing rows
+                        tableBody.empty();
+
+                        // Iterate over the data and create rows dynamically
+                        data.forEach(item => {
+                            let row = $('<tr>');
+                            row.append($('<td>').text(item.education_name));
+                            row.append($('<td>').text(item.institute_name));
+                            row.append($('<td>').text(item.start_date));
+                            row.append($('<td>').text(item.completed_date));
+                            row.append($('<td>').text(item.score_grade));
+
+                            tableBody.append(row);
+                        });
+                    }
+
+
+
+                    // Call the populateTable function with your data
+                    populateTableEducation(education_table_data);
+
+                var certification_table_data = JSON.parse(response).certification_table_data;
+                function populateTableCertification(data) {
+                       
+
+                        let tableBody = $('#employee_certificate_table tbody');
+
+                        // Clear existing rows
+                        tableBody.empty();
+
+                        // Iterate over the data and create rows dynamically
+                        data.forEach(item => {
+                            let row = $('<tr>');
+                            row.append($('<td>').text(item.certification_name));
+                            row.append($('<td>').text(item.institute_name));
+                            row.append($('<td>').text(item.date_issued));
+                            row.append($('<td>').text(item.date_valid_upto));
+                            row.append($('<td>').text(item.score_grade));
+
+                            tableBody.append(row);
+                        });
+                    }
+                    // Call the populateTable function with your data
+                    populateTableCertification(certification_table_data);
+
+
+                var language_table_data = JSON.parse(response).language_table_data;
+                function populateTableLanguage(data) {
+                       
+
+                        let tableBody = $('#employee_language_table tbody');
+
+                        // Clear existing rows
+                        tableBody.empty();
+
+                        // Iterate over the data and create rows dynamically
+                        data.forEach(item => {
+                            let row = $('<tr>');
+                            row.append($('<td>').text(item.language_name));
+                            row.append($('<td>').text(item.reading_proficiency));
+                            row.append($('<td>').text(item.speaking_proficiency));
+                            row.append($('<td>').text(item.writing_proficiency));
+                            row.append($('<td>').text(item.listening_proficiency));
+
+                            tableBody.append(row);
+                        });
+                    }
+                    // Call the populateTable function with your data
+                    populateTableLanguage(language_table_data);
+
+                var dependents_table_data = JSON.parse(response).dependents_table_data;
+                function populateDependentsLanguage(data) {
+                       
+
+                        let tableBody = $('#employee_dependents_table tbody');
+
+                        // Clear existing rows
+                        tableBody.empty();
+
+                        // Iterate over the data and create rows dynamically
+                        data.forEach(item => {
+                            let row = $('<tr>');
+                            row.append($('<td>').text(item.dependent_name));
+                            row.append($('<td>').text(item.relation_with_employee));
+                            row.append($('<td>').text(item.date_of_birth));
+                            row.append($('<td>').text(item.aadhar_number));
+                            row.append($('<td>').text(item.passport_number));
+
+                            tableBody.append(row);
+                        });
+                    }
+                    // Call the populateTable function with your data
+                    populateDependentsLanguage(dependents_table_data);
+
+                     
+                 // get_individual_employee_skills_data
+                 var individual_employee_skill = JSON.parse(response).individual_employee_skill;
+                 console.log("skill_dats"+individual_employee_skill);
+                 var skillsList = document.getElementById('employee_profile_skill_ul');
+
+                    // Clear existing list items
+                    skillsList.innerHTML = '';
+
+                    // Iterate through each skill and create LI elements
+                    individual_employee_skill.forEach(function(skill) {
+                        var listItem = document.createElement('li');
+                        listItem.textContent = skill.skill_name;
+                        skillsList.appendChild(listItem);
+                    });
+
+
+                
+        },
+        error: function(error) {
+            console.error("AJAX Error:", error);
+        }
+    });
+
+    // Show the modal
+    $('#employee_profile_pdf_modal').modal('show');
+
+
+    
+}
+
+
+document.getElementById('printButton').addEventListener('click', function() {
+
+// Get the value from the hidden input
+var empHidId = document.getElementById('emp_hid_id').value;
+
+// Construct the print URL with the empHidId parameter
+var printUrl = '<?php echo base_url()?>hr-management/HrMaster/employee_profile_print/' + empHidId;
+
+// Open a new window with the constructed URL
+var printWindow = window.open(printUrl, '_blank');
+
+// Optional: Add additional styling or content to the print window if needed
+
+// Trigger printing
+printWindow.print();
+});
+
+
 
 
 

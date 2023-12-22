@@ -129,20 +129,31 @@ public function get_all_sub_menu_permission($main_menu_id="",$role="") {
     //         echo "Success";
     // }
 
- public function update_main_menu_permission($data,$where)
+
+
+
+    public function update_main_menu_permission($data,$where)
     {
        
-        // $this->db->update('hr_permission_main_menu', $data,$where);
-        $this->db->update('hr_main_menu_permission', $data,$where);
-// 	echo 	$this->db->last_query();
-			return $this->db->affected_rows();
+        $res= $this->db->update('hr_main_menu_permission', $data,$where);
+        if($res)
+            return true;
+        else
+            return false;
+// 			return $this->db->affected_rows();
     }
+
+
     public function update_sub_menu_permission($data,$where)
     {
        
-        // $this->db->update('hr_permission_sub_menu', $data,$where);
                 $this->db->update('hr_sub_menu_permission', $data,$where);
-
-			return $this->db->affected_rows();
+                 if($res)
+                    return true;
+                else
+                    return false;
+// 			return $this->db->affected_rows();
     }
+
+
 }

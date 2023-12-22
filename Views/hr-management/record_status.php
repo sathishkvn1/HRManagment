@@ -114,6 +114,11 @@
                     </div>
                   <!-- ./tab1  --- -->
 
+                   <!-- one tab -->
+                   <div class="tab-pane fade" id="overtime_request_tab" role="tabpanel" aria-labelledby="overtime_request_tab">     
+                      <?php include("recordstatus_overtime.php");?>
+                   </div>
+                  <!-- ./one tab -->
 
                     <!--tab 2   ------ -->
                     <div class="tab-pane fade" id="loan_request_status_tab" role="tabpanel" aria-labelledby="profile-tab">
@@ -121,24 +126,8 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                             <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
 
-                                <div class="ant-card-head">
-                    
-                                    <div class="name">
-                                    Loan Request Status
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
+                               
+                               
                             </div>
                         </div>
                         <!-- --- ./discription ---- -->
@@ -168,24 +157,8 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                             <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
 
-                                <div class="ant-card-head">
-                    
-                                    <div class="name">
-                                    Loan Status
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
+                             
+                                
                             </div>
                         </div>
                         <!-- --- ./discription ---- -->
@@ -214,24 +187,7 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                             <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
 
-                                <div class="ant-card-head">
-                    
-                                    <div class="name">
-                                    Leave Request Status
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
+                            
                             </div>
                         </div>
                         <!-- --- ./discription ---- -->
@@ -260,24 +216,8 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                             <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
 
-                                <div class="ant-card-head">
-                    
-                                    <div class="name">
-                                    Marital Status
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
+                              
+                               
                             </div>
                         </div>
                         <!-- --- ./discription ---- -->
@@ -305,24 +245,7 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                             <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
 
-                                <div class="ant-card-head">
-                    
-                                    <div class="name">
-                                   Relation
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
+                                
                             </div>
                         </div>
                         <!-- --- ./discription ---- -->
@@ -350,24 +273,7 @@
                         <div id="company_structure_table_top" class="reviewBlock">
                             <div class="ant-card ant-card-bordered ant-card-small" style="width: 100%;">
 
-                                <div class="ant-card-head">
-                    
-                                    <div class="name">
-                                  Gender
-                                    </div>
-                                    <div class="moreinfo">
-                                        <a href="#">More Info</a>
-                                    </div>
-                                </div>
-                                <div class="ant-card-body">
-                                <div class="ant-card-meta">
-                                    <div class="ant-card-meta-detail">
-                                    <div class="ant-card-meta-description">
-                                        Here you can define the different pay Scales in your organization.
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
+                                
                             </div>
                         </div>
                         <!-- --- ./discription ---- -->

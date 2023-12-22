@@ -3078,20 +3078,7 @@ public function get_employee_team_master_details_for_modal($id)
 
 
 
-public function get_calandar_details()
-{
-   
-    $query = $this->db->select('*')
-        ->from('hr_calendar_master') 
-        ->where('is_deleted', 'no') 
-        ->get();
 
-    if ($query->num_rows() > 0) {
-        return $query->result(); 
-    }
-
-    return []; 
-}
 
 public function get_week_days(){
     $query = $this->db->select('*')
@@ -3108,16 +3095,7 @@ public function get_week_days(){
 
 
 
-    public function insert_calendar_details($data) {
 
-        $this->db->insert('hr_calendar_details', $data);
-        return $this->db->insert_id(); 
-    }
-
-    public function insert_calendar_master($data) {
-        $this->db->insert('hr_calendar_master', $data);
-        return $this->db->insert_id(); 
-    }
 
 
 
@@ -3138,8 +3116,1032 @@ public function get_week_days(){
     }
     
     
+    // functions after updation
 
 
+    public function insert_calendar_master($data) {
+        $this->db->insert('hr_calendar_master', $data);
+        return $this->db->insert_id(); 
+    }
+
+    public function insert_calendar_details($data) {
+
+        $this->db->insert('hr_calendar_details', $data);
+        return $this->db->insert_id(); 
+    }
+
+    public function update_calendar_master($calender_master_data, $row_id) {
+       
+        $this->db->where('id', $row_id);
+        $this->db->update('hr_calendar_master', $calender_master_data);
+        
+        //  echo "Last Query: " . $this->db->last_query();
+
+    }
+
+
+
+    public function get_calender_details_by_id($calender_master_id) {
+        $this->db->select('wd.id, wd.day_short_name, wd.day_long_name,cd.id AS calender_details_id, cd.calendar_master_id, cd.start_time, cd.end_time, cd.is_working_day');
+        $this->db->from('hr_week_days wd');
+        $this->db->join('hr_calendar_details cd', 'wd.id = cd.week_day_id', 'LEFT');
+        $this->db->where('cd.calendar_master_id', $calender_master_id);
+     
+        $query = $this->db->get();
+        // echo "Last Query: " . $this->db->last_query($query);
+
+         
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return array(); 
+        }
+    }
+
+    public function fetch_calendar_master_data() {
+        
+        $this->db->select('*');
+        $this->db->from('hr_calendar_master');
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return array(); 
+        }
+    }
+
+    public function delete_calendar_master($row_id)
+    {
+        $this->db->set('deleted_by', $_SESSION['user_id']);
+        $this->db->set('deleted_on', date('Y-m-d H:i:s'));
+        $this->db->set('is_deleted', 'yes');
+        $this->db->where('id', $row_id);
+        $this->db->update('hr_calendar_master');
+    
+        return $this->db->affected_rows() > 0;
+    }
+    
+
+
+    public function update_calendar_details($calender_details_data, $dynamic_calendar_detail_id) {
+        $this->db->where('id', $dynamic_calendar_detail_id);
+        $this->db->update('hr_calendar_details', $calender_details_data);
+        // echo "Last Query: " . $this->db->last_query();
+
+    }
+
+    public function update_calendar_year($calendar_year_data)
+    {
+      
+        $calendar_master_id = $calendar_year_data['calendar_master_id'];
+        $date_of_the_day = $calendar_year_data['date_of_the_day'];
+
+       
+        $data = array(
+            'start_time' => $calendar_year_data['start_time'],
+            'end_time' => $calendar_year_data['end_time'],
+            'is_working_day' => $calendar_year_data['is_working_day']
+        );
+
+     
+        $this->db->where('calendar_master_id', $calendar_master_id);
+        $this->db->where('date_of_the_day', $date_of_the_day);
+        $this->db->update('hr_calendar_year', $data);
+        // echo "Last Query: " . $this->db->last_query();
+
+    }
+
+    public function insert_calendar_year($data) {
+        $this->db->insert('hr_calendar_year', $data);
+        return $this->db->insert_id(); 
+    }
+
+    public function get_calandar_details()
+    {
+    
+        $query = $this->db->select('*')
+            ->from('hr_calendar_master') 
+            ->where('is_deleted', 'no') 
+            ->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->result(); 
+        }
+
+        return []; 
+    }
+
+    public function get_calendar_holidays_details()
+    {
+        $query = $this->db->select('*')
+            ->from('hr_calendar_holidays') 
+            ->where('is_deleted', 'no') 
+            ->get();
+        if ($query->num_rows() > 0) {
+            return $query->result(); 
+        }
+        return []; 
+    }
+
+    public function getCalendarMasterDetails() {
+   
+        $this->db->select('*');
+        $query = $this->db->get('hr_calendar_master');
+    
+     
+        if ($query->num_rows() > 0) {
+            return $query->result_array(); 
+        } else {
+            return array();
+        }
+    }
+
+
+    public function get_calender_master_dates($selectedCalendarMasterId){
+        $this->db->select('effective_from, effective_to');
+        $this->db->from('hr_calendar_master');
+        $this->db->where('id', $selectedCalendarMasterId);
+        $query = $this->db->get();
+        // echo "Last Query: " . $this->db->last_query($query);
+    
+        if ($query->num_rows() > 0) {
+            return $query->row_array(); 
+        } else {
+            return array(); 
+        }
+    }
+
+    public function save_calendar_holidays_details($data) {
+        $this->db->insert('hr_calendar_holidays', $data);
+    
+        return $this->db->affected_rows() > 0;
+    }
+
+    public function update_calendar_holidays_details($data,$row_id) {
+
+        $this->db->where('id', $row_id);
+        $this->db->update('hr_calendar_holidays', $data);
+    
+        return ($this->db->affected_rows() > 0);
+    }
+
+    public function get_calendar_holidays_details_by_id($row_id)
+    {
+        $query = $this->db->select('*')
+            ->from('hr_calendar_holidays')
+            ->where('id', $row_id)
+            ->where('is_deleted', 'no')
+            ->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->row(); 
+        }
+
+        return null; 
+    }  
+
+
+    public function delete_calendar_holidays_by_id($row_id)
+        {
+            $this->db->set('deleted_by', $_SESSION['user_id']);
+            $this->db->set('deleted_on', date('Y-m-d H:i:s'));
+            $this->db->set('is_deleted', 'yes');
+            $this->db->where('id', $row_id);
+            $this->db->update('hr_calendar_holidays');
+
+            return $this->db->affected_rows() > 0;
+        }
+
+        
+public function get_calendar_event_details()
+{
+    $query = $this->db->select('*')
+        ->from('hr_calendar_events') 
+        ->where('is_deleted', 'no') 
+        ->get();
+    if ($query->num_rows() > 0) {
+        return $query->result(); 
+    }
+    return []; 
+}
+
+public function save_calendar_events_details($data) {
+    $this->db->insert('hr_calendar_events', $data);
+
+    return $this->db->affected_rows() > 0;
+}
+
+
+public function update_calendar_events_details($data,$row_id) {
+
+    $this->db->where('id', $row_id);
+    $this->db->update('hr_calendar_events', $data);
+
+    return ($this->db->affected_rows() > 0);
+}
+
+public function get_calendar_events_details_by_id($row_id)
+{
+    $query = $this->db->select('*')
+        ->from('hr_calendar_events')
+        ->where('id', $row_id)
+        ->where('is_deleted', 'no')
+        ->get();
+
+    if ($query->num_rows() > 0) {
+        return $query->row(); 
+    }
+
+    return null; 
+}  
+
+public function delete_calendar_events_by_id($row_id)
+{
+    $this->db->set('deleted_by', $_SESSION['user_id']);
+    $this->db->set('deleted_on', date('Y-m-d H:i:s'));
+    $this->db->set('is_deleted', 'yes');
+    $this->db->where('id', $row_id);
+    $this->db->update('hr_calendar_events');
+
+    return $this->db->affected_rows() > 0;
+}
+
+public function get_employee_name_options(){
+    $this->db->from('hr_employee_master');
+    $this->db->select('employee_id, CONCAT(employee_number," ",first_name, " ",last_name) as employee_name');
+    $this->db->where('is_deleted', 'no'); 
+    $this->db->where('hr_employee_master.company_id',$this->session->userdata('company_id_in_hr'));
+    $query = $this->db->get();
+    return $query->result();
+}
+
+public function get_overtime_category_option(){
+    $this->db->where('is_deleted', 'no');
+    $query = $this->db->get('hr_overtime_categories');
+  
+  
+    if($query->num_rows()>0)
+    {
+        return($query->result());
+
+    }
+       
+    return array();
+}
+
+public function get_overtime_new_request_status()
+{
+   
+    $query = $this->db->select('*')
+        ->from('hr_overtime_request_status') 
+        ->where('is_deleted', 'no') 
+        ->where('overtime_request_status !=', 'Pending') 
+        ->get();
+
+    if ($query->num_rows() > 0) {
+        return $query->result(); 
+    }
+
+    return []; 
+}
+public function get_overtime_details()
+    {
+        $this->db->select('hr_overtime_register.*, CONCAT(e.employee_number, " ", e.first_name, " ", e.last_name) AS employee_name, s.overtime_request_status');
+        $this->db->from('hr_overtime_register');
+        $this->db->join('hr_employee_master e', 'hr_overtime_register.employee_id = e.employee_id');
+        $this->db->join('hr_overtime_request_status s', 'hr_overtime_register.overtime_request_status_id = s.id');
+        $this->db->where('hr_overtime_register.is_deleted',"no");
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return array();
+        }
+    }
+    public function get_overtime_rate($category_id) {
+         
+        $this->db->select('overtime_rate');
+        $this->db->where('id', $category_id);
+        $query = $this->db->get('hr_overtime_categories');
+        // echo "Last Query: " . $this->db->last_query($query);
+
+      
+        if ($query->num_rows() > 0) {
+            $row = $query->row();
+            return $row->overtime_rate;
+        } else {
+            return null; 
+        }
+    }
+
+    public function  update_overtime_requests_details($row_id, $data){
+        $this->db->where('id', $row_id);
+        $this->db->update('hr_overtime_register', $data);
+       
+        if ($this->db->affected_rows() > 0) {
+            return true; 
+        } else {
+            return false; 
+        }
+    }
+
+    public function get_overtime_request_by_id($row_id)
+    {
+        $query = $this->db->select('*')
+            ->from('hr_overtime_register')
+            ->where('id', $row_id)
+            ->where('is_deleted', 'no')
+            ->get();
+            // echo "Last Query: " . $this->db->last_query();
+
+        if ($query->num_rows() > 0) {
+            return $query->row(); 
+        }
+
+        return null; 
+    }
+
+    public function get_new_overtime_details()
+    {
+        $this->db->select('hr_overtime_register.*, CONCAT(e.employee_number, " ", e.first_name, " ", e.last_name) AS employee_name, s.overtime_request_status');
+        $this->db->from('hr_overtime_register');
+        $this->db->join('hr_employee_master e', 'hr_overtime_register.employee_id = e.employee_id');
+        $this->db->join('hr_overtime_request_status s', 'hr_overtime_register.overtime_request_status_id = s.id');
+        $this->db->where('hr_overtime_register.is_deleted',"no");
+        $this->db->where('hr_overtime_register.overtime_request_status_id',"1");
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return array();
+        }
+    }
+
+    
+public function save_new_overtime_request($data, $row_id) {
+    $this->db->where('id', $row_id);
+    $this->db->update('hr_overtime_register', $data);
+
+    return $this->db->affected_rows() > 0;
+}
+
+public function get_overtime_verified_details()
+{
+    $this->db->select('hr_overtime_register.*, CONCAT(e.employee_number, " ", e.first_name, " ", e.last_name) AS employee_name, s.overtime_request_status');
+    $this->db->from('hr_overtime_register');
+    $this->db->join('hr_employee_master e', 'hr_overtime_register.employee_id = e.employee_id');
+    $this->db->join('hr_overtime_request_status s', 'hr_overtime_register.overtime_request_status_id = s.id');
+    $this->db->where('hr_overtime_register.is_deleted',"no");
+    $this->db->where('hr_overtime_register.overtime_request_status_id',"2");
+    $query = $this->db->get();
+    // echo "Last Query: " . $this->db->last_query($query);
+
+    if ($query->num_rows() > 0) {
+        return $query->result_array();
+    } else {
+        return array();
+    }
+}
+
+public function fetch_overtime_by_id($row_id) {
+    $this->db->where('id', $row_id);
+    $query = $this->db->get('hr_overtime_register');
+
+    if ($query->num_rows() == 1) {
+        return $query->row();
+    } else {
+        return false;
+    }
+}
+
+public function save_overtime_verified($data,$row_id){
+
+    $this->db->where('id', $row_id);
+    $this->db->update('hr_overtime_register', $data);
+    return $this->db->affected_rows() > 0; 
+    echo json_encode($response);
+
+    }
+
+    public function get_overtime_approved_details()
+    {
+        $this->db->select('hr_overtime_register.*, CONCAT(e.employee_number, " ", e.first_name, " ", e.last_name) AS employee_name, s.overtime_request_status');
+        $this->db->from('hr_overtime_register');
+        $this->db->join('hr_employee_master e', 'hr_overtime_register.employee_id = e.employee_id');
+        $this->db->join('hr_overtime_request_status s', 'hr_overtime_register.overtime_request_status_id = s.id');
+        $this->db->where('hr_overtime_register.is_deleted',"no");
+        $this->db->where('hr_overtime_register.overtime_request_status_id',"3");
+        $query = $this->db->get();
+        // echo "Last Query: " . $this->db->last_query($query);
+    
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return array();
+        }
+    }
+
+    public function get_overtime_approved_by_id($row_id) {
+        $this->db->where('id', $row_id);
+        $query = $this->db->get('hr_overtime_register');
+    
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        } else {
+            return false;
+        }
+    }
+
+    public function save_overtime_approved($data,$row_id){
+
+        $this->db->where('id', $row_id);
+        $this->db->update('hr_overtime_register', $data);
+        return $this->db->affected_rows() > 0; 
+        echo json_encode($response);
+    
+        }
+        public function get_new_overtime_request_by_id($row_id)
+        {
+        
+            $this->db->where('id', $row_id);
+            $query = $this->db->get('hr_overtime_register');
+            // echo "Last Query: " . $this->db->last_query();
+        
+                if ($query->num_rows() == 1) {
+                    return $query->row();
+                } else {
+                    return false;
+                }
+                    echo json_encode($response);
+        
+        }    
+        
+        // code by mufi
+        public function get_leave_days()
+            {
+                $query = $this->db->select('*')
+                    ->from('hr_leave_category') 
+                    ->get();
+                if ($query->num_rows() > 0) {
+                    return $query->result(); 
+                }
+                
+                return [];  
+            }
+
+
+            public function get_calendar_master_id(){
+                $query = $this->db->get('hr_calendar_master');
+              
+                if($query->num_rows()>0)
+                {
+                    return($query->result());
+            
+                }
+                   
+                return array();
+            }
+            
+            public function get_leave_category_id()
+            {
+                $query = $this->db->get('hr_leave_category');
+              
+                if($query->num_rows()>0)
+                {
+                    return($query->result());
+            
+                }
+                   
+                return array();
+            }
+            
+            public function get_leave_master()
+            {
+                $this->db->select('hr_leave_master.id,year_name,leave_category,number_of_leaves_per_year,maximum_can_be_taken_in_a_month');
+                $this->db->from('hr_leave_master');
+                $this->db->join('hr_calendar_master', 'hr_leave_master.calendar_master_id = hr_calendar_master.id', 'left');
+                $this->db->join('hr_leave_category', 'hr_leave_master.leave_category_id = hr_leave_category.id', 'left');
+                $this->db->where('hr_leave_master.is_deleted', 'no');
+
+                $query = $this->db->get(); 
+
+                return $query->result();
+            }
+
+
+            public function  update_leave_master($row_id, $data)
+            {
+               
+                $this->db->where('id', $row_id);
+                $this->db->update('hr_leave_master', $data);
+               
+                if ($this->db->affected_rows() > 0) {
+                    return true; 
+                } else {
+                    return false; 
+                }
+            }
+            
+            public function get_leave_master_by_id($row_id)
+            {
+                $query = $this->db->select('*')
+                    ->from('hr_leave_master')
+                    ->where('id', $row_id)
+                    ->where('is_deleted', 'no')
+                    ->get();
+
+                if ($query->num_rows() > 0) {
+                    return $query->row(); 
+                }
+
+                return null; 
+            }
+
+            
+public function delete_leave_master_by_id($row_id)
+{
+    $data = array(
+        'is_deleted' => 'yes',  
+        'deleted_by' => $_SESSION['user_id'],
+        'deleted_on' => date('Y-m-d H:i:s')
+    );
+   
+    $this->db->where('id', $row_id);
+    return $this->db->update('hr_leave_master', $data);
+}
+
+public function get_leave_category_option($calendar_master_val)
+{
+    $this->db->select('*');
+    $this->db->from('hr_leave_category');
+    $this->db->where('is_deleted', 'no');
+    $this->db->where_not_in('id', "SELECT leave_category_id FROM hr_leave_master WHERE calendar_master_id = '$calendar_master_val'", false);
+    $query = $this->db->get();
+    // echo "Last Query: " . $this->db->last_query(); 
+    return $query->result();
+}
+
+public function get_setupdata_overtime_details()
+    {
+        $query = $this->db->select('*')
+        ->from('hr_overtime_categories') 
+        ->where('is_deleted', 'no') 
+        ->get();
+    if ($query->num_rows() > 0) {
+        return $query->result(); 
+    }
+
+    return [];
+
+    }
+
+    public function  update_setupdata_overtime_details($row_id, $data)
+    {
+        $this->db->where('id', $row_id);
+        $this->db->update('hr_overtime_categories', $data);
+    
+        if ($this->db->affected_rows() > 0) {
+            return true; 
+        } else {
+            return false; 
+        }
+    }
+
+    public function get_setupdata_overtime_by_id($row_id)
+{
+    $query = $this->db->select('*')
+        ->from('hr_overtime_categories')
+        ->where('id', $row_id)
+        ->where('is_deleted', 'no')
+        ->get();
+        //  echo "Last Query: " . $this->db->last_query();
+
+    if ($query->num_rows() > 0) {
+        return $query->row(); 
+    }
+
+    return null; 
+}
+
+public function delete_setupdata_overtime_by_id($row_id)
+{
+    $data = array(
+        'is_deleted' => 'yes',  
+        'deleted_by' => $_SESSION['user_id'],
+        'deleted_on' => date('Y-m-d H:i:s')
+    );
+
+    $this->db->where('id', $row_id);
+    return $this->db->update('hr_overtime_categories', $data);
+}
+public function get_recordstatus_overtime_details()
+{
+    $query = $this->db->select('*')
+    ->from('hr_overtime_request_status') 
+    ->where('is_deleted', 'no') 
+    ->get();
+   if ($query->num_rows() > 0) {
+     return $query->result(); 
+   }
+
+return [];
+
+}
+
+//code by mashu
+public function get_individual_employee_personal_data($individual_employee_id) {
+    $this->db->select('*');
+    $this->db->from('hr_employee_master_view');
+    $this->db->where('employee_id', $individual_employee_id);
+    $this->db->where('is_active', 'yes');
+    $query = $this->db->get();
+
+    if ($query->num_rows() ==1) {
+        return $result = $query->row();
+    } else 
+    {
+        return null; 
+    }
+}
+
+public function get_individual_employee_emergency_contacts($individual_employee_id) {
+    $this->db->select('eecd.*, hr.id, hr.relation as relation_with_employee'); 
+    $this->db->from('hr_employee_emergency_contact_details eecd');
+    $this->db->join('hr_relations hr', 'eecd.relation_with_employee_id = hr.id', 'inner');
+    $this->db->where('eecd.is_deleted', 'no');
+    $this->db->where('eecd.employee_id', $individual_employee_id);
+    $query = $this->db->get();
+    if ($query->num_rows() > 0) {
+        return $query->result(); 
+    }
+
+    return [];
+    
+}
+
+public function get_individual_employee_work_history_table_data($individual_employee_id) {
+    $this->db->from('hr_employee_employment_details AS ed');
+    $this->db->join('hr_employee_master AS em', 'ed.employee_id = em.employee_id', 'inner');
+    $this->db->join('hr_branches AS b', 'ed.branch_id = b.id', 'inner');
+    $this->db->join('hr_departments AS d', 'ed.department_id = d.id', 'inner');
+    $this->db->join('hr_job_title AS j', 'ed.job_title_id = j.id', 'inner');
+    $this->db->join('hr_pay_scales AS p', 'ed.pay_scale_id = p.id', 'inner');
+    $this->db->join('hr_employment_status AS es', 'ed.employment_status_id = es.id', 'inner');
+    
+    
+    $this->db->select('ed.id, CONCAT(em.employee_number," ",em.first_name, " ", em.last_name) as employee_name, b.branch_name, d.department_name, j.job_title, p.pay_scale_name, es.employment_status');
+    $this->db->where('ed.is_deleted', 'no'); 
+    $this->db->where('ed.employee_id', $individual_employee_id); 
+    
+     $query = $this->db->get();
+    // echo "Last Query: " . $this->db->last_query($query);
+    if ($query->num_rows() > 0) {
+        return $query->result();
+    }
+    
+    return [];
+}
+
+public function get_individual_employee_education_table_data($individual_employee_id) {
+    $this->db->select('eed.id, CONCAT(em.employee_number," ",em.first_name," ",em.last_name) AS employee_name,em.employee_number, edu.education_name as education_name, eed.institute_name, eed.start_date, eed.completed_date, eed.score_grade, eed.details');
+    $this->db->from('hr_employee_education_details eed');
+    $this->db->join('hr_employee_master em', 'eed.employee_id = em.employee_id', 'inner');
+    $this->db->join('hr_education edu', 'eed.education_id = edu.id', 'inner');
+    $this->db->where('eed.is_deleted', 'no');
+    $this->db->where('eed.employee_id', $individual_employee_id);
+
+    $query = $this->db->get();
+
+    if ($query->num_rows() > 0) {
+        return $query->result();
+    }
+
+    return [];
+}
+
+public function get_individual_employee_certification_table_data($individual_employee_id) {
+    $this->db->select('ecd.id, CONCAT(em.employee_number," ",em.first_name," ",em.last_name) AS employee_name, em.employee_number, ctr.certification_name AS certification_name, ecd.institute_name, ecd.date_issued, ecd.date_valid_upto, ecd.score_grade');
+    $this->db->from('hr_employee_certification_details ecd');
+    $this->db->join('hr_employee_master em', 'ecd.employee_id = em.employee_id', 'inner');
+    $this->db->join('hr_certifications ctr', 'ecd.certification_id = ctr.id', 'inner');
+    $this->db->where('ecd.is_deleted', 'no');
+    $query = $this->db->get();
+
+    if ($query->num_rows() > 0) {
+        return $query->result();
+    }
+    return [];
+}
+
+public function get_individual_employee_language_table_data($individual_employee_id) {
+    $this->db->select('elp.id, CONCAT(em.employee_number," ",em.first_name," ",em.last_name) AS employee_name, hl.language_name AS language_name, 
+    hlp_reading.language_proficiency AS reading_proficiency, 
+    hlp_speaking.language_proficiency AS speaking_proficiency, 
+    hlp_writing.language_proficiency AS writing_proficiency, 
+    hlp_listening.language_proficiency AS listening_proficiency');
+    $this->db->from('hr_employee_langauge_proficiency elp');
+    $this->db->join('hr_employee_master em', 'elp.employee_id = em.employee_id', 'inner');
+    $this->db->join('hr_languages hl', 'elp.language_id = hl.id', 'inner');
+    $this->db->join('hr_language_proficiency hlp_reading', 'elp.reading_proficiency_id = hlp_reading.id', 'inner');
+    $this->db->join('hr_language_proficiency hlp_speaking', 'elp.speaking_proficiency_id = hlp_speaking.id', 'inner');
+    $this->db->join('hr_language_proficiency hlp_writing', 'elp.writing_proficiency_id = hlp_writing.id', 'inner');
+    $this->db->join('hr_language_proficiency hlp_listening', 'elp.listening_proficiency_id = hlp_listening.id', 'inner');
+    $this->db->where('elp.is_deleted', 'no');
+    $this->db->where('elp.employee_id', $individual_employee_id);
+
+    $query = $this->db->get();
+    // echo "Last Query: " . $this->db->last_query($query);
+
+    if ($query->num_rows() > 0) {
+    return $query->result();
+    }
+
+    return [];
+}
+
+public function get_individual_employee_dependents_table_data($individual_employee_id) {
+    $this->db->select('ed.id, em.first_name AS employee_name, ed.dependent_name, hr.relation AS relation_with_employee, ed.date_of_birth, ed.aadhar_number, ed.passport_number');
+    $this->db->from('hr_employee_dependents ed');
+    $this->db->join('hr_employee_master em', 'ed.employee_id = em.employee_id', 'inner');
+    $this->db->join('hr_relations hr', 'ed.relation_with_employee_id = hr.id', 'inner');
+    $this->db->where('ed.is_deleted', 'no');
+
+    $query = $this->db->get();
+
+    if ($query->num_rows() > 0) {
+        return $query->result();
+    }
+
+    return [];
+}
+
+public function get_individual_employee_skills_data($individual_employee_id) {
+    $this->db->select('hr_employee_skills.id,details,skill_name,CONCAT(hr_employee_master.employee_number, " ", hr_employee_master.first_name, " ", hr_employee_master.last_name) as employee_name');
+     $this->db->from('hr_employee_skills');
+     $this->db->join('hr_employee_master', 'hr_employee_skills.employee_id = hr_employee_master.employee_id', 'left');
+     $this->db->join('hr_skills', 'hr_employee_skills.skill_id = hr_skills.id', 'left');
+     $this->db->where('hr_employee_skills.is_deleted', 'no');
+     $this->db->where('hr_employee_skills.employee_id', $individual_employee_id);
+     $query = $this->db->get();
+     if ($query->num_rows() > 0) {
+         return $query->result();
+     }
+ 
+     return [];
+ }
+
+ public function get_team_employee_name_options(){
+    $this->db->from('hr_employee_master');
+    // Select the columns you need
+    // $this->db->select('employee_id, CONCAT(employee_number," ",first_name, " ",last_name) as employee_name');
+    $this->db->select('employee_id, CONCAT(employee_number," ",first_name, " ",last_name) as employee_name');
+    $this->db->where('is_deleted', 'no'); 
+    $this->db->where('hr_employee_master.company_id',$this->session->userdata('company_id_in_hr'));
+    // Execute the query
+    $query = $this->db->get();
+
+    // Get the result
+    return $query->result();
+}
+ 
+public function get_leave_category_options(){
+    $this->db->where('is_deleted', 'no');
+    $query = $this->db->get('hr_leave_category');
+  
+    if($query->num_rows()>0)
+    {
+        return($query->result());
+
+    }
+       
+    return array();
+}
+
+public function new_leave_request_option(){
+        
+    $this->db->select('id,leave_request_status');
+    $this->db->from('hr_employee_leave_request_status');
+    $this->db->where('leave_request_status !=', 'Pending');
+    $this->db->where('is_deleted',"no");
+    $query = $this->db->get();
+    return $query->result();
+
+}
+
+public function  verified_leave_request_option() {
+    //  $company_id_in_hr = $this->session->userdata('company_id_in_hr');
+    $this->db->select('id, leave_request_status');
+    $this->db->from('hr_employee_leave_request_status');
+    $this->db->where('leave_request_status !=', 'Pending');
+    $this->db->where('leave_request_status !=', 'Verified');
+    $this->db->where('is_deleted',"no");
+    $query = $this->db->get();
+    return $query->result();
+    }
+
+    public function  approved_leave_request_option() {
+        //  $company_id_in_hr = $this->session->userdata('company_id_in_hr');
+        $this->db->select('id, leave_request_status');
+        $this->db->from('hr_employee_leave_request_status');
+        $this->db->where('leave_request_status !=', 'Pending');
+        $this->db->where('leave_request_status !=', 'Verified');
+        $this->db->where('leave_request_status !=', 'Approved');
+        $this->db->where('is_deleted',"no");
+        $query = $this->db->get();
+        return $query->result();
+        }
+
+        public function forget_leave_from_time_option($leave_from_date,$company_id_in_hr){
+            $this->db->select('id,start_time,end_time');
+            $this->db->from('hr_calendar_year');
+            $this->db->where('is_working_day',"yes");
+            $this->db->where('company_id',$company_id_in_hr);
+           $this->db->where('date_of_the_day',$leave_from_date);
+           $query=$this->db->get();
+        //    echo "Last Query: " . $this->db->last_query($query);
+            return $query->result();
+            
+        }
+        public function forget_leave_to_time_option($leave_to_date,$company_id_in_hr){
+            $this->db->select('id,start_time,end_time');
+            $this->db->from('hr_calendar_year');
+            $this->db->where('is_working_day',"yes");
+            $this->db->where('company_id',$company_id_in_hr);
+           $this->db->where('date_of_the_day',$leave_to_date);
+           $query=$this->db->get();
+        //    echo "Last Query: " . $this->db->last_query($query);
+            return $query->result();
+            
+        }
+        public function insert_employee_leave_register($data)
+        {
+            return $this->db->insert('hr_employee_leave_register', $data);
+
+        } 
+        public function update_employee_leave_register($data,$row_id)
+        {
+            $this->db->where('id', $row_id);
+            $this->db->update('hr_employee_leave_register', $data);
+            return $this->db->affected_rows() > 0; 
+        }
+
+        public function get_leave_register_details()
+        {
+            
+            $this->db->select('hr_employee_leave_register.id,requested_date,leave_request_status,leave_category,leave_from_date,leave_from_time,leave_to_date,leave_to_time,reason_for_leave, CONCAT(hr_employee_master.employee_number, " ", hr_employee_master.first_name, " ", hr_employee_master.last_name) as employee_name');
+            $this->db->from('hr_employee_leave_register');
+            $this->db->join('hr_employee_master', 'hr_employee_leave_register.employee_id = hr_employee_master.employee_id', 'left');
+            $this->db->join('hr_leave_category', 'hr_employee_leave_register.leave_category_id = hr_leave_category.id', 'left');
+            $this->db->join('hr_employee_leave_request_status', 'hr_employee_leave_register.leave_request_status_id = hr_employee_leave_request_status.id', 'left');
+            $this->db->where('hr_employee_leave_register.is_deleted',"no");
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+        
+    public function get_employee_leave_register_by_id($row_id){
+
+        $this->db->where('id', $row_id);
+        $query = $this->db->get('hr_employee_leave_register');
+
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        } else {
+            return false;
+        }
+
+    }
+
+    public function delete_employee_leave_register_by_id($row_id)
+    {
+        $this->db->where('id', $row_id);
+        $this->db->set('deleted_by', $_SESSION['user_id']);
+        $this->db->set('deleted_on', date('Y-m-d H:i:s'));
+        $this->db->set('is_deleted','yes');
+
+        $this->db->update('hr_employee_leave_register');
+        return $this->db->affected_rows() > 0;
+    }
+
+    public function get_new_leave_register_request()
+    {
+        $this->db->select('hr_employee_leave_register.id,requested_date,leave_category,leave_from_date,leave_from_time,leave_to_date,leave_to_time,reason_for_leave, CONCAT(hr_employee_master.employee_number, " ", hr_employee_master.first_name, " ", hr_employee_master.last_name) as employee_name');
+        $this->db->from('hr_employee_leave_register');
+        $this->db->join('hr_employee_master', 'hr_employee_leave_register.employee_id = hr_employee_master.employee_id', 'left');
+        $this->db->join('hr_leave_category', 'hr_employee_leave_register.leave_category_id = hr_leave_category.id', 'left');
+        $this->db->where('hr_employee_leave_register.is_deleted',"no");
+        $this->db->where('hr_employee_leave_register.leave_request_status_id',"1");
+        $query = $this->db->get();
+        //  echo "Last Query: " . $this->db->last_query($query);
+
+        return $query->result();
+    } 
+
+    public function get_leave_new_request_by_id($row_id){
+        
+        $this->db->where('id', $row_id);
+        $query = $this->db->get('hr_employee_leave_register');
+    
+            if ($query->num_rows() == 1) {
+                return $query->row();
+            } else {
+                return false;
+            }
+        echo json_encode($response);
+    
+    }
+
+    public function save_new_leave_request($data,$row_id){
+
+        $this->db->where('id', $row_id);
+        $this->db->update('hr_employee_leave_register', $data);
+        return $this->db->affected_rows() > 0; 
+        echo json_encode($response);
+    
+        }
+
+        public function get_approved_leave_details()
+        {
+            $this->db->select('hr_employee_leave_register.id,requested_date,leave_category,leave_from_date,leave_from_time,leave_to_date,leave_to_time,reason_for_leave, CONCAT(hr_employee_master.employee_number, " ", hr_employee_master.first_name, " ", hr_employee_master.last_name) as employee_name');
+            $this->db->from('hr_employee_leave_register');
+            $this->db->join('hr_employee_master', 'hr_employee_leave_register.employee_id = hr_employee_master.employee_id', 'left');
+            $this->db->join('hr_leave_category', 'hr_employee_leave_register.leave_category_id = hr_leave_category.id', 'left');
+            $this->db->where('hr_employee_leave_register.is_deleted',"no");
+            $this->db->where('hr_employee_leave_register.leave_request_status_id',"3");
+            $query = $this->db->get();
+            //  echo "Last Query: " . $this->db->last_query($query);
+        
+            return $query->result();
+        }
+
+        // public function get_leave_verified_by_id($row_id){
+        
+        //     $this->db->where('id', $row_id);
+        //     $query = $this->db->get('hr_employee_leave_register');
+        
+        //         if ($query->num_rows() == 1) {
+        //             return $query->row();
+        //         } else {
+        //             return false;
+        //         }
+        //     echo json_encode($response);
+        
+        // }
+
+        public function save_leave_approved($data,$row_id){
+
+            $this->db->where('id', $row_id);
+            $this->db->update('hr_employee_leave_register', $data);
+            return $this->db->affected_rows() > 0; 
+            echo json_encode($response);
+        
+            }
+
+            public function get_verified_leave_details()
+            {
+                $this->db->select('hr_employee_leave_register.id,requested_date,leave_category,leave_from_date,leave_from_time,leave_to_date,leave_to_time,reason_for_leave, CONCAT(hr_employee_master.employee_number, " ", hr_employee_master.first_name, " ", hr_employee_master.last_name) as employee_name');
+                $this->db->from('hr_employee_leave_register');
+                $this->db->join('hr_employee_master', 'hr_employee_leave_register.employee_id = hr_employee_master.employee_id', 'left');
+                $this->db->join('hr_leave_category', 'hr_employee_leave_register.leave_category_id = hr_leave_category.id', 'left');
+                $this->db->where('hr_employee_leave_register.is_deleted',"no");
+                $this->db->where('hr_employee_leave_register.leave_request_status_id',"2");
+                $query = $this->db->get();
+                //  echo "Last Query: " . $this->db->last_query($query);
+            
+                return $query->result();
+            } 
+    
+            public function get_leave_verified_by_id($row_id){
+        
+                $this->db->where('id', $row_id);
+                $query = $this->db->get('hr_employee_leave_register');
+            
+                    if ($query->num_rows() == 1) {
+                        return $query->row();
+                    } else {
+                        return false;
+                    }
+                echo json_encode($response);
+            
+            }
+
+            public function save_leave_verified($data,$row_id){
+
+                $this->db->where('id', $row_id);
+                $this->db->update('hr_employee_leave_register', $data);
+                return $this->db->affected_rows() > 0; 
+                echo json_encode($response);
+            
+                }
+
+
+
+  
+
+            
 
 
 }

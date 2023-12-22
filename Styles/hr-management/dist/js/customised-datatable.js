@@ -58,7 +58,7 @@ function customizeDataTable(tableId) {
 
 
 // Create a function to display toasts
-function showToast(icon, title, timer = 1000) {
+function showToast(icon, title, timer = 3000) {
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -170,4 +170,63 @@ function removeNullOption(modalId) {
 }
 
 
+//get option based on select date
+function populateTimeOptions(startTime, endTime, selectId) {
 
+  var selectElement = $("#" + selectId);
+
+  // Clear existing options
+  selectElement.empty();
+
+  var startTimeParts = startTime.split(':');
+  var endTimeParts = endTime.split(':');
+  var startHour = parseInt(startTimeParts[0], 10);
+  var startMinute = parseInt(startTimeParts[1], 10);
+
+  var endHour = parseInt(endTimeParts[0], 10);
+  var endMinute = parseInt(endTimeParts[1], 10);
+
+  selectElement.append('<option value="">Please select a time</option>');
+
+  for (var hour = startHour; hour <= endHour; hour++) {
+      var minuteStart = (hour === startHour) ? startMinute : 0;
+      var minuteEnd = (hour === endHour) ? endMinute : 60;
+
+      for (var minute = minuteStart; minute < minuteEnd; minute += 15) {
+          var formatted_hour_12 = (hour % 12) || 12;
+          var formatted_minute = (minute < 10 ? '0' : '') + minute;
+          var period = hour >= 12 ? 'PM' : 'AM';
+
+          var formatted_time_12_hour = formatted_hour_12 + ':' + formatted_minute + ' ' + period;
+
+          var formatted_hour_24 = (hour < 10 ? '0' : '') + hour;
+          var formatted_time_24_hour = formatted_hour_24 + ':' + formatted_minute;
+
+          selectElement.append('<option value="' + formatted_time_24_hour + '">' + formatted_time_12_hour + '</option>');
+      }
+  }
+
+  // Uncomment the following code to include the end time options
+  var formatted_end_time_24_hour = (endHour < 10 ? '0' : '') + endHour + ':' + (endMinute < 10 ? '0' : '') + endMinute;
+  var period = endHour >= 12 ? 'PM' : 'AM';
+  var formatted_end_time_12_hour = ((endHour % 12) || 12) + ':' + (endMinute < 10 ? '0' : '') + endMinute + ' ' + period;
+
+  selectElement.append('<option value="' + formatted_end_time_24_hour + '">' + formatted_end_time_12_hour + '</option>');
+}
+
+
+
+
+// make it date fomate yyyy-mm-dd 
+function formatDate(inputDate) {
+  var date = new Date(inputDate);
+  
+  // Subtract one day from the current date
+  date.setDate(date.getDate() +1);
+
+  var year = date.getFullYear();
+  var month = ("0" + (date.getMonth() + 1)).slice(-2);
+  var day = ("0" + date.getDate()).slice(-2);
+  
+  return year + "-" + month + "-" + day;
+}
